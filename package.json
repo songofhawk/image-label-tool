@@ -1,0 +1,31 @@
+{
+  "name": "image-label-tool",
+  "version": "1.0.0",
+  "description": "a label tool for image compose",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode development --progress -p",
+    "dwatch": "webpack --mode development --progress --watch",
+    "watch": "webpack --progress --watch",
+    "server": "webpack-dev-server --mode development --open  --inline --hot"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/songofhawk/image-label-tool.git"
+  },
+  "keywords": [
+    "fabric"
+  ],
+  "author": "songhui",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/songofhawk/image-label-tool/issues"
+  },
+  "homepage": "https://github.com/songofhawk/image-label-tool#readme",
+  "devDependencies": {
+    "webpack": "^4.28.1",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14"
+  }
+}
