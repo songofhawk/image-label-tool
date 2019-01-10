@@ -8,6 +8,6 @@ let hello = function () {
 hello();
 
 
-import {ImageLabelTool} from './image_label/ImageLabelTool.js';
-let labelTool = new ImageLabelTool(document.querySelector('#image-area'));
+import {GraphPanel} from './panel/GraphPanel.js';
+let labelTool = new GraphPanel(document.querySelector('#image-area'));
 labelTool.add();
