@@ -3,8 +3,10 @@ export class Graph {
 
     }
 
-    static draw(){
-
+    create(callBack){
+        if (callBack){
+            callBack();
+        }
     }
 
     move(){
@@ -15,6 +17,13 @@ export class Graph {
 
     }
 
-    
-    
 }
+
+Graph.Drawing = {
+
+    do:function(){
+        return clickPoint;
+    }
+
+
+};

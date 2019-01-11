@@ -1,4 +1,5 @@
 import {Graph} from "./Graph";
+import {Drawing} from "../drawing/Drawing";
 
 export class GraphAxis extends Graph{
     constructor(props) {
@@ -6,14 +7,31 @@ export class GraphAxis extends Graph{
 
     }
 
-    static draw(){
+    create(){
 
     }
 
-    add(){
+    move(){
+
+    }
+
+    delete(){
+
+    }
+
+    isPointOn(point){
 
     }
 
 
+}
+
+export class GraphAxisDrawing extends Drawing{
+
+    do(callBack){
+        let graph = new GraphAxis();
+
+        callBack(graph);
+    }
 
 }
