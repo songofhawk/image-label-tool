@@ -9,7 +9,19 @@ export class Graph {
         }
     }
 
-    move(){
+    moveTo(){
+
+    }
+
+    moveOn(){
+
+    }
+
+    select(){
+
+    }
+
+    unSelect(){
 
     }
 
@@ -17,13 +29,8 @@ export class Graph {
 
     }
 
+    isPointOn(point){
+
+    }
 }
 
-Graph.Drawing = {
-
-    do:function(){
-        return clickPoint;
-    }
-
-
-};

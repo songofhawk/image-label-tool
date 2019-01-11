@@ -14,11 +14,13 @@ export class Container {
         this._graphMap[graph.code] = i;
 
         let className = graph.name;
+
         let classList = this._graphClassMap[className];
         if (!classList){
             classList = [];
             this._graphClassMap[className] = classList;
         }
+        graph._index = i;
         classList.push(i);
     }
 
@@ -56,8 +58,7 @@ export class Container {
      * @param className 类别名称
      * @returns {Array of Graph} 图形列表
      */
-    getAllInClass(className)
-    {
+    getAllInClass(className){
         let graphList = [];
         let indexList = this._graphClassMap(className);
         if (indexList==null){
@@ -68,4 +69,9 @@ export class Container {
         }
         return graphList;
     }
+
+    getAll(){
+        return this._graphList;
+    }
+
 }

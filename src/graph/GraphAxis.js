@@ -7,11 +7,23 @@ export class GraphAxis extends Graph{
 
     }
 
-    create(){
+    create(callBack){
 
     }
 
-    move(){
+    moveTo(){
+
+    }
+
+    moveOn(){
+
+    }
+
+    select(){
+
+    }
+
+    unselect(){
 
     }
 
