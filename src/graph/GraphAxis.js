@@ -1,5 +1,5 @@
 import {Graph} from "./Graph";
-import {Drawing} from "../drawing/Drawing";
+import {Drawing} from "../drawing/DrawingInterface";
 
 export class GraphAxis extends Graph{
     constructor(props) {
@@ -36,14 +36,30 @@ export class GraphAxis extends Graph{
     }
 
 
+
+
 }
 
 export class GraphAxisDrawing extends Drawing{
 
-    do(callBack){
-        let graph = new GraphAxis();
+    stepStart(){
 
-        callBack(graph);
+    }
+    stepMove(screenPoint, step){
+
+    }
+    stepDown(screenPoint, step){
+
+    }
+    stepUp(screenPoint, step){
+
+    }
+    stepOver(screenPoint, step){
+
+    }
+
+    get stepCount(){
+        return 1;
     }
 
 }

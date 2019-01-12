@@ -1,6 +1,7 @@
 import {Graph} from '../graph/Graph';
 import {GeneralSelection} from '../drawing/GeneralSelection';
 import {Container} from "./Container";
+import {EventHandler} from "../drawing/EventHandler";
 
 export class GraphPanel {
 
@@ -19,7 +20,7 @@ export class GraphPanel {
         this._currentDrawing = null;
         this._currentGraph = null;
         this._container = new Container(this);
-        this._eventHandler = null;
+        this._eventHandler = new EventHandler(fabric);
 
         if (bkImg){
             fabric.setBackgroundImage(bkImg, fabric.renderAll.bind(fabric), {
@@ -33,28 +34,19 @@ export class GraphPanel {
         }
 
         fabric.on('mouse:down', function(o){
-            // console.log('mouse:down')
             let pointer = canvas.getPointer(o.e);
-            if (this._eventHandler && this._eventHandler.mousedown){
-                this._eventHandler.mousedown(pointer);
-            }
+            this._eventHandler.mousedown(pointer);
         });
 
         fabric.on('mouse:move', function(o){
             let pointer = canvas.getPointer(o.e);
-            if (this._eventHandler && this._eventHandler.mousedown){
-                this._eventHandler.mousemove(pointer);
-            }
-            canvas.renderAll();
+            this._eventHandler.mousemove(pointer);
         });
 
         fabric.on('mouse:up', function(o){
             // console.log('mouse:up')
             let pointer = canvas.getPointer(o.e);
-            if (this._eventHandler && this._eventHandler.mousedown){
-                this._eventHandler.mouseup(pointer);
-            }
-            canvas.renderAll();
+            this._eventHandler.mouseup(pointer);
         });
 
         fabric.on('selection:created', function(o){
@@ -91,19 +83,17 @@ export class GraphPanel {
     }
 
     draw(){
-        let fabric = this._fabric;
-
         if (!this._currentDrawing){
             return;
         }
 
-        this._eventHandler = this._currentDrawing;
-
-
+        this._eventHandler.drawing = this._currentDrawing;
+        this._eventHandler.stepStart();
     }
 
     select(){
-        this._eventHandler = this._generalSelection;
+        this._eventHandler.drawing = this._generalSelection;
+        this._eventHandler.stepStart();
     }
 
     add(graph) {
