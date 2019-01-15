@@ -1,8 +1,8 @@
 import {DrawingInterface} from "./DrawingInterface";
 
 export class EventHandler {
-    constructor(fabric, drawingObject = new DrawingInterface()){
-        this._fabric = fabric;
+    constructor(fabric, drawingObject){
+        this._fCanvas = fabric;
         this._drawing = drawingObject;
         this._step = 0;
         this._isRunning = false;
@@ -15,23 +15,9 @@ export class EventHandler {
             willRender = drawing.stepStart();
         }
         if (willRender){
-            this._fabric.renderAll();
+            this._fCanvas.renderAll();
         }
         this._isRunning = true;
-    }
-
-    mouseDown(screenPoint){
-        if (!this._isRunning){
-            return;
-        }
-        let willRender = true;
-        let drawing = this._drawing;
-        if (drawing.stepDown){
-            willRender = drawing.stepDown(screenPoint, this._step);
-        }
-        if (willRender){
-            this._fabric.renderAll();
-        }
     }
 
     mouseMove(screenPoint){
@@ -44,10 +30,24 @@ export class EventHandler {
             willRender = drawing.stepMove(screenPoint, this._step);
         }
         if (willRender){
-            this._fabric.renderAll();
+            this._fCanvas.renderAll();
         }
     }
 
+
+    mouseDown(screenPoint){
+        if (!this._isRunning){
+            return;
+        }
+        let willRender = true;
+        let drawing = this._drawing;
+        if (drawing.stepDown){
+            willRender = drawing.stepDown(screenPoint, this._step);
+        }
+        if (willRender){
+            this._fCanvas.renderAll();
+        }
+    }
     mouseUp(screenPoint){
         if (!this._isRunning){
             return;
@@ -58,7 +58,7 @@ export class EventHandler {
             willRender = drawing.stepUp(screenPoint, this._step);
         }
         if (willRender){
-            this._fabric.renderAll();
+            this._fCanvas.renderAll();
         }
         this._step++;
         if (this._step>=this._drawing._stepCount){
@@ -77,7 +77,7 @@ export class EventHandler {
             willRender = drawing.stepOver(screenPoint, this._step);
         }
         if (willRender){
-            this._fabric.renderAll();
+            this._fCanvas.renderAll();
         }
     }
 

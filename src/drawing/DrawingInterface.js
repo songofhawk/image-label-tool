@@ -1,5 +1,6 @@
 export class DrawingInterface {
     constructor(panel){
+        this._fCanvas = panel.fCanvas;
     }
 
     stepStart(){
@@ -20,5 +21,9 @@ export class DrawingInterface {
 
     get stepCount(){
         return 1;
+    }
+
+    get defaultColor(){
+        return 'rgba(80,80,80,0.5)';
     }
 }

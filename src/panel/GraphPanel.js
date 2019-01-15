@@ -16,12 +16,12 @@ export class GraphPanel {
             height: 600,
             hoverCursor: 'pointer'
         });
+        this._generalSelection =  null;
         this._currentDrawing = null;
         this._currentGraph = null;
         this._container = new Container(this);
-        this._generalSelection =  new GeneralSelection(this);
 
-        this._eventHandler = new EventHandler(fabric);
+        this._eventHandler = new EventHandler(fCanvas);
 
         if (bkImgUrl && typeof bkImgUrl==='string'){
             fabric.Image.fromURL(bkImgUrl,function(bkImg) {
@@ -35,19 +35,20 @@ export class GraphPanel {
             });
         }
 
+        let self = this;
         fCanvas.on('mouse:down', function(o){
             let pointer = fCanvas.getPointer(o.e);
-            this._eventHandler.mouseDown(pointer);
+            self._eventHandler.mouseDown(pointer);
         });
 
         fCanvas.on('mouse:move', function(o){
             let pointer = fCanvas.getPointer(o.e);
-            this._eventHandler.mouseMove(pointer);
+            self._eventHandler.mouseMove(pointer);
         });
 
         fCanvas.on('mouse:up', function(o){
             let pointer = fCanvas.getPointer(o.e);
-            this._eventHandler.mouseUp(pointer);
+            self._eventHandler.mouseUp(pointer);
         });
 
         fCanvas.on('selection:created', function(o){
@@ -62,6 +63,10 @@ export class GraphPanel {
 
     }
 
+    get fCanvas(){
+        return this._fCanvas;
+    }
+
     get drawingClass(){
         return this._currentDrawing;
     }
@@ -69,6 +74,8 @@ export class GraphPanel {
         if (!clazz instanceof Graph){
             throw  'The parameter must be an instance of Graph class';
         }
+        clazz.fCanvas = this._fCanvas;
+
         this._currentDrawing = clazz;
         this._currentDrawing.over = (graph)=>{
             if (graph !== null){
@@ -83,12 +90,16 @@ export class GraphPanel {
         };
     }
 
-    draw(){
-        if (!this._currentDrawing){
+    draw(drawingClass){
+
+        if (!drawingClass && !this.drawingClass){
             return;
         }
 
-        this._eventHandler.drawing = this._currentDrawing;
+        if (drawingClass){
+            this.drawingClass = drawingClass;
+        }
+        this._eventHandler.drawing =  this.drawingClass;
         this._eventHandler.stepStart();
     }
 

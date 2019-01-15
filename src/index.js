@@ -1,4 +1,6 @@
 //测试webpack打包
+import {GraphAxis, GraphAxisDrawing} from "./graph/GraphAxis";
+
 let hello = function () {
     let textWrapper = document.createElement("div");
     textWrapper.innerText = "hello from webpack";
@@ -12,5 +14,10 @@ hello();
  * -------------------------
  */
 import {GraphPanel} from './panel/GraphPanel.js';
-let panel = new GraphPanel(document.querySelector('#image-label-area'), './resource/image/jd.jpg');
-panel.add();
+const panel = new GraphPanel(document.querySelector('#image-label-area'), './resource/image/jd.jpg');
+const graphAxixDrawing = new GraphAxisDrawing(panel);
+
+/*处理事件*/
+document.querySelector('#btn-draw-coord').addEventListener('click',function (event) {
+    panel.draw(graphAxixDrawing);
+});
