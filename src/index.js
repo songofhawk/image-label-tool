@@ -7,7 +7,10 @@ let hello = function () {
 
 hello();
 
-
+/**-------------------------
+ * 正式开始初始化工具
+ * -------------------------
+ */
 import {GraphPanel} from './panel/GraphPanel.js';
-let labelTool = new GraphPanel(document.querySelector('#image-area'));
-labelTool.add();
+let panel = new GraphPanel(document.querySelector('#image-label-area'), './resource/image/jd.jpg');
+panel.add();

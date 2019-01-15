@@ -20,7 +20,7 @@ export class EventHandler {
         this._isRunning = true;
     }
 
-    mousedown(screenPoint){
+    mouseDown(screenPoint){
         if (!this._isRunning){
             return;
         }
@@ -34,7 +34,7 @@ export class EventHandler {
         }
     }
 
-    mousemove(screenPoint){
+    mouseMove(screenPoint){
         if (!this._isRunning){
             return;
         }
@@ -48,7 +48,7 @@ export class EventHandler {
         }
     }
 
-    mouseup(screenPoint){
+    mouseUp(screenPoint){
         if (!this._isRunning){
             return;
         }

@@ -1,5 +1,5 @@
 import {Graph} from "./Graph";
-import {Drawing} from "../drawing/DrawingInterface";
+import {Drawing, DrawingInterface} from "../drawing/DrawingInterface";
 
 export class GraphAxis extends Graph{
     constructor(props) {
@@ -40,7 +40,7 @@ export class GraphAxis extends Graph{
 
 }
 
-export class GraphAxisDrawing extends Drawing{
+export class GraphAxisDrawing extends DrawingInterface{
 
     stepStart(){
 

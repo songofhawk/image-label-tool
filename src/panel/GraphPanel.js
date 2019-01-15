@@ -5,56 +5,57 @@ import {EventHandler} from "../drawing/EventHandler";
 
 export class GraphPanel {
 
-    constructor(canvasElement, bkImg) {
+    constructor(canvasElement, bkImgUrl) {
         if (!canvasElement) {
             throw 'canvasElement parameter is mandatory!';
         }
 
-        let fabric = this._fabric = new fabric.Canvas(canvasElement, {
+        let fCanvas = this._fCanvas = new fabric.Canvas(canvasElement, {
             selection: false,   //按照官方文档,是禁止了group selection
             width: 600,
             height: 600,
             hoverCursor: 'pointer'
         });
-        this._generalSelection =  new GeneralSelection(this);
         this._currentDrawing = null;
         this._currentGraph = null;
         this._container = new Container(this);
+        this._generalSelection =  new GeneralSelection(this);
+
         this._eventHandler = new EventHandler(fabric);
 
-        if (bkImg){
-            fabric.setBackgroundImage(bkImg, fabric.renderAll.bind(fabric), {
-                // Needed to position backgroundImage at 0/0
-                width: bkImg.width,
-                height: bkImg.height,
-                originX: 'left',
-                originY: 'top',
-                crossOrigin: 'anonymous' //放开跨域限制,据说这个属性影响取像素颜色的操作
+        if (bkImgUrl && typeof bkImgUrl==='string'){
+            fabric.Image.fromURL(bkImgUrl,function(bkImg) {
+                fCanvas.setBackgroundImage(bkImg, fCanvas.renderAll.bind(fCanvas), {
+                    width: bkImg.width,
+                    height: bkImg.height,
+                    originX: 'left',
+                    originY: 'top',
+                    crossOrigin: 'anonymous' //放开跨域限制,据说这个属性影响取像素颜色的操作
+                });
             });
         }
 
-        fabric.on('mouse:down', function(o){
-            let pointer = canvas.getPointer(o.e);
-            this._eventHandler.mousedown(pointer);
+        fCanvas.on('mouse:down', function(o){
+            let pointer = fCanvas.getPointer(o.e);
+            this._eventHandler.mouseDown(pointer);
         });
 
-        fabric.on('mouse:move', function(o){
-            let pointer = canvas.getPointer(o.e);
-            this._eventHandler.mousemove(pointer);
+        fCanvas.on('mouse:move', function(o){
+            let pointer = fCanvas.getPointer(o.e);
+            this._eventHandler.mouseMove(pointer);
         });
 
-        fabric.on('mouse:up', function(o){
-            // console.log('mouse:up')
-            let pointer = canvas.getPointer(o.e);
-            this._eventHandler.mouseup(pointer);
+        fCanvas.on('mouse:up', function(o){
+            let pointer = fCanvas.getPointer(o.e);
+            this._eventHandler.mouseUp(pointer);
         });
 
-        fabric.on('selection:created', function(o){
+        fCanvas.on('selection:created', function(o){
 
 
         });
 
-        fabric.on('selection:updated', function(o){
+        fCanvas.on('selection:updated', function(o){
 
 
         });
