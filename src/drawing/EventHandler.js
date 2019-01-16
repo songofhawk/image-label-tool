@@ -61,7 +61,7 @@ export class EventHandler {
             this._fCanvas.renderAll();
         }
         this._step++;
-        if (this._step>=this._drawing._stepCount){
+        if (this._step>=this._drawing.stepCount){
             this._stepOver(screenPoint);
         }
     }

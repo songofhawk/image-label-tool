@@ -1,5 +1,5 @@
 import {Graph} from "./Graph";
-import {Drawing, DrawingInterface} from "../drawing/DrawingInterface";
+import {DrawingInterface} from "../drawing/DrawingInterface";
 
 export class GraphAxis extends Graph{
     constructor(fCanvas, defaultColor) {
@@ -15,8 +15,9 @@ export class GraphAxis extends Graph{
 
     }
 
-    moveTo(){
-
+    moveTo(point){
+        this._vLine.left = point.x;
+        this._hLine.top = point.y;
     }
 
     moveOn(){
@@ -47,16 +48,17 @@ export class GraphAxis extends Graph{
 export class GraphAxisDrawing extends DrawingInterface{
     constructor(panel) {
         super(panel);
-        this.axis = null;
+        this._axis = null;
     }
 
     stepStart(){
         let defaultColor = super.defaultColor;
-        this.axis = new GraphAxis(this._fCanvas, defaultColor);
-        return this.axis;
+        this._axis = new GraphAxis(this._fCanvas, defaultColor);
+        return this._axis;
     }
     stepMove(screenPoint, step){
-
+        this._axis.moveTo(screenPoint);
+        return true;
     }
     stepDown(screenPoint, step){
 
