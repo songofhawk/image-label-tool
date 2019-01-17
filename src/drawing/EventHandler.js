@@ -1,8 +1,8 @@
 import {DrawingInterface} from "./DrawingInterface";
 
 export class EventHandler {
-    constructor(fabric, drawingObject){
-        this._fCanvas = fabric;
+    constructor(stage, drawingObject){
+        this._stage = stage;
         this._drawing = drawingObject;
         this._step = 0;
         this._isRunning = false;
@@ -15,7 +15,7 @@ export class EventHandler {
             willRender = drawing.stepStart();
         }
         if (willRender){
-            this._fCanvas.renderAll();
+            // this._stage.renderAll();
         }
         this._isRunning = true;
     }
@@ -30,7 +30,7 @@ export class EventHandler {
             willRender = drawing.stepMove(screenPoint, this._step);
         }
         if (willRender){
-            this._fCanvas.renderAll();
+            // this._stage.renderAll();
         }
     }
 
@@ -45,7 +45,7 @@ export class EventHandler {
             willRender = drawing.stepDown(screenPoint, this._step);
         }
         if (willRender){
-            this._fCanvas.renderAll();
+            // this._stage.renderAll();
         }
     }
     mouseUp(screenPoint){
@@ -58,10 +58,10 @@ export class EventHandler {
             willRender = drawing.stepUp(screenPoint, this._step);
         }
         if (willRender){
-            this._fCanvas.renderAll();
+            // this._stage.renderAll();
         }
         this._step++;
-        if (this._step>=this._drawing.stepCount){
+        if (this._step>=this._stepCount){
             this._stepOver(screenPoint);
         }
     }
@@ -77,7 +77,7 @@ export class EventHandler {
             willRender = drawing.stepOver(screenPoint, this._step);
         }
         if (willRender){
-            this._fCanvas.renderAll();
+            // this._stage.renderAll();
         }
     }
 

@@ -2,6 +2,7 @@ import {Graph} from '../graph/Graph';
 import {GeneralSelection} from '../drawing/GeneralSelection';
 import {Container} from "./Container";
 import {EventHandler} from "../drawing/EventHandler";
+import Konva from "konva";
 
 export class GraphPanel {
 
@@ -10,53 +11,86 @@ export class GraphPanel {
             throw 'canvasElement parameter is mandatory!';
         }
 
-        let fCanvas = this._fCanvas = new fabric.Canvas(canvasElement, {
-            selection: false,   //按照官方文档,是禁止了group selection
+        let stage = this._stage = new Konva.Stage({
+            container: 'image-label-area',
             width: 600,
-            height: 600,
-            hoverCursor: 'pointer'
+            height: 600
         });
+        let bkLayer = new Konva.Layer();
+        //bkLayer.setZIndex(-1000);
+        let jsImage = new Image();
+        jsImage.onload = function() {
+
+            let bkImage = new Konva.Image({
+                x: 0,
+                y: 0,
+                image: jsImage,
+                width: 600,
+                height: 600
+            });
+
+            // add the shape to the layer
+            bkLayer.add(bkImage);
+
+            // add the layer to the stage
+            stage.add(bkLayer);
+            bkLayer.moveToBottom();
+        };
+        jsImage.src = bkImgUrl;
+
+
+
+
+
+
+        // let fCanvas = this._stage = new fabric.Canvas(canvasElement, {
+        //     selection: false,   //按照官方文档,是禁止了group selection
+        //     width: 600,
+        //     height: 600,
+        //     hoverCursor: 'pointer'
+        // });
+
         this._generalSelection =  null;
         this._currentDrawing = null;
         this._currentGraph = null;
         this._container = new Container(this);
 
-        this._eventHandler = new EventHandler(fCanvas);
+        this._eventHandler = new EventHandler(stage);
 
-        if (bkImgUrl && typeof bkImgUrl==='string'){
-            fabric.Image.fromURL(bkImgUrl,function(bkImg) {
-                fCanvas.setBackgroundImage(bkImg, fCanvas.renderAll.bind(fCanvas), {
-                    width: bkImg.width,
-                    height: bkImg.height,
-                    originX: 'left',
-                    originY: 'top',
-                    crossOrigin: 'anonymous' //放开跨域限制,据说这个属性影响取像素颜色的操作
-                });
-            });
-        }
+        // if (bkImgUrl && typeof bkImgUrl==='string'){
+        //     fabric.Image.fromURL(bkImgUrl,function(bkImg) {
+        //         fCanvas.setBackgroundImage(bkImg, fCanvas.renderAll.bind(fCanvas), {
+        //             width: bkImg.width,
+        //             height: bkImg.height,
+        //             originX: 'left',
+        //             originY: 'top',
+        //             crossOrigin: 'anonymous' //放开跨域限制,据说这个属性影响取像素颜色的操作
+        //         });
+        //     });
+        // }
 
         let self = this;
-        fCanvas.on('mouse:down', function(o){
-            let pointer = fCanvas.getPointer(o.e);
+        stage.on('mousedown', function(){
+            let pointer = stage.getPointerPosition();
             self._eventHandler.mouseDown(pointer);
         });
 
-        fCanvas.on('mouse:move', function(o){
-            let pointer = fCanvas.getPointer(o.e);
+        stage.on('mousemove', function(){
+            let pointer = stage.getPointerPosition();
             self._eventHandler.mouseMove(pointer);
         });
 
-        fCanvas.on('mouse:up', function(o){
-            let pointer = fCanvas.getPointer(o.e);
+        stage.on('mouseup', function(){
+            let pointer = stage.getPointerPosition();
             self._eventHandler.mouseUp(pointer);
         });
 
-        fCanvas.on('selection:created', function(o){
+        stage.on('selection:created', function(o){
 
 
         });
 
-        fCanvas.on('selection:updated', function(o){
+        stage.on('selection:updated', function(o){
 
 
         });
@@ -64,7 +98,7 @@ export class GraphPanel {
     }
 
     get fCanvas(){
-        return this._fCanvas;
+        return this._stage;
     }
 
     get drawingClass(){
@@ -74,7 +108,7 @@ export class GraphPanel {
         if (!clazz instanceof Graph){
             throw  'The parameter must be an instance of Graph class';
         }
-        clazz.fCanvas = this._fCanvas;
+        clazz.fCanvas = this._stage;
 
         this._currentDrawing = clazz;
         this._currentDrawing.over = (graph)=>{

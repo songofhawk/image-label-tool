@@ -1,4 +1,4 @@
-import {Drawing, DrawingInterface} from "./DrawingInterface";
+import {DrawingInterface} from "./DrawingInterface";
 
 export class GeneralSelection extends DrawingInterface{
     constructor(panel){

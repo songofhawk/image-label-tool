@@ -1,6 +1,6 @@
 export class DrawingInterface {
     constructor(panel){
-        this._fCanvas = panel.fCanvas;
+        this._stage = panel._stage;
     }
 
     stepStart(){
