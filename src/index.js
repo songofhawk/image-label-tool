@@ -1,5 +1,5 @@
 //测试webpack打包
-import {GraphAxis, GraphAxisDrawing} from "./graph/GraphAxis";
+import {GraphAxis, GraphAxisManager} from "./graph/GraphAxis";
 
 let hello = function () {
     let textWrapper = document.createElement("div");
@@ -15,7 +15,7 @@ hello();
  */
 import {GraphPanel} from './panel/GraphPanel.js';
 const panel = new GraphPanel(document.querySelector('#image-label-area'), './resource/image/jd.jpg');
-const graphAxixDrawing = new GraphAxisDrawing(panel);
+const graphAxixDrawing = new GraphAxisManager(panel);
 
 /*处理事件*/
 document.querySelector('#btn-draw-coord').addEventListener('click',function (event) {

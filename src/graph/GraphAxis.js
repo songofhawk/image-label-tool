@@ -1,6 +1,10 @@
-import {Graph} from "./Graph";
-import {AbstractDrawing} from "../drawing/AbstractDrawing";
 import Konva from 'konva';
+import {Graph} from "./Graph";
+import {AbstractOperator} from "../drawing/AbstractOperator";
+import {AbstractManager} from "../drawing/AbstractManager";
+import {AbstractDrawingOperator} from "../drawing/AbstractManager";
+import {AbstractEditingOperator} from "../drawing/AbstractManager";
+import {AbstractSelectingOperator} from "../drawing/AbstractManager";
 
 export class GraphAxis extends Graph{
     constructor(layer, defaultColor) {
@@ -54,16 +58,20 @@ export class GraphAxis extends Graph{
 
 }
 
-export class GraphAxisDrawing extends AbstractDrawing{
-    constructor(panel) {
+export class GraphAxisManager extends AbstractManager{
+    constructor(panel){
         super(panel);
         this._axis = null;
     }
 
-    /**
-     * 开始绘制
-     * @return {boolean} 是否重绘(true:重绘, false:不重绘)
-     */
+
+}
+
+class AxisDrawingOperator extends AbstractDrawingOperator{
+    constructor(panel){
+        super(panel);
+    }
+
     stepStart(){
         let defaultColor = super.defaultColor;
         this._axis = new GraphAxis(this._layer, defaultColor);
@@ -82,6 +90,7 @@ export class GraphAxisDrawing extends AbstractDrawing{
 
     }
     stepOver(screenPoint, step){
+        super.stepOver(screenPoint, step);
         return this._axis;
     }
 
@@ -89,5 +98,4 @@ export class GraphAxisDrawing extends AbstractDrawing{
     get stepCount(){
         return 1;
     }
-
 }

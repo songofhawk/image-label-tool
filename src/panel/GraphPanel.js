@@ -134,7 +134,9 @@ export class GraphPanel {
             this.drawingClass = drawingClass;
         }
         this._eventHandler.drawing =  this.drawingClass;
-        this._eventHandler.stepStart();
+        this._eventHandler.stepStart(()=>{
+            this._eventHandler.drawing = this._generalSelection;
+        });
     }
 
     select(){

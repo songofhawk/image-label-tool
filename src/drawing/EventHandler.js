@@ -1,15 +1,18 @@
-import {AbstractDrawing} from "./AbstractDrawing";
+import {AbstractOperator} from "./AbstractOperator";
+import {GeneralSelection} from "./GeneralSelection";
 
 export class EventHandler {
     constructor(panel, drawingObject){
         this._container = panel._container;
         this._stage = panel._stage;
-        this._drawing = drawingObject;
+        if (drawingObject){
+            this._drawing = drawingObject;
+        }
         this._step = 0;
         this._isRunning = false;
     }
 
-    stepStart(){
+    stepStart(onOverCallback){
         let willRender = false;
         let drawing = this._drawing;
         if (drawing.stepStart){
@@ -18,6 +21,7 @@ export class EventHandler {
         if (willRender){
             drawing.render();
         }
+        this._onOverCallback = onOverCallback;
         this._isRunning = true;
     }
 
@@ -76,6 +80,8 @@ export class EventHandler {
         let graph = drawing.stepOver(screenPoint, this._step);
         drawing.render();
         this._container.add(graph);
+
+        this._drawing = new GeneralSelection(panel, drawing);
     }
 
     _stepBreak(){

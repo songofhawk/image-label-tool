@@ -1,10 +1,28 @@
-import {AbstractDrawing} from "./AbstractDrawing";
+import {AbstractOperator} from "./AbstractOperator";
 
-export class GeneralSelection extends AbstractDrawing{
-    constructor(panel){
+export class GeneralSelection extends AbstractOperator{
+    constructor(panel, drawingClazz){
         super(panel);
-        this._ownerPanel = panel;
         this._graphList = panel._container.getAll();
+        this._drawingClazz = drawingClazz;
+    }
+
+    stepStart(){
+    }
+    stepMove(screenPoint, step){
+
+    }
+    stepDown(screenPoint, step){
+
+    }
+    stepUp(screenPoint, step){
+
+    }
+    stepOver(screenPoint, step){
+
+    }
+    render(){
+        this._layer.draw();
     }
 
     do(callBack){
