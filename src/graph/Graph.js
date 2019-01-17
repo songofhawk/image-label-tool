@@ -1,6 +1,6 @@
 export class Graph {
-    constructor(){
-
+    constructor(layer){
+        this._layer = layer;
     }
 
     create(callBack){

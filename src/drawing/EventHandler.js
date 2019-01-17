@@ -1,8 +1,9 @@
 import {AbstractDrawing} from "./AbstractDrawing";
 
 export class EventHandler {
-    constructor(stage, drawingObject){
-        this._stage = stage;
+    constructor(panel, drawingObject){
+        this._container = panel._container;
+        this._stage = panel._stage;
         this._drawing = drawingObject;
         this._step = 0;
         this._isRunning = false;
@@ -15,7 +16,7 @@ export class EventHandler {
             willRender = drawing.stepStart();
         }
         if (willRender){
-            // this._stage.renderAll();
+            drawing.render();
         }
         this._isRunning = true;
     }
@@ -30,7 +31,7 @@ export class EventHandler {
             willRender = drawing.stepMove(screenPoint, this._step);
         }
         if (willRender){
-            // this._stage.renderAll();
+            drawing.render();
         }
     }
 
@@ -45,7 +46,7 @@ export class EventHandler {
             willRender = drawing.stepDown(screenPoint, this._step);
         }
         if (willRender){
-            // this._stage.renderAll();
+            drawing.render();
         }
     }
     mouseUp(screenPoint){
@@ -58,7 +59,7 @@ export class EventHandler {
             willRender = drawing.stepUp(screenPoint, this._step);
         }
         if (willRender){
-            // this._stage.renderAll();
+            drawing.render();
         }
         this._step++;
         if (this._step>=this._stepCount){
@@ -69,16 +70,12 @@ export class EventHandler {
     _stepOver(screenPoint){
         this._isRunning = false;
 
-        let willRender = true;
         let drawing = this._drawing;
         this._step = 0;
 
-        if (drawing.stepOver){
-            willRender = drawing.stepOver(screenPoint, this._step);
-        }
-        if (willRender){
-            // this._stage.renderAll();
-        }
+        let graph = drawing.stepOver(screenPoint, this._step);
+        drawing.render();
+        this._container.add(graph);
     }
 
     _stepBreak(){

@@ -9,11 +9,8 @@ export class AbstractDrawing {
     }
 
     stepStart(){
-        this._layer.draw();
-        //this._layer.moveToTop();
     }
     stepMove(screenPoint, step){
-        this._layer.draw();
     }
     stepDown(screenPoint, step){
 
@@ -24,7 +21,9 @@ export class AbstractDrawing {
     stepOver(screenPoint, step){
 
     }
-
+    render(){
+        this._layer.draw();
+    }
     get stepCount(){
         return 1;
     }

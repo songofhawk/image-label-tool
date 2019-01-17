@@ -55,7 +55,7 @@ export class GraphPanel {
         this._currentGraph = null;
         this._container = new Container(this);
 
-        this._eventHandler = new EventHandler(stage);
+        this._eventHandler = new EventHandler(this);
 
         // if (bkImgUrl && typeof bkImgUrl==='string'){
         //     fabric.Image.fromURL(bkImgUrl,function(bkImg) {

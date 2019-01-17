@@ -4,9 +4,7 @@ import Konva from 'konva';
 
 export class GraphAxis extends Graph{
     constructor(layer, defaultColor) {
-        super(defaultColor);
-        this.type = 'axis';
-        this._layer = layer;
+        super(layer);
 
         this._vLine = new Konva.Line({
             points: [0, 0, 0, layer.size().height],
@@ -62,16 +60,18 @@ export class GraphAxisDrawing extends AbstractDrawing{
         this._axis = null;
     }
 
+    /**
+     * 开始绘制
+     * @return {boolean} 是否重绘(true:重绘, false:不重绘)
+     */
     stepStart(){
         let defaultColor = super.defaultColor;
         this._axis = new GraphAxis(this._layer, defaultColor);
-        super.stepStart();
-        return this._axis;
+        return false;
     }
 
     stepMove(screenPoint, step){
         this._axis.moveTo(screenPoint);
-        super.stepMove();
         return true;
     }
 
@@ -82,7 +82,7 @@ export class GraphAxisDrawing extends AbstractDrawing{
 
     }
     stepOver(screenPoint, step){
-
+        return this._axis;
     }
 
 
