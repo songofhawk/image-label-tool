@@ -1,6 +1,6 @@
-import {DrawingInterface} from "./DrawingInterface";
+import {AbstractDrawing} from "./AbstractDrawing";
 
-export class GeneralSelection extends DrawingInterface{
+export class GeneralSelection extends AbstractDrawing{
     constructor(panel){
         super(panel);
         this._ownerPanel = panel;

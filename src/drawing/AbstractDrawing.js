@@ -1,13 +1,19 @@
-export class DrawingInterface {
+import Konva from "konva";
+
+export class AbstractDrawing {
     constructor(panel){
         this._stage = panel._stage;
+        this._layer = new Konva.Layer();
+        this._stage.add(this._layer);
+
     }
 
     stepStart(){
-
+        this._layer.draw();
+        //this._layer.moveToTop();
     }
     stepMove(screenPoint, step){
-
+        this._layer.draw();
     }
     stepDown(screenPoint, step){
 
