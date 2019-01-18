@@ -159,7 +159,7 @@ fabric.arcToSegmentsCache = { };
 fabric.boundsOfCurveCache = { };
 
 /**
- * If disabled boundsOfCurveCache is not used. For apps that make heavy usage of pencil drawing probably disabling it is better
+ * If disabled boundsOfCurveCache is not used. For apps that make heavy usage of pencil operator probably disabling it is better
  * @default true
  */
 fabric.cachesBoundsOfCurve = true;
@@ -8661,7 +8661,7 @@ fabric.BaseBrush = fabric.util.createClass(/** @lends fabric.BaseBrush.prototype
       ctx.beginPath();
       //if we only have 2 points in the path and they are the same
       //it means that the user only clicked the canvas without moving the mouse
-      //then we should be drawing a dot. A path isn't drawn between two identical dots
+      //then we should be operator a dot. A path isn't drawn between two identical dots
       //that's why we set them apart a bit
       if (this._points.length === 2 && p1.x === p2.x && p1.y === p2.y) {
         var width = this.width / 1000;
@@ -8752,7 +8752,7 @@ fabric.BaseBrush = fabric.util.createClass(/** @lends fabric.BaseBrush.prototype
     },
 
     /**
-     * On mouseup after drawing the path on contextTop canvas
+     * On mouseup after operator the path on contextTop canvas
      * we use the points captured to create an new fabric path object
      * and add it to the fabric canvas.
      */
@@ -9424,7 +9424,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
     defaultCursor:          'default',
 
     /**
-     * Cursor value used during free drawing
+     * Cursor value used during free operator
      * @type String
      * @default
      */
@@ -9474,7 +9474,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
     skipTargetFind:         false,
 
     /**
-     * When true, mouse events on canvas (mousedown/mousemove/mouseup) result in free drawing.
+     * When true, mouse events on canvas (mousedown/mousemove/mouseup) result in free operator.
      * After mousedown, mousemove creates a shape,
      * and then mouseup finalizes it and adds an instance of `fabric.Path` onto canvas.
      * @tutorial {@link http://fabricjs.com/fabric-intro-part-4#free_drawing}
@@ -13068,12 +13068,12 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
      * @param {Object} dims
      * @param {Object} dims.width width of canvas
      * @param {Object} dims.height height of canvas
-     * @param {Object} dims.zoomX zoomX zoom value to unscale the canvas before drawing cache
-     * @param {Object} dims.zoomY zoomY zoom value to unscale the canvas before drawing cache
+     * @param {Object} dims.zoomX zoomX zoom value to unscale the canvas before operator cache
+     * @param {Object} dims.zoomY zoomY zoom value to unscale the canvas before operator cache
      * @return {Object}.width width of canvas
      * @return {Object}.height height of canvas
-     * @return {Object}.zoomX zoomX zoom value to unscale the canvas before drawing cache
-     * @return {Object}.zoomY zoomY zoom value to unscale the canvas before drawing cache
+     * @return {Object}.zoomX zoomX zoom value to unscale the canvas before operator cache
+     * @return {Object}.zoomY zoomY zoom value to unscale the canvas before operator cache
      */
     _limitCacheSize: function(dims) {
       var perfLimitSizeTotal = fabric.perfLimitSizeTotal,
@@ -13113,8 +13113,8 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
      * @return {Object}.y height of object to be cached
      * @return {Object}.width width of canvas
      * @return {Object}.height height of canvas
-     * @return {Object}.zoomX zoomX zoom value to unscale the canvas before drawing cache
-     * @return {Object}.zoomY zoomY zoom value to unscale the canvas before drawing cache
+     * @return {Object}.zoomX zoomX zoom value to unscale the canvas before operator cache
+     * @return {Object}.zoomY zoomY zoom value to unscale the canvas before operator cache
      */
     _getCacheCanvasDimensions: function() {
       var objectScale = this.getTotalObjectScaling(),
@@ -13521,7 +13521,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     /**
      * Decide if the object should cache or not. Create its own cache level
      * objectCaching is a global flag, wins over everything
-     * needsItsOwnCache should be used when the object drawing method requires
+     * needsItsOwnCache should be used when the object operator method requires
      * a cache step. None of the fabric classes requires it.
      * Generally you do not cache objects in groups because the group outside is cached.
      * @return {Boolean}
@@ -13542,7 +13542,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     },
 
     /**
-     * Execute the drawing operation for an object clipPath
+     * Execute the operator operation for an object clipPath
      * @param {CanvasRenderingContext2D} ctx Context to render on
      */
     drawClipPathOnCache: function(ctx) {
@@ -13568,7 +13568,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     },
 
     /**
-     * Execute the drawing operation for an object on a specified context
+     * Execute the operator operation for an object on a specified context
      * @param {CanvasRenderingContext2D} ctx Context to render on
      */
     drawObject: function(ctx, forClipping) {
@@ -18983,7 +18983,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     /**
      * Decide if the object should cache or not. Create its own cache level
      * objectCaching is a global flag, wins over everything
-     * needsItsOwnCache should be used when the object drawing method requires
+     * needsItsOwnCache should be used when the object operator method requires
      * a cache step. None of the fabric classes requires it.
      * Generally you do not cache objects in groups because the group outside is cached.
      * @return {Boolean}
@@ -19027,7 +19027,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     },
 
     /**
-     * Execute the drawing operation for an object on a specified context
+     * Execute the operator operation for an object on a specified context
      * @param {CanvasRenderingContext2D} ctx Context to render on
      */
     drawObject: function(ctx) {
@@ -19373,7 +19373,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     /**
      * Decide if the object should cache or not. Create its own cache level
      * objectCaching is a global flag, wins over everything
-     * needsItsOwnCache should be used when the object drawing method requires
+     * needsItsOwnCache should be used when the object operator method requires
      * a cache step. None of the fabric classes requires it.
      * Generally you do not cache objects in groups because the group outside is cached.
      * @return {Boolean}
@@ -19924,7 +19924,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     /**
      * Decide if the object should cache or not. Create its own cache level
      * objectCaching is a global flag, wins over everything
-     * needsItsOwnCache should be used when the object drawing method requires
+     * needsItsOwnCache should be used when the object operator method requires
      * a cache step. None of the fabric classes requires it.
      * Generally you do not cache objects in groups because the group outside is cached.
      * This is the special image version where we would like to avoid caching where possible.
@@ -20424,7 +20424,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     },
 
     /**
-     * Attempts to apply the requested filters to the source provided, drawing the filtered output
+     * Attempts to apply the requested filters to the source provided, operator the filtered output
      * to the provided target canvas.
      *
      * @param {Array} filters The filters to apply.
@@ -24694,8 +24694,8 @@ fabric.Image.filters.BaseFilter.fromObject = function(object, callback) {
      * @param {Object} dim.y height of object to be cached
      * @return {Object}.width width of canvas
      * @return {Object}.height height of canvas
-     * @return {Object}.zoomX zoomX zoom value to unscale the canvas before drawing cache
-     * @return {Object}.zoomY zoomY zoom value to unscale the canvas before drawing cache
+     * @return {Object}.zoomX zoomX zoom value to unscale the canvas before operator cache
+     * @return {Object}.zoomY zoomY zoom value to unscale the canvas before operator cache
      */
     _getCacheCanvasDimensions: function() {
       var dims = this.callSuper('_getCacheCanvasDimensions');
@@ -27533,7 +27533,7 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
    * Default event handler for the basic functionalities needed on _mouseDown
    * can be overridden to do something different.
    * Scope of this implementation is: find the click position, set selectionStart
-   * find selectionEnd, initialize the drawing of either cursor or selection area
+   * find selectionEnd, initialize the operator of either cursor or selection area
    */
   _mouseDownHandler: function(options) {
     if (!this.canvas || !this.editable || (options.e.button && options.e.button !== 1)) {

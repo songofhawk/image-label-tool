@@ -1,9 +1,9 @@
 import Konva from "konva";
 
 export class AbstractOperator {
-    constructor(panel){
-        this._layer = new Konva.Layer();
-        panel._stage.add(this._layer);
+    constructor(manager){
+        this._manager = manager;
+        this._layer = manager._layer;
     }
 
     /**

@@ -2,11 +2,11 @@ import {AbstractOperator} from "./AbstractOperator";
 import {GeneralSelection} from "./GeneralSelection";
 
 export class EventHandler {
-    constructor(panel, drawingObject){
+    constructor(panel, operator){
         this._container = panel._container;
         this._stage = panel._stage;
-        if (drawingObject){
-            this._drawing = drawingObject;
+        if (operator){
+            this._operator = operator;
         }
         this._step = 0;
         this._isRunning = false;
@@ -14,7 +14,7 @@ export class EventHandler {
 
     stepStart(onOverCallback){
         let willRender = false;
-        let drawing = this._drawing;
+        let drawing = this._operator;
         if (drawing.stepStart){
             willRender = drawing.stepStart();
         }
@@ -30,7 +30,7 @@ export class EventHandler {
             return;
         }
         let willRender = true;
-        let drawing = this._drawing;
+        let drawing = this._operator;
         if (drawing.stepMove){
             willRender = drawing.stepMove(screenPoint, this._step);
         }
@@ -45,7 +45,7 @@ export class EventHandler {
             return;
         }
         let willRender = true;
-        let drawing = this._drawing;
+        let drawing = this._operator;
         if (drawing.stepDown){
             willRender = drawing.stepDown(screenPoint, this._step);
         }
@@ -58,12 +58,12 @@ export class EventHandler {
             return;
         }
         let willRender = true;
-        let drawing = this._drawing;
-        if (drawing.stepUp){
-            willRender = drawing.stepUp(screenPoint, this._step);
+        let operator = this._operator;
+        if (operator.stepUp){
+            willRender = operator.stepUp(screenPoint, this._step);
         }
         if (willRender){
-            drawing.render();
+            operator.render();
         }
         this._step++;
         if (this._step>=this._stepCount){
@@ -74,14 +74,16 @@ export class EventHandler {
     _stepOver(screenPoint){
         this._isRunning = false;
 
-        let drawing = this._drawing;
+        let operator = this._operator;
         this._step = 0;
 
-        let graph = drawing.stepOver(screenPoint, this._step);
-        drawing.render();
-        this._container.add(graph);
+        let graph = operator.stepOver(screenPoint, this._step);
+        if (graph) {
+            this._container.add(graph);
+        }
+        operator.render();
 
-        this._drawing = new GeneralSelection(panel, drawing);
+        this._onOverCallback?this._onOverCallback(graph):"";
     }
 
     _stepBreak(){
@@ -89,14 +91,14 @@ export class EventHandler {
         this._step = 0;
     }
 
-    set drawing(drawingObject){
+    set operator(operatorObject){
         this._stepBreak();
-        this._drawing = drawingObject;
-        this._stepCount = drawingObject.stepCount;
+        this._operator = operatorObject;
+        this._stepCount = operatorObject.stepCount;
     }
 
-    get drawing(){
-        return this._drawing;
+    get operator(){
+        return this._operator;
     }
 
 }

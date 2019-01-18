@@ -14,10 +14,10 @@ hello();
  * -------------------------
  */
 import {GraphPanel} from './panel/GraphPanel.js';
-const panel = new GraphPanel(document.querySelector('#image-label-area'), './resource/image/jd.jpg');
-const graphAxixDrawing = new GraphAxisManager(panel);
+const panel = new GraphPanel('image-label-area', './resource/image/jd.jpg');
+const graphAxisManager = new GraphAxisManager(panel);
 
 /*处理事件*/
 document.querySelector('#btn-draw-coord').addEventListener('click',function (event) {
-    panel.draw(graphAxixDrawing);
+    panel.draw(graphAxisManager);
 });

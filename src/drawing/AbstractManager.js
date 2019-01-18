@@ -9,9 +9,9 @@ export class AbstractManager {
         this._stage.add(this._layer);
         this._panel = panel;
 
-        this._drawingOperator = new AbstractOperator(panel);
-        this._selectingOperator = new AbstractOperator(panel);
-        this._editingOperator = new AbstractOperator(panel);
+        this._drawingOperator = null;
+        this._selectingOperator = null;
+        this._editingOperator = null;
     }
 
     get defaultColor(){
@@ -19,21 +19,21 @@ export class AbstractManager {
     }
 
     get drawingOperator(){
-        return this._drawingOperator;
+        throw 'Drawing operator is not defined in concrete class!';
     }
     get selectingOperator(){
-        return this._selectingOperator;
+        throw 'Selecting operator is not defined in concrete class!';
     }
     get editingOperator(){
-        return this._editingOperator;
+        throw 'Editing operator is not defined in concrete class!';
     }
 
 
 }
 
 export class AbstractDrawingOperator extends AbstractOperator{
-    constructor(panel){
-        super(panel);
+    constructor(manager){
+        super(manager);
     }
 
     stepStart(){
@@ -61,8 +61,8 @@ export class AbstractDrawingOperator extends AbstractOperator{
 }
 
 export class AbstractSelectingOperator extends AbstractOperator{
-    constructor(panel){
-        super(panel);
+    constructor(manager){
+        super(manager);
     }
 
     stepStart(){
@@ -90,8 +90,8 @@ export class AbstractSelectingOperator extends AbstractOperator{
 }
 
 export class AbstractEditingOperator extends AbstractOperator{
-    constructor(panel){
-        super(panel);
+    constructor(manager){
+        super(manager);
     }
 
     stepStart(){

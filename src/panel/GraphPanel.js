@@ -6,18 +6,18 @@ import Konva from "konva";
 
 export class GraphPanel {
 
-    constructor(canvasElement, bkImgUrl) {
-        if (!canvasElement) {
-            throw 'canvasElement parameter is mandatory!';
+    constructor(containerElement, bkImgUrl) {
+        if (!containerElement) {
+            throw 'containerElement parameter is mandatory!';
         }
 
         let stage = this._stage = new Konva.Stage({
-            container: 'image-label-area',
+            container: containerElement,
             width: 600,
             height: 600
         });
+
         let bkLayer = new Konva.Layer();
-        //bkLayer.setZIndex(-1000);
         let jsImage = new Image();
         jsImage.onload = function() {
 
@@ -39,35 +39,12 @@ export class GraphPanel {
         jsImage.src = bkImgUrl;
 
 
-
-
-
-
-        // let fCanvas = this._stage = new fabric.Canvas(canvasElement, {
-        //     selection: false,   //按照官方文档,是禁止了group selection
-        //     width: 600,
-        //     height: 600,
-        //     hoverCursor: 'pointer'
-        // });
-
-        this._generalSelection =  null;
-        this._currentDrawing = null;
+        this._currentManager = null;
         this._currentGraph = null;
         this._container = new Container(this);
 
         this._eventHandler = new EventHandler(this);
 
-        // if (bkImgUrl && typeof bkImgUrl==='string'){
-        //     fabric.Image.fromURL(bkImgUrl,function(bkImg) {
-        //         fCanvas.setBackgroundImage(bkImg, fCanvas.renderAll.bind(fCanvas), {
-        //             width: bkImg.width,
-        //             height: bkImg.height,
-        //             originX: 'left',
-        //             originY: 'top',
-        //             crossOrigin: 'anonymous' //放开跨域限制,据说这个属性影响取像素颜色的操作
-        //         });
-        //     });
-        // }
 
         let self = this;
         stage.on('mousedown', function(){
@@ -97,21 +74,21 @@ export class GraphPanel {
 
     }
 
-    get fCanvas(){
+    get stage(){
         return this._stage;
     }
 
-    get drawingClass(){
-        return this._currentDrawing;
+    get graphManager(){
+        return this._currentManager;
     }
-    set drawingClass(clazz){
+    set graphManager(clazz){
         if (!clazz instanceof Graph){
             throw  'The parameter must be an instance of Graph class';
         }
         clazz.fCanvas = this._stage;
 
-        this._currentDrawing = clazz;
-        this._currentDrawing.over = (graph)=>{
+        this._currentManager = clazz;
+        this._currentManager.over = (graph)=>{
             if (graph !== null){
                 this._container.add(graph);
             }
@@ -124,24 +101,25 @@ export class GraphPanel {
         };
     }
 
-    draw(drawingClass){
+    draw(graphManager){
 
-        if (!drawingClass && !this.drawingClass){
+        if (!graphManager && !this.graphManager){
             return;
         }
 
-        if (drawingClass){
-            this.drawingClass = drawingClass;
+        if (graphManager){
+            this.graphManager = graphManager;
         }
-        this._eventHandler.drawing =  this.drawingClass;
-        this._eventHandler.stepStart(()=>{
-            this._eventHandler.drawing = this._generalSelection;
+        this._eventHandler.operator =  this.graphManager.drawingOperator;
+        this._eventHandler.stepStart((graph)=>{
+            this._eventHandler.operator = this.graphManager.selectingOperator;
+            this._eventHandler.stepStart();
         });
     }
 
     select(){
-        this._eventHandler.drawing = this._generalSelection;
-        this._eventHandler.stepStart();
+
+
     }
 
     add(graph) {
