@@ -9,11 +9,11 @@ export class EventHandler {
         this._isRunning = false;
     }
 
-    stepStart(onOverCallback){
+    stepStart(config,onOverCallback){
         let willRender = false;
         let drawing = this._operator;
         if (drawing.stepStart){
-            willRender = drawing.stepStart();
+            willRender = drawing.stepStart(config);
         }
         if (willRender){
             drawing.render();

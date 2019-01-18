@@ -34,7 +34,7 @@ export class GeneralSelection extends AbstractOperator{
                     this._ownerPanel._currentGraph = graph;
                     selected = graph;
                 }else{
-                    graph.unselect();
+                    graph.deSelect();
                 }
             }
             callBack(selected);

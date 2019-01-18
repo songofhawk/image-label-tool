@@ -94,14 +94,14 @@ export class GraphPanel {
             }
 
             if (this._currentGraph !== null){
-                this._currentGraph.unSelect();
+                this._currentGraph.deSelect();
             }
             this._currentGraph = graph;
             return graph;
         };
     }
 
-    draw(graphManager){
+    draw(graphManager, config){
 
         if (!graphManager && !this.graphManager){
             return;
@@ -111,7 +111,7 @@ export class GraphPanel {
             this.graphManager = graphManager;
         }
         this._eventHandler.operator =  this.graphManager.drawingOperator;
-        this._eventHandler.stepStart((graph)=>{
+        this._eventHandler.stepStart(config, (graph)=>{
             this._eventHandler.operator = this.graphManager.selectingOperator;
             this._eventHandler.stepStart();
         });

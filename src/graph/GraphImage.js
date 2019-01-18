@@ -5,37 +5,45 @@ import {AbstractDrawingOperator} from "../drawing/AbstractManager";
 import {AbstractSelectingOperator} from "../drawing/AbstractManager";
 import {AbstractEditingOperator} from "../drawing/AbstractManager";
 
-export class GraphAxis extends Graph{
-    constructor(layer) {
+export class GraphImage extends Graph{
+    constructor(layer,config) {
         super(layer);
 
-        this._vLine = new Konva.Group({
+        this._group = new Konva.Group({
             x:0,
             y:0
         });
-        let vLine = new Konva.Line({
-            points: [0, 0, 0, layer.size().height],
-            stroke: Graph.DEFAULT_COLOR,
-            strokeWidth: 2
-        });
-        this._vLine.add(vLine);
-        this._vLine.line = vLine;
+        layer.add(this._group);
+
+        let imageObj = new Image();
+        let self = this;
+        imageObj.onload = function() {
+
+            let image = new Konva.Image({
+                x: 0,
+                y: 0,
+                image: imageObj,
+                width: config.width,
+                height: config.height
+            });
+            self._group.add(image);
+            self._group.image = image;
+
+            let decor = new Konva.Rect({
+                x: - 1,
+                y: - 1,
+                width: config.width+1,
+                height: config.height+1,
+                fillEnabled: false,
+                stroke: 'gray',
+                strokeWidth: 1
+            })
+            //decor.hide();
+            self._group.add(decor);
 
 
-        this._hLine = new Konva.Group({
-            x:0,
-            y:0
-        });
-        let hLine = new Konva.Line({
-            points: [0, 0, layer.size().width, 0],
-            stroke: Graph.DEFAULT_COLOR,
-            strokeWidth: 2
-        });
-        this._hLine.add(hLine);
-        this._hLine.line = hLine;
-
-        layer.add(this._vLine);
-        layer.add(this._hLine);
+        };
+        imageObj.src = config.src;
     }
 
     create(callBack){
@@ -43,8 +51,11 @@ export class GraphAxis extends Graph{
     }
 
     moveTo(point){
-        this._vLine.setX(point.x);
-        this._hLine.setY(point.y);
+        if (!this._group){
+            return;
+        }
+        this._group.setX(point.x);
+        this._group.setY(point.y);
     }
 
     moveOn(){
@@ -55,7 +66,10 @@ export class GraphAxis extends Graph{
 
     }
 
-    unselect(){
+    /**
+     * 取消选择
+     */
+    deSelect(){
 
     }
 
@@ -113,13 +127,13 @@ export class GraphAxis extends Graph{
 
 }
 
-export class GraphAxisManager extends AbstractManager{
+export class GraphImageManager extends AbstractManager{
     constructor(panel){
         super(panel);
         this._axis = null;
-        this._drawingOperator = new AxisDrawingOperator(this);
-        this._selectingOperator = new AxisSelectingOperator(this);
-        this._editingOperator = new AxisEditingOperator(this);
+        this._drawingOperator = new ImageDrawingOperator(this);
+        this._selectingOperator = new ImageSelectingOperator(this);
+        this._editingOperator = new ImageEditingOperator(this);
     }
 
     get drawingOperator(){
@@ -134,20 +148,19 @@ export class GraphAxisManager extends AbstractManager{
 
 }
 
-class AxisDrawingOperator extends AbstractDrawingOperator{
+class ImageDrawingOperator extends AbstractDrawingOperator{
     constructor(manager){
         super(manager);
     }
 
     stepStart(config){
-        if (!this._manager._axis){
-            this._manager._axis = new GraphAxis(this._layer);
-        }
+        this._manager.currentGraph = new GraphImage(this._layer, config);
+        this._manager._stage.container().style.cursor = 'crosshair';
         return false;
     }
 
     stepMove(screenPoint, step){
-        this._manager._axis.moveTo(screenPoint);
+        this._manager.currentGraph.moveTo(screenPoint);
         return true;
     }
 
@@ -159,16 +172,16 @@ class AxisDrawingOperator extends AbstractDrawingOperator{
     }
     stepOver(screenPoint, step){
         super.stepOver(screenPoint, step);
-        return this._manager._axis;
+        this._manager._stage.container().style.cursor = 'pointer';
+        return this._manager.currentGraph;
     }
-
 
     get stepCount(){
         return 1;
     }
 }
 
-class AxisSelectingOperator extends AbstractSelectingOperator{
+class ImageSelectingOperator extends AbstractSelectingOperator{
     constructor(manager){
         super(manager);
     }
@@ -215,7 +228,7 @@ class AxisSelectingOperator extends AbstractSelectingOperator{
     }
 }
 
-class AxisEditingOperator extends AbstractEditingOperator{
+class ImageEditingOperator extends AbstractEditingOperator{
     constructor(manager){
         super(manager);
     }

@@ -6,6 +6,11 @@ export class Graph {
         this.code = StringUtil.getGuid();
     }
 
+    static get DEFAULT_COLOR(){
+        return 'gray';
+    }
+
+
     create(callBack){
         if (callBack){
             callBack();
@@ -24,7 +29,7 @@ export class Graph {
 
     }
 
-    unSelect(){
+    deSelect(){
 
     }
 

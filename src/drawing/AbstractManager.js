@@ -13,10 +13,6 @@ export class AbstractManager {
         this._editingOperator = null;
     }
 
-    get defaultColor(){
-        return 'rgba(80,80,80,0.5)';
-    }
-
     get drawingOperator(){
         throw 'Drawing operator is not defined in concrete class!';
     }

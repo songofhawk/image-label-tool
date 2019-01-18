@@ -12036,16 +12036,16 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
       for (var i = this._objects.length; i--; ) {
         currentObject = this._objects[i];
 
-        if (!currentObject || !currentObject.selectable || !currentObject.visible || currentObject.onSelect({ e: e })) {
+        if (!currentGraph || !currentGraph.selectable || !currentGraph.visible || currentGraph.onSelect({ e: e })) {
           continue;
         }
 
-        if ((allowIntersect && currentObject.intersectsWithRect(selectionX1Y1, selectionX2Y2)) ||
-            currentObject.isContainedWithinRect(selectionX1Y1, selectionX2Y2) ||
-            (allowIntersect && currentObject.containsPoint(selectionX1Y1)) ||
-            (allowIntersect && currentObject.containsPoint(selectionX2Y2))
+        if ((allowIntersect && currentGraph.intersectsWithRect(selectionX1Y1, selectionX2Y2)) ||
+            currentGraph.isContainedWithinRect(selectionX1Y1, selectionX2Y2) ||
+            (allowIntersect && currentGraph.containsPoint(selectionX1Y1)) ||
+            (allowIntersect && currentGraph.containsPoint(selectionX2Y2))
         ) {
-          group.push(currentObject);
+          group.push(currentGraph);
 
           // only add one object if it's a click
           if (isClick) {
