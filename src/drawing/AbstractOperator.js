@@ -1,5 +1,3 @@
-import Konva from "konva";
-
 export class AbstractOperator {
     constructor(manager){
         this._manager = manager;
@@ -45,7 +43,7 @@ export class AbstractOperator {
      * 操作结束
      * @param screenPoint 当前鼠标位置
      * @param step 步骤数
-     * @return {boolean} 是否渲染
+     * @return {Graph} 绘制对象
      */
     stepOver(screenPoint, step){
 

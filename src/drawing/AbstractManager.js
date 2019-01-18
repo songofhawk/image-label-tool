@@ -1,5 +1,4 @@
 import Konva from "konva";
-import {GraphAxis} from "../graph/GraphAxis";
 import {AbstractOperator} from "./AbstractOperator";
 
 export class AbstractManager {

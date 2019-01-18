@@ -1,6 +1,3 @@
-import {AbstractOperator} from "./AbstractOperator";
-import {GeneralSelection} from "./GeneralSelection";
-
 export class EventHandler {
     constructor(panel, operator){
         this._container = panel._container;

@@ -1,10 +1,9 @@
 import Konva from 'konva';
 import {Graph} from "./Graph";
-import {AbstractOperator} from "../drawing/AbstractOperator";
 import {AbstractManager} from "../drawing/AbstractManager";
 import {AbstractDrawingOperator} from "../drawing/AbstractManager";
-import {AbstractEditingOperator} from "../drawing/AbstractManager";
 import {AbstractSelectingOperator} from "../drawing/AbstractManager";
+import {AbstractEditingOperator} from "../drawing/AbstractManager";
 
 export class GraphAxis extends Graph{
     constructor(layer, defaultColor) {
@@ -70,12 +69,12 @@ export class GraphAxis extends Graph{
 
     highlight(){
         let vLine = this._vLine;
-        let x = 1;
+        let x = 2;
         if (!vLine.hl){
             vLine.hl = new Konva.Line({
                 points: [x, 0, x, vLine.line.height()],
-                stroke: 'green',
-                strokeWidth: 2
+                stroke: 'rgba(156,156,156,10)',
+                strokeWidth: 3
             })
             vLine.add(vLine.hl);
         }else{
@@ -85,12 +84,12 @@ export class GraphAxis extends Graph{
 
 
         let hLine = this._hLine;
-        let y =  1;
+        let y =  2;
         if (!hLine.hl){
             hLine.hl = new Konva.Line({
                 points: [0, y, hLine.line.width(), y],
-                stroke: 'green',
-                strokeWidth: 2
+                stroke: 'rgba(156,156,156,10)',
+                strokeWidth: 3
             })
             hLine.add(hLine.hl);
         }else{
@@ -120,7 +119,7 @@ export class GraphAxisManager extends AbstractManager{
         this._axis = null;
         this._drawingOperator = new AxisDrawingOperator(this);
         this._selectingOperator = new AxisSelectingOperator(this);
-        this._editingOperator = new AbstractOperator(this);
+        this._editingOperator = new AxisEditingOperator(this);
     }
 
     get drawingOperator(){
@@ -142,7 +141,9 @@ class AxisDrawingOperator extends AbstractDrawingOperator{
 
     stepStart(){
         let defaultColor = super.defaultColor;
-        this._manager._axis = new GraphAxis(this._layer, defaultColor);
+        if (!this._manager._axis){
+            this._manager._axis = new GraphAxis(this._layer, defaultColor);
+        }
         return false;
     }
 
@@ -168,7 +169,7 @@ class AxisDrawingOperator extends AbstractDrawingOperator{
     }
 }
 
-export class AxisSelectingOperator extends AbstractOperator{
+class AxisSelectingOperator extends AbstractSelectingOperator{
     constructor(manager){
         super(manager);
     }
@@ -194,6 +195,7 @@ export class AxisSelectingOperator extends AbstractOperator{
 
     }
     stepOver(screenPoint, step){
+        this._manager._axis.unHighlight();
         super.stepOver(screenPoint, step);
     }
 
@@ -213,3 +215,35 @@ export class AxisSelectingOperator extends AbstractOperator{
         return null;
     }
 }
+
+class AxisEditingOperator extends AbstractEditingOperator{
+    constructor(manager){
+        super(manager);
+    }
+
+    stepStart(){
+    }
+
+    stepMove(screenPoint, step){
+        this._manager._axis.moveTo(screenPoint);
+        return true;
+    }
+
+    stepDown(screenPoint, step){
+
+    }
+
+    stepUp(screenPoint, step){
+
+    }
+
+    stepOver(screenPoint, step){
+        super.stepOver(screenPoint, step);
+        return this._manager._axis;
+    }
+
+    get stepCount(){
+        return 1;
+    }
+}
+
