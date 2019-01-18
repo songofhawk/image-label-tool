@@ -11,14 +11,15 @@ export class GraphImage extends Graph{
 
         this._group = new Konva.Group({
             x:0,
-            y:0
+            y:0,
+            width: config.width,
+            height: config.height
         });
         layer.add(this._group);
 
         let imageObj = new Image();
         let self = this;
         imageObj.onload = function() {
-
             let image = new Konva.Image({
                 x: 0,
                 y: 0,
@@ -30,18 +31,17 @@ export class GraphImage extends Graph{
             self._group.image = image;
 
             let decor = new Konva.Rect({
-                x: - 1,
-                y: - 1,
+                x: - 2,
+                y: - 2,
                 width: config.width+1,
                 height: config.height+1,
                 fillEnabled: false,
                 stroke: 'gray',
-                strokeWidth: 1
+                strokeWidth: 2
             })
-            //decor.hide();
+            decor.hide();
+            self._group.decor = decor;
             self._group.add(decor);
-
-
         };
         imageObj.src = config.src;
     }
@@ -78,51 +78,23 @@ export class GraphImage extends Graph{
     }
 
     isPointOn(point){
-
+        let x=point.x, y=point.y;
+        let graph = this._group;
+        let minX = graph.x(), minY = graph.y(),
+            maxX = graph.x()+graph.width(),
+            maxY = graph.y()+graph.height();
+        if (x>=minX && y>=minY && x<=maxX && y<=maxY){
+            return true;
+        }
+        return false;
     }
 
     highlight(){
-        let vLine = this._vLine;
-        let x = 2;
-        if (!vLine.hl){
-            vLine.hl = new Konva.Line({
-                points: [x, 0, x, vLine.line.height()],
-                stroke: 'rgba(156,156,156,10)',
-                strokeWidth: 3
-            })
-            vLine.add(vLine.hl);
-        }else{
-            //vLine.hl.setX(x);
-            vLine.hl.show();
-        }
-
-
-        let hLine = this._hLine;
-        let y =  2;
-        if (!hLine.hl){
-            hLine.hl = new Konva.Line({
-                points: [0, y, hLine.line.width(), y],
-                stroke: 'rgba(156,156,156,10)',
-                strokeWidth: 3
-            })
-            hLine.add(hLine.hl);
-        }else{
-            //hLine.hl.setY(y);
-            hLine.hl.show();
-        }
+        this._group.decor.show();
     }
 
     unHighlight(){
-        let vLine = this._vLine;
-        if (vLine.hl){
-            vLine.hl.hide();
-        }
-
-
-        let hLine = this._hLine;
-        if (hLine.hl){
-            hLine.hl.hide();
-        }
+        this._group.decor.hide();
     }
 
 }
@@ -172,7 +144,8 @@ class ImageDrawingOperator extends AbstractDrawingOperator{
     }
     stepOver(screenPoint, step){
         super.stepOver(screenPoint, step);
-        this._manager._stage.container().style.cursor = 'pointer';
+        this._manager._stage.container().style.cursor = 'default';
+        super.afterStepOver(this._manager.currentGraph);
         return this._manager.currentGraph;
     }
 
@@ -191,12 +164,7 @@ class ImageSelectingOperator extends AbstractSelectingOperator{
     }
 
     stepMove(screenPoint, step){
-        let axis = this._findInPoint(screenPoint);
-        if (axis){
-            axis.highlight();
-        }else{
-            this._manager._axis.unHighlight();
-        }
+        this._manager._container.highlightByPoint(screenPoint);;
         return true;
     }
 
@@ -207,7 +175,7 @@ class ImageSelectingOperator extends AbstractSelectingOperator{
 
     }
     stepOver(screenPoint, step){
-        this._manager._axis.unHighlight();
+
         super.stepOver(screenPoint, step);
     }
 
@@ -216,16 +184,6 @@ class ImageSelectingOperator extends AbstractSelectingOperator{
         return 1;
     }
 
-    _findInPoint(screenPoint){
-        const TOLERANCE = 4;
-        let axis = this._manager._axis;
-        let x = axis._vLine.x(), y = axis._hLine.y();
-        let differX = screenPoint.x - x, differY = screenPoint.y - y;
-        if (differX<TOLERANCE && differX>-TOLERANCE   ||   differY<TOLERANCE && differY>-TOLERANCE){
-            return axis;
-        }
-        return null;
-    }
 }
 
 class ImageEditingOperator extends AbstractEditingOperator{
