@@ -117,9 +117,16 @@ export class GraphPanel {
         });
     }
 
-    select(){
+    select(graphManager, config){
+        if (!graphManager && !this.graphManager){
+            return;
+        }
 
-
+        if (graphManager){
+            this.graphManager = graphManager;
+        }
+        this._eventHandler.operator =  this.graphManager.selectingOperator;
+        this._eventHandler.stepStart(config);
     }
 
     add(graph) {

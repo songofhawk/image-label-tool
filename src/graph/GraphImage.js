@@ -25,19 +25,20 @@ export class GraphImage extends Graph{
                 y: 0,
                 image: imageObj,
                 width: config.width,
-                height: config.height
+                height: config.height,
+                draggable:true
             });
             self._group.add(image);
             self._group.image = image;
 
             let decor = new Konva.Rect({
-                x: - 2,
-                y: - 2,
+                x: - 1,
+                y: - 1,
                 width: config.width+1,
                 height: config.height+1,
                 fillEnabled: false,
-                stroke: 'gray',
-                strokeWidth: 2
+                stroke: 'LightGray',
+                strokeWidth: 3
             })
             decor.hide();
             self._group.decor = decor;
@@ -63,14 +64,19 @@ export class GraphImage extends Graph{
     }
 
     select(){
+        this._group.decor.stroke('#FFCC99');
+        this._group.decor.show();
 
+        super.select();
     }
 
     /**
      * 取消选择
      */
     deSelect(){
-
+        this._group.decor.stroke('LightGray');
+        this._group.decor.hide();
+        super.deSelect();
     }
 
     delete(){
@@ -164,7 +170,7 @@ class ImageSelectingOperator extends AbstractSelectingOperator{
     }
 
     stepMove(screenPoint, step){
-        this._manager._container.highlightByPoint(screenPoint);;
+        this._manager._container.highlightByPoint(screenPoint);
         return true;
     }
 
@@ -175,8 +181,8 @@ class ImageSelectingOperator extends AbstractSelectingOperator{
 
     }
     stepOver(screenPoint, step){
-
         super.stepOver(screenPoint, step);
+        super.afterStepOver();
     }
 
 

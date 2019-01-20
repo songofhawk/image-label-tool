@@ -77,7 +77,12 @@ export class AbstractSelectingOperator extends AbstractOperator{
 
     }
     stepOver(screenPoint, step){
+
         super.stepOver(screenPoint, step);
+    }
+
+    afterStepOver(graph){
+        this._manager._container.select(graph);
     }
 
 
@@ -120,6 +125,8 @@ class Container {
     constructor() {
         this._graphList = [];
         this._graphMap = {};
+        this.currentGraph = null;
+        this.selectedGraph = null;
     }
     /**
      * 添加指定图形
@@ -193,10 +200,29 @@ class Container {
             if (graph.isPointOn(point)){
                 graph.highlight();
                 theGraph= graph;
+                this.currentGraph = theGraph;
             }else{
                 graph.unHighlight();
             }
         }
         return theGraph;
+    }
+
+    select(graphToBeSelected){
+        if (!graphToBeSelected){
+            graphToBeSelected = this.currentGraph;
+        }
+        for (let graph of this._graphList){
+            if (graph===graphToBeSelected){
+                graph.select();
+                this.selectedGraph = graph;
+            }else{
+                graph.deSelect();
+            }
+        }
+    }
+
+    getSelected(){
+        return this.selectedGraph;
     }
 }

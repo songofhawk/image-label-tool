@@ -26,11 +26,11 @@ export class Graph {
     }
 
     select(){
-
+        this.selected = true;
     }
 
     deSelect(){
-
+        this.selected = false;
     }
 
     delete(){
