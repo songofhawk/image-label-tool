@@ -52,7 +52,8 @@ export class GraphPanel {
             self._eventHandler.mouseDown(pointer);
         });
 
-        stage.on('mousemove', function(){
+        stage.on('mousemove', function(e){
+            console.log('mousemove on: ', e.target);
             let pointer = stage.getPointerPosition();
             self._eventHandler.mouseMove(pointer);
         });
@@ -126,7 +127,10 @@ export class GraphPanel {
             this.graphManager = graphManager;
         }
         this._eventHandler.operator =  this.graphManager.selectingOperator;
-        this._eventHandler.stepStart(config);
+        this._eventHandler.stepStart(config, (graph)=>{
+            this._eventHandler.operator = this.graphManager.editingOperator;
+            this._eventHandler.stepStart();
+        });
     }
 
     add(graph) {

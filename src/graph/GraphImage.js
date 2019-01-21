@@ -13,7 +13,8 @@ export class GraphImage extends Graph{
             x:0,
             y:0,
             width: config.width,
-            height: config.height
+            height: config.height,
+            draggable:true
         });
         layer.add(this._group);
 
@@ -25,8 +26,7 @@ export class GraphImage extends Graph{
                 y: 0,
                 image: imageObj,
                 width: config.width,
-                height: config.height,
-                draggable:true
+                height: config.height
             });
             self._group.add(image);
             self._group.image = image;
@@ -103,6 +103,25 @@ export class GraphImage extends Graph{
         this._group.decor.hide();
     }
 
+    enableEdit(){
+        let tr = new Konva.Transformer();
+        this._layer.add(tr);
+
+        let group = this._group;
+        tr.attachTo(group);
+
+        // 在transform结束的时候,把scale调整为实际的宽和高,但效果并不好, 点击图片中心会缩回去
+        // 代码来自官网的一个回答: https://konvajs.github.io/docs/select_and_transform/Basic_demo.html
+        // group.on('transformend', function () {
+        //     console.log('transform end');
+        //     group.setAttrs({
+        //         width: group.width() * group.scaleX(),
+        //         height: group.height() * group.scaleY(),
+        //         scaleX: 1,
+        //         scaleY: 1,
+        //     })
+        // });
+    }
 }
 
 export class GraphImageManager extends AbstractManager{
@@ -198,11 +217,16 @@ class ImageEditingOperator extends AbstractEditingOperator{
     }
 
     stepStart(){
+        let graph = this._manager._container.getSelected();
+        if (!graph){
+            return;
+        }
+        graph.enableEdit();
+        return true;
     }
 
     stepMove(screenPoint, step){
-        this._manager._axis.moveTo(screenPoint);
-        return true;
+       return false;
     }
 
     stepDown(screenPoint, step){
@@ -215,7 +239,7 @@ class ImageEditingOperator extends AbstractEditingOperator{
 
     stepOver(screenPoint, step){
         super.stepOver(screenPoint, step);
-        return this._manager._axis;
+
     }
 
     get stepCount(){
