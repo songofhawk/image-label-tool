@@ -117,18 +117,10 @@ export class GraphAxisManager extends AbstractManager{
         super(panel);
         this._axis = null;
         this._drawingOperator = new AxisDrawingOperator(this);
-        this._selectingOperator = new AxisSelectingOperator(this);
-        this._editingOperator = new AxisEditingOperator(this);
     }
 
     get drawingOperator(){
         return this._drawingOperator;
-    }
-    get selectingOperator(){
-        return this._selectingOperator;
-    }
-    get editingOperator(){
-        return this._editingOperator;
     }
 
 }
@@ -140,7 +132,7 @@ class AxisDrawingOperator extends AbstractDrawingOperator{
 
     stepStart(config){
         if (!this._manager._axis){
-            this._manager._axis = new GraphAxis(this._layer);
+            this._manager._axis = new GraphAxis(this);
         }
         return false;
     }

@@ -1,63 +1,81 @@
 import {StringUtil} from "../util/StringUtil";
 
 export class Graph {
-    constructor(layer){
-        this._layer = layer;
+    constructor(manager) {
+        this._manager = manager;
+        this._layer = manager._layer;
         this.code = StringUtil.getGuid();
     }
 
-    static get DEFAULT_COLOR(){
+    static get DEFAULT_COLOR() {
         return 'gray';
     }
 
 
-    create(callBack){
-        if (callBack){
+    create(callBack) {
+        if (callBack) {
             callBack();
         }
     }
 
-    moveTo(){
+    moveTo() {
 
     }
 
-    moveOn(){
+    moveOn() {
 
     }
 
-    select(){
+    onBoradcast(msgName, sourceCode){
+        if (msgName==='select'){
+            this.deSelect();
+        }
+    }
+
+    select() {
         this.selected = true;
+        this._manager._container.broadcast('select', this.code);
     }
 
-    deSelect(){
+    deSelect() {
         this.selected = false;
     }
 
-    delete(){
+    toggleSelect() {
+        if (this.selected) {
+            this.deSelect();
+        } else {
+            this.select();
+        }
+    }
+
+    delete() {
 
     }
 
-    isPointOn(point){
+    isPointOn(point) {
 
     }
 
-    highlight(){
+    highlight() {
     }
 
-    unHighlight(){
+    unHighlight() {
 
     }
 
-
-    mouseOver(code)
-    {
+    mouseOver() {
         this.highlight();
         this._layer.draw();
     }
 
-    mouseOut(code){
+    mouseOut() {
         this.unHighlight();
         this._layer.draw();
+    }
+
+    mouseClick() {
+        this.toggleSelect();
     }
 }
 

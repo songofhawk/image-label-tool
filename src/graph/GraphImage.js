@@ -5,9 +5,10 @@ import {AbstractDrawingOperator} from "../drawing/AbstractManager";
 
 
 export class GraphImage extends Graph{
-    constructor(layer,config) {
-        super(layer);
+    constructor(manager,config) {
+        super(manager);
 
+        let layer = this._layer;
         this._group = new Konva.Group({
             x:0,
             y:0,
@@ -54,6 +55,11 @@ export class GraphImage extends Graph{
                 console.log('mouse out from image: '+self.code);
                 self.mouseOut();
             });
+
+            image.on("click", function (e) {
+                console.log('mouse click on image: '+self.code);
+                self.mouseClick();
+            });
         };
         imageObj.src = config.src;
 
@@ -81,9 +87,9 @@ export class GraphImage extends Graph{
     }
 
     select(){
-        this._group.decor.stroke('#FFCC99');
-        this._group.decor.show();
-
+        // this._group.decor.stroke('#FFCC99');
+        // this._group.decor.show();
+        this.setEditable(true);
         super.select();
     }
 
@@ -91,8 +97,10 @@ export class GraphImage extends Graph{
      * 取消选择
      */
     deSelect(){
-        this._group.decor.stroke('LightGray');
-        this._group.decor.hide();
+        // this._group.decor.stroke('LightGray');
+        // this._group.decor.hide();
+
+        this.setEditable(false);
         super.deSelect();
     }
 
@@ -120,12 +128,25 @@ export class GraphImage extends Graph{
         this._group.decor.hide();
     }
 
-    enableEdit(){
-        let tr = new Konva.Transformer();
-        this._layer.add(tr);
+    setEditable(editable){
+        if (editable){
+            if (this.tr){
+                return;
+            }
+            let tr = new Konva.Transformer();
+            this._layer.add(tr);
 
-        let group = this._group;
-        tr.attachTo(group);
+            let group = this._group;
+            tr.attachTo(group);
+            this.tr = tr;
+        }else{
+            if (!this.tr){
+                return;
+            }
+            this.tr.destroy();
+            this.tr = null;
+        }
+        this.ediable = editable;
 
         // 在transform结束的时候,把scale调整为实际的宽和高,但效果并不好, 点击图片中心会缩回去
         // 代码来自官网的一个回答: https://konvajs.github.io/docs/select_and_transform/Basic_demo.html
@@ -139,6 +160,7 @@ export class GraphImage extends Graph{
         //     })
         // });
     }
+
 }
 
 export class GraphImageManager extends AbstractManager{
@@ -168,7 +190,7 @@ class ImageDrawingOperator extends AbstractDrawingOperator{
     }
 
     stepStart(config){
-        this._manager.currentGraph = new GraphImage(this._layer, config);
+        this._manager.currentGraph = new GraphImage(this._manager, config);
         this._manager._stage.container().style.cursor = 'crosshair';
         return false;
     }

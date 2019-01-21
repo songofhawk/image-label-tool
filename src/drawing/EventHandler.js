@@ -1,5 +1,6 @@
 export class EventHandler {
     constructor(panel, operator){
+        this._panel = panel;
         this._container = panel._container;
         this._stage = panel._stage;
         if (operator){
@@ -81,6 +82,7 @@ export class EventHandler {
         operator.render();
 
         this._onOverCallback?this._onOverCallback(graph):"";
+        this._panel.listenEvent(false);
     }
 
     _stepBreak(){

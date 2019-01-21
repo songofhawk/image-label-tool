@@ -16,12 +16,7 @@ export class AbstractManager {
     get drawingOperator(){
         throw 'Drawing operator is not defined in concrete class!';
     }
-    get selectingOperator(){
-        throw 'Selecting operator is not defined in concrete class!';
-    }
-    get editingOperator(){
-        throw 'Editing operator is not defined in concrete class!';
-    }
+
 }
 
 export class AbstractDrawingOperator extends AbstractOperator{
@@ -158,5 +153,11 @@ class Container {
 
     getSelected(){
         return this.selectedGraph;
+    }
+
+    broadcast(msgName, sourceCode){
+        this._graphList.
+        filter((graph)=>graph.code!=sourceCode).
+        forEach((graph)=>graph.onBoradcast(msgName, sourceCode));
     }
 }
