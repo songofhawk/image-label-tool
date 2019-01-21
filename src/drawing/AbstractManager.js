@@ -9,8 +9,6 @@ export class AbstractManager {
         this._panel = panel;
 
         this._drawingOperator = null;
-        this._selectingOperator = null;
-        this._editingOperator = null;
 
         this._container = new Container();
     }
@@ -56,70 +54,6 @@ export class AbstractDrawingOperator extends AbstractOperator{
         return 1;
     }
 }
-
-export class AbstractSelectingOperator extends AbstractOperator{
-    constructor(manager){
-        super(manager);
-    }
-
-    stepStart(){
-        return false;
-    }
-
-    stepMove(screenPoint, step){
-        return true;
-    }
-
-    stepDown(screenPoint, step){
-
-    }
-    stepUp(screenPoint, step){
-
-    }
-    stepOver(screenPoint, step){
-
-        super.stepOver(screenPoint, step);
-    }
-
-    afterStepOver(graph){
-        this._manager._container.select(graph);
-    }
-
-
-    get stepCount(){
-        return 1;
-    }
-}
-
-export class AbstractEditingOperator extends AbstractOperator{
-    constructor(manager){
-        super(manager);
-    }
-
-    stepStart(){
-        return false;
-    }
-
-    stepMove(screenPoint, step){
-        return true;
-    }
-
-    stepDown(screenPoint, step){
-
-    }
-    stepUp(screenPoint, step){
-
-    }
-    stepOver(screenPoint, step){
-        super.stepOver(screenPoint, step);
-    }
-
-
-    get stepCount(){
-        return 1;
-    }
-}
-
 
 class Container {
     constructor() {

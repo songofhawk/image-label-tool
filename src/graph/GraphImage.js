@@ -2,8 +2,7 @@ import Konva from 'konva';
 import {Graph} from "./Graph";
 import {AbstractManager} from "../drawing/AbstractManager";
 import {AbstractDrawingOperator} from "../drawing/AbstractManager";
-import {AbstractSelectingOperator} from "../drawing/AbstractManager";
-import {AbstractEditingOperator} from "../drawing/AbstractManager";
+
 
 export class GraphImage extends Graph{
     constructor(layer,config) {
@@ -14,7 +13,8 @@ export class GraphImage extends Graph{
             y:0,
             width: config.width,
             height: config.height,
-            draggable:true
+            draggable:true,
+            listening:true
         });
         layer.add(this._group);
 
@@ -26,7 +26,8 @@ export class GraphImage extends Graph{
                 y: 0,
                 image: imageObj,
                 width: config.width,
-                height: config.height
+                height: config.height,
+                listening:true
             });
             self._group.add(image);
             self._group.image = image;
@@ -179,9 +180,9 @@ class ImageDrawingOperator extends AbstractDrawingOperator{
     }
 }
 
-class ImageSelectingOperator extends AbstractSelectingOperator{
+class ImageSelectingOperator{
     constructor(manager){
-        super(manager);
+
     }
 
     stepStart(){
@@ -211,9 +212,9 @@ class ImageSelectingOperator extends AbstractSelectingOperator{
 
 }
 
-class ImageEditingOperator extends AbstractEditingOperator{
+class ImageEditingOperator{
     constructor(manager){
-        super(manager);
+
     }
 
     stepStart(){

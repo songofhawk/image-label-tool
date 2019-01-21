@@ -2,8 +2,7 @@ import Konva from 'konva';
 import {Graph} from "./Graph";
 import {AbstractManager} from "../drawing/AbstractManager";
 import {AbstractDrawingOperator} from "../drawing/AbstractManager";
-import {AbstractSelectingOperator} from "../drawing/AbstractManager";
-import {AbstractEditingOperator} from "../drawing/AbstractManager";
+
 
 export class GraphAxis extends Graph{
     constructor(layer) {
@@ -168,9 +167,9 @@ class AxisDrawingOperator extends AbstractDrawingOperator{
     }
 }
 
-class AxisSelectingOperator extends AbstractSelectingOperator{
+class AxisSelectingOperator {
     constructor(manager){
-        super(manager);
+
     }
 
     stepStart(){
@@ -215,9 +214,9 @@ class AxisSelectingOperator extends AbstractSelectingOperator{
     }
 }
 
-class AxisEditingOperator extends AbstractEditingOperator{
+class AxisEditingOperator {
     constructor(manager){
-        super(manager);
+
     }
 
     stepStart(){

@@ -42,3 +42,9 @@ document.querySelector('#btn-select-image').addEventListener('click',function (e
         src:'./resource/image/f.jpg'
     });
 });
+document.querySelector('#btn-listen').addEventListener('click',function (event) {
+    panel.listenEvent(true);
+});
+document.querySelector('#btn-notlisten').addEventListener('click',function (event) {
+    panel.listenEvent(false);
+});
