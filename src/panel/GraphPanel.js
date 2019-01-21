@@ -46,10 +46,7 @@ export class GraphPanel {
 
         this._eventHandler = new EventHandler(this);
 
-
-
-
-
+        this.listenEvent(true);
     }
 
     get stage(){

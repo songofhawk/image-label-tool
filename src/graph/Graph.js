@@ -40,5 +40,24 @@ export class Graph {
     isPointOn(point){
 
     }
+
+    highlight(){
+    }
+
+    unHighlight(){
+
+    }
+
+
+    mouseOver(code)
+    {
+        this.highlight();
+        this._layer.draw();
+    }
+
+    mouseOut(code){
+        this.unHighlight();
+        this._layer.draw();
+    }
 }
 

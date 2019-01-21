@@ -13,13 +13,13 @@ export class GraphImage extends Graph{
             y:0,
             width: config.width,
             height: config.height,
-            draggable:true,
-            listening:true
+            draggable:true
         });
         layer.add(this._group);
 
         let imageObj = new Image();
         let self = this;
+
         imageObj.onload = function() {
             let image = new Konva.Image({
                 x: 0,
@@ -44,8 +44,24 @@ export class GraphImage extends Graph{
             decor.hide();
             self._group.decor = decor;
             self._group.add(decor);
+
+            image.on("mouseover", function (e) {
+                console.log('mouse over on image: '+self.code);
+                self.mouseOver();
+            });
+
+            image.on("mouseout", function (e) {
+                console.log('mouse out from image: '+self.code);
+                self.mouseOut();
+            });
         };
         imageObj.src = config.src;
+
+        // this._group.on("mouseover", function (e) {
+        //     console.log('mouse over on group: '+self.code);
+        // })
+
+
     }
 
     create(callBack){
