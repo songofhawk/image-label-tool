@@ -12,6 +12,8 @@ export class EventHandler {
 
     stepStart(config,onOverCallback){
         let willRender = false;
+        this._panel.listenEvent(true);
+
         let drawing = this._operator;
         if (drawing.stepStart){
             willRender = drawing.stepStart(config);

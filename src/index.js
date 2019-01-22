@@ -33,15 +33,12 @@ document.querySelector('#btn-draw-image').addEventListener('click',function (eve
     });
 });
 
-document.querySelector('#btn-select-image').addEventListener('click',function (event) {
-    panel.select(graphImageManager, {
-        x:10,
-        y:10,
-        width:50,
-        height:50,
-        src:'./resource/image/f.jpg'
-    });
-});
+// 选择不再是一个Operator
+// document.querySelector('#btn-select-image').addEventListener('click',function (event) {
+//     panel.select(graphImageManager);
+// });
+
+
 document.querySelector('#btn-listen').addEventListener('click',function (event) {
     panel.listenEvent(true);
 });
