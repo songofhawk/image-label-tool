@@ -76,6 +76,7 @@ export class Graph {
 
     mouseClick() {
         this.toggleSelect();
+        this._layer.draw();
     }
 }
 

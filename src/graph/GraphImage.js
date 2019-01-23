@@ -47,17 +47,17 @@ export class GraphImage extends Graph{
             self._group.add(decor);
 
             image.on("mouseover", function (e) {
-                console.log('mouse over on image: '+self.code);
+                //console.log('mouse over on image: '+self.code);
                 self.mouseOver();
             });
 
             image.on("mouseout", function (e) {
-                console.log('mouse out from image: '+self.code);
+                //console.log('mouse out from image: '+self.code);
                 self.mouseOut();
             });
 
             image.on("click", function (e) {
-                console.log('mouse click on image: '+self.code);
+                //console.log('mouse click on image: '+self.code);
                 self.mouseClick();
             });
         };
@@ -80,10 +80,6 @@ export class GraphImage extends Graph{
         }
         this._group.setX(point.x);
         this._group.setY(point.y);
-    }
-
-    moveOn(){
-
     }
 
     select(){
@@ -131,6 +127,7 @@ export class GraphImage extends Graph{
     setEditable(editable){
         if (editable){
             if (this.tr){
+                this.tr.show();
                 return;
             }
             let tr = new Konva.Transformer();
@@ -143,8 +140,9 @@ export class GraphImage extends Graph{
             if (!this.tr){
                 return;
             }
-            this.tr.destroy();
-            this.tr = null;
+            this.tr.hide();
+            // this.tr.destroy();
+            // this.tr = null;
         }
         this.ediable = editable;
 
@@ -168,19 +166,12 @@ export class GraphImageManager extends AbstractManager{
         super(panel);
         this._axis = null;
         this._drawingOperator = new ImageDrawingOperator(this);
-        this._selectingOperator = new ImageSelectingOperator(this);
-        this._editingOperator = new ImageEditingOperator(this);
     }
 
     get drawingOperator(){
         return this._drawingOperator;
     }
-    get selectingOperator(){
-        return this._selectingOperator;
-    }
-    get editingOperator(){
-        return this._editingOperator;
-    }
+
 
 }
 
@@ -218,71 +209,5 @@ class ImageDrawingOperator extends AbstractDrawingOperator{
     }
 }
 
-class ImageSelectingOperator{
-    constructor(manager){
 
-    }
-
-    stepStart(){
-        return false;
-    }
-
-    stepMove(screenPoint, step){
-        this._manager._container.highlightByPoint(screenPoint);
-        return true;
-    }
-
-    stepDown(screenPoint, step){
-
-    }
-    stepUp(screenPoint, step){
-
-    }
-    stepOver(screenPoint, step){
-        super.stepOver(screenPoint, step);
-        super.afterStepOver();
-    }
-
-
-    get stepCount(){
-        return 1;
-    }
-
-}
-
-class ImageEditingOperator{
-    constructor(manager){
-
-    }
-
-    stepStart(){
-        let graph = this._manager._container.getSelected();
-        if (!graph){
-            return;
-        }
-        graph.enableEdit();
-        return true;
-    }
-
-    stepMove(screenPoint, step){
-       return false;
-    }
-
-    stepDown(screenPoint, step){
-
-    }
-
-    stepUp(screenPoint, step){
-
-    }
-
-    stepOver(screenPoint, step){
-        super.stepOver(screenPoint, step);
-
-    }
-
-    get stepCount(){
-        return 1;
-    }
-}
 
