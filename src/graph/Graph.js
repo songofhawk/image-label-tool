@@ -1,10 +1,15 @@
 import {StringUtil} from "../util/StringUtil";
+import Konva from "konva";
 
 export class Graph {
     constructor(manager) {
         this._manager = manager;
         this._layer = manager._layer;
         this.code = StringUtil.getGuid();
+        this._graphWrapper = new Konva.Group({
+            x:0,
+            y:0
+        });
     }
 
     static get DEFAULT_COLOR() {
@@ -19,10 +24,6 @@ export class Graph {
     }
 
     moveTo() {
-
-    }
-
-    moveOn() {
 
     }
 
@@ -78,5 +79,24 @@ export class Graph {
         this.toggleSelect();
         this._layer.draw();
     }
+
+    bindEvent(image) {
+        let self = this;
+        image.on("mouseover", function (e) {
+            //console.log('mouse over on image: '+self.code);
+            self.mouseOver();
+        });
+
+        image.on("mouseout", function (e) {
+            //console.log('mouse out from image: '+self.code);
+            self.mouseOut();
+        });
+
+        image.on("click", function (e) {
+            //console.log('mouse click on image: '+self.code);
+            self.mouseClick();
+        });
+    }
+
 }
 

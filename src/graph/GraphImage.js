@@ -1,8 +1,8 @@
 import Konva from 'konva';
 import {Graph} from "./Graph";
-import {GraphManager} from "../drawing/GraphManager";
-import {AbstractDrawingOperator} from "../drawing/GraphManager";
-import {DrawingHandler} from "../drawing/DrawingHandler";
+import {GraphManager} from "../manager/GraphManager";
+import {AbstractDrawingOperator} from "../manager/GraphManager";
+import {DrawingHandler} from "../manager/DrawingHandler";
 
 
 export class GraphImage extends Graph{
@@ -10,14 +10,14 @@ export class GraphImage extends Graph{
         super(manager);
 
         let layer = this._layer;
-        this._group = new Konva.Group({
+        this._graphWrapper = new Konva.Group({
             x:0,
             y:0,
             width: config.width,
             height: config.height,
             draggable:true
         });
-        layer.add(this._group);
+        layer.add(this._graphWrapper);
 
         let imageObj = new Image();
         let self = this;
@@ -31,8 +31,8 @@ export class GraphImage extends Graph{
                 height: config.height,
                 listening:true
             });
-            self._group.add(image);
-            self._group.image = image;
+            self._graphWrapper.add(image);
+            self._graphWrapper.image = image;
 
             let decor = new Konva.Rect({
                 x: - 1,
@@ -44,27 +44,13 @@ export class GraphImage extends Graph{
                 strokeWidth: 3
             })
             decor.hide();
-            self._group.decor = decor;
-            self._group.add(decor);
-
-            image.on("mouseover", function (e) {
-                //console.log('mouse over on image: '+self.code);
-                self.mouseOver();
-            });
-
-            image.on("mouseout", function (e) {
-                //console.log('mouse out from image: '+self.code);
-                self.mouseOut();
-            });
-
-            image.on("click", function (e) {
-                //console.log('mouse click on image: '+self.code);
-                self.mouseClick();
-            });
+            self._graphWrapper.decor = decor;
+            self._graphWrapper.add(decor);
+            self.bindEvent(image);
         };
         imageObj.src = config.src;
 
-        // this._group.on("mouseover", function (e) {
+        // this._graphWrapper.on("mouseover", function (e) {
         //     console.log('mouse over on group: '+self.code);
         // })
 
@@ -76,16 +62,16 @@ export class GraphImage extends Graph{
     }
 
     moveTo(point){
-        if (!this._group){
+        if (!this._graphWrapper){
             return;
         }
-        this._group.setX(point.x);
-        this._group.setY(point.y);
+        this._graphWrapper.setX(point.x);
+        this._graphWrapper.setY(point.y);
     }
 
     select(){
-        // this._group.decor.stroke('#FFCC99');
-        // this._group.decor.show();
+        // this._graphWrapper.decor.stroke('#FFCC99');
+        // this._graphWrapper.decor.show();
         this.setEditable(true);
         super.select();
     }
@@ -94,8 +80,8 @@ export class GraphImage extends Graph{
      * 取消选择
      */
     deSelect(){
-        // this._group.decor.stroke('LightGray');
-        // this._group.decor.hide();
+        // this._graphWrapper.decor.stroke('LightGray');
+        // this._graphWrapper.decor.hide();
 
         this.setEditable(false);
         super.deSelect();
@@ -107,7 +93,7 @@ export class GraphImage extends Graph{
 
     isPointOn(point){
         let x=point.x, y=point.y;
-        let graph = this._group;
+        let graph = this._graphWrapper;
         let minX = graph.x(), minY = graph.y(),
             maxX = graph.x()+graph.width(),
             maxY = graph.y()+graph.height();
@@ -118,11 +104,11 @@ export class GraphImage extends Graph{
     }
 
     highlight(){
-        this._group.decor.show();
+        this._graphWrapper.decor.show();
     }
 
     unHighlight(){
-        this._group.decor.hide();
+        this._graphWrapper.decor.hide();
     }
 
     setEditable(editable){
@@ -134,7 +120,7 @@ export class GraphImage extends Graph{
             let tr = new Konva.Transformer();
             this._layer.add(tr);
 
-            let group = this._group;
+            let group = this._graphWrapper;
             tr.attachTo(group);
             this.tr = tr;
         }else{

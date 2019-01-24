@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import {Graph} from "./Graph";
-import {GraphManager} from "../drawing/GraphManager";
-import {DrawingHandler} from "../drawing/DrawingHandler";
+import {GraphManager} from "../manager/GraphManager";
+import {DrawingHandler} from "../manager/DrawingHandler";
 
 
 export class GraphAxis extends Graph{
@@ -9,6 +9,7 @@ export class GraphAxis extends Graph{
         super(manager);
 
         let layer = this._layer;
+
 
         this._vLine = new Konva.Group({
             x:0,
@@ -35,8 +36,11 @@ export class GraphAxis extends Graph{
         this._hLine.add(hLine);
         this._hLine.line = hLine;
 
+        this._graphWrapper.add(this._vLine);
+        this._graphWrapper.add(this._hLine);
         layer.add(this._vLine);
         layer.add(this._hLine);
+
     }
 
     create(callBack){
@@ -48,17 +52,6 @@ export class GraphAxis extends Graph{
         this._hLine.setY(point.y);
     }
 
-    moveOn(){
-
-    }
-
-    select(){
-
-    }
-
-    unselect(){
-
-    }
 
     delete(){
 

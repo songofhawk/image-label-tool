@@ -1,7 +1,4 @@
 import {Graph} from '../graph/Graph';
-import {GeneralSelection} from '../drawing/GeneralSelection';
-import {Container} from "./Container";
-import {EventHandler} from "../drawing/DrawingHandler";
 import Konva from "konva";
 
 export class GraphPanel {
