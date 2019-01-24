@@ -1,6 +1,6 @@
-import {AbstractOperator} from "./AbstractOperator";
+import {EventOperator} from "./EventOperator";
 
-export class GeneralSelection extends AbstractOperator{
+export class GeneralSelection extends EventOperator{
     constructor(panel, drawingClazz){
         super(panel);
         this._graphList = panel._container.getAll();

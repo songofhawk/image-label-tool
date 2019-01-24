@@ -1,0 +1,55 @@
+@startuml
+
+class GraphPanel{
+    Stage _stage
+    draw(GraphManager graphManager)
+    add(Graph graph)
+    delete(String code)
+}
+
+GraphPanel "1" *-- "*" GraphManager : 含有 >
+
+abstract class GraphManager{
+    Stage _stage
+    Layer _layer
+    EventHandler _drawingHandler
+}
+GraphManager <|-- GraphAxisManager
+GraphManager <|-- GraphImageManager
+
+
+GraphManager "1" #-- "1" EventHandler : 委托 >
+GraphManager "1" #-- "1" Container : 委托 >
+Container "1" *-- "*" Graph : 管理 >
+
+class EventHandler{
+    Container container
+}
+
+abstract class Graph{
+    Stage _stage
+    Layer _layer
+    Shape _shape
+
+    select()
+    deselect()
+
+    highlight()
+    unHighlight()
+
+    setEditable(bool)
+}
+
+Graph <|-- GraphImage
+Graph <|-- GraphAxis
+
+abstract class Editor{
+
+}
+Editor <|-- GraphAxisEditor
+Editor <|-- GraphImageEditor
+
+
+Graph "1" *-- "1" Editor : 附加 >
+
+@enduml

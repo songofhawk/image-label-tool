@@ -1,53 +1,36 @@
 import Konva from "konva";
-import {AbstractOperator} from "./AbstractOperator";
+import {EventHandler} from "./DrawingHandler";
 
-export class AbstractManager {
+/**
+ * 这是一个抽象类,封装了图形管理的通用方法
+ */
+export class GraphManager {
     constructor(panel){
+        this._panel = panel;
         this._stage = panel._stage;
         this._layer = new Konva.Layer();
         this._stage.add(this._layer);
-        this._panel = panel;
 
-        this._drawingOperator = null;
+        this._drawingHandler = null;
+        this._container = new Container(this);
 
-        this._container = new Container();
+        this.over = (graph)=>{
+            if (graph !== null){
+                this._container.add(graph);
+            }
+
+            return graph;
+        };
     }
 
-    get drawingOperator(){
-        throw 'Drawing operator is not defined in concrete class!';
+    draw(config){
+        this._drawingHandler.stepStart(config);
     }
 
-}
-
-export class AbstractDrawingOperator extends AbstractOperator{
-    constructor(manager){
-        super(manager);
+    getAllGraph(){
+        return this._container.getAll();
     }
 
-    stepStart(){
-        return false;
-    }
-
-    stepMove(screenPoint, step){
-        return true;
-    }
-
-    stepDown(screenPoint, step){
-
-    }
-    stepUp(screenPoint, step){
-
-    }
-    stepOver(screenPoint, step){
-        super.stepOver(screenPoint, step);
-    }
-    afterStepOver(graph){
-        this._manager._container.add(graph);
-    }
-
-    get stepCount(){
-        return 1;
-    }
 }
 
 class Container {
@@ -65,6 +48,7 @@ class Container {
         let i = this._graphList.push(graph) - 1;
         this._graphMap[graph.code] = i;
         graph._index = i;
+        graph.container = this;
     }
 
     /**

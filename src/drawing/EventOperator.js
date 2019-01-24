@@ -1,4 +1,4 @@
-export class AbstractOperator {
+export class EventOperator {
     constructor(manager){
         this._manager = manager;
         this._layer = manager._layer;

@@ -2,7 +2,6 @@ export class Container {
     constructor(){
         this._graphList = [];
         this._graphMap = {};
-        this._graphClassMap = {};
     }
 
     /**
@@ -12,16 +11,7 @@ export class Container {
     add(graph){
         let i = this._graphList.push(graph) - 1;
         this._graphMap[graph.code] = i;
-
-        let className = graph.name;
-
-        let classList = this._graphClassMap[className];
-        if (!classList){
-            classList = [];
-            this._graphClassMap[className] = classList;
-        }
         graph._index = i;
-        classList.push(i);
     }
 
     /**
@@ -51,23 +41,6 @@ export class Container {
         }else{
             return null;
         }
-    }
-
-    /**
-     * 获取指定类别的所有图形
-     * @param className 类别名称
-     * @returns {Array of Graph} 图形列表
-     */
-    getAllInClass(className){
-        let graphList = [];
-        let indexList = this._graphClassMap(className);
-        if (indexList==null){
-            return graphList;
-        }
-        for (let i of indexList){
-            graphList.push(this._graphList[i]);
-        }
-        return graphList;
     }
 
     getAll(){

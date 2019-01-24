@@ -1,12 +1,14 @@
 import Konva from 'konva';
 import {Graph} from "./Graph";
-import {AbstractManager} from "../drawing/AbstractManager";
-import {AbstractDrawingOperator} from "../drawing/AbstractManager";
+import {GraphManager} from "../drawing/GraphManager";
+import {DrawingHandler} from "../drawing/DrawingHandler";
 
 
 export class GraphAxis extends Graph{
-    constructor(layer) {
-        super(layer);
+    constructor(manager) {
+        super(manager);
+
+        let layer = this._layer;
 
         this._vLine = new Konva.Group({
             x:0,
@@ -112,45 +114,37 @@ export class GraphAxis extends Graph{
 
 }
 
-export class GraphAxisManager extends AbstractManager{
+export class GraphAxisManager extends GraphManager{
     constructor(panel){
         super(panel);
-        this._axis = null;
-        this._drawingOperator = new AxisDrawingOperator(this);
-    }
-
-    get drawingOperator(){
-        return this._drawingOperator;
+        this._drawingHandler = new AxisDrawingHandler(this);
     }
 
 }
 
-class AxisDrawingOperator extends AbstractDrawingOperator{
+class AxisDrawingHandler extends DrawingHandler{
     constructor(manager){
         super(manager);
     }
 
     stepStart(config){
-        if (!this._manager._axis){
-            this._manager._axis = new GraphAxis(this);
-        }
-        return false;
+        let graph = new GraphAxis(this._manager);
+        super.stepStart(graph);
     }
 
     stepMove(screenPoint, step){
-        this._manager._axis.moveTo(screenPoint);
-        return true;
+        this._graph.moveTo(screenPoint);
+        super.stepMove(screenPoint, step);
     }
 
     stepDown(screenPoint, step){
-
+        super.stepDown(screenPoint, step);
     }
     stepUp(screenPoint, step){
-
+        super.stepUp(screenPoint, step);
     }
     stepOver(screenPoint, step){
         super.stepOver(screenPoint, step);
-        return this._manager._axis;
     }
 
 
@@ -159,81 +153,4 @@ class AxisDrawingOperator extends AbstractDrawingOperator{
     }
 }
 
-class AxisSelectingOperator {
-    constructor(manager){
-
-    }
-
-    stepStart(){
-        return false;
-    }
-
-    stepMove(screenPoint, step){
-        let axis = this._findInPoint(screenPoint);
-        if (axis){
-            axis.highlight();
-        }else{
-            this._manager._axis.unHighlight();
-        }
-        return true;
-    }
-
-    stepDown(screenPoint, step){
-
-    }
-    stepUp(screenPoint, step){
-
-    }
-    stepOver(screenPoint, step){
-        this._manager._axis.unHighlight();
-        super.stepOver(screenPoint, step);
-    }
-
-
-    get stepCount(){
-        return 1;
-    }
-
-    _findInPoint(screenPoint){
-        const TOLERANCE = 4;
-        let axis = this._manager._axis;
-        let x = axis._vLine.x(), y = axis._hLine.y();
-        let differX = screenPoint.x - x, differY = screenPoint.y - y;
-        if (differX<TOLERANCE && differX>-TOLERANCE   ||   differY<TOLERANCE && differY>-TOLERANCE){
-            return axis;
-        }
-        return null;
-    }
-}
-
-class AxisEditingOperator {
-    constructor(manager){
-
-    }
-
-    stepStart(){
-    }
-
-    stepMove(screenPoint, step){
-        this._manager._axis.moveTo(screenPoint);
-        return true;
-    }
-
-    stepDown(screenPoint, step){
-
-    }
-
-    stepUp(screenPoint, step){
-
-    }
-
-    stepOver(screenPoint, step){
-        super.stepOver(screenPoint, step);
-        return this._manager._axis;
-    }
-
-    get stepCount(){
-        return 1;
-    }
-}
 

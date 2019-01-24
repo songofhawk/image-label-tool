@@ -1,0 +1,40 @@
+@startuml
+
+abstract class Graph{
+    Shape shape
+}
+
+
+Graph <|-- GraphImage
+Graph <|-- GraphAxis
+
+
+abstract class GraphManager{
+    EventOperator drawingOperator
+    Layer layer
+}
+
+GraphManager <|-- GraphAxisManager
+GraphManager <|-- GraphImageManager
+
+GraphManager "1" #-- "1" Container : 委托 >
+Container "1" *-- "*" Graph : 管理 >
+
+
+class GraphPanel{
+    Stage stage
+    EventHandler eventHandler
+}
+
+GraphPanel "1" *-- "*" GraphManager : 含有 >
+
+
+
+GraphPanel "1" #-- "1" EventHandler : 委托 >
+GraphManager "1" #-- "1" EventOperator : 委托 >
+
+EventHandler "1" ..> "1" EventOperator : 依赖 >
+
+
+
+@enduml

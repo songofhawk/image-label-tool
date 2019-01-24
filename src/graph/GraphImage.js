@@ -1,7 +1,8 @@
 import Konva from 'konva';
 import {Graph} from "./Graph";
-import {AbstractManager} from "../drawing/AbstractManager";
-import {AbstractDrawingOperator} from "../drawing/AbstractManager";
+import {GraphManager} from "../drawing/GraphManager";
+import {AbstractDrawingOperator} from "../drawing/GraphManager";
+import {DrawingHandler} from "../drawing/DrawingHandler";
 
 
 export class GraphImage extends Graph{
@@ -161,48 +162,43 @@ export class GraphImage extends Graph{
 
 }
 
-export class GraphImageManager extends AbstractManager{
+export class GraphImageManager extends GraphManager{
     constructor(panel){
         super(panel);
-        this._axis = null;
-        this._drawingOperator = new ImageDrawingOperator(this);
+        this._drawingHandler = new ImageDrawingHandler(this);
     }
-
-    get drawingOperator(){
-        return this._drawingOperator;
-    }
-
 
 }
 
-class ImageDrawingOperator extends AbstractDrawingOperator{
+class ImageDrawingHandler extends DrawingHandler{
     constructor(manager){
         super(manager);
     }
 
     stepStart(config){
-        this._manager.currentGraph = new GraphImage(this._manager, config);
-        this._manager._stage.container().style.cursor = 'crosshair';
-        return false;
+        let graph = new GraphImage(this._manager, config);
+        this._stage.container().style.cursor = 'crosshair';
+        super.stepStart(graph);
     }
 
     stepMove(screenPoint, step){
-        this._manager.currentGraph.moveTo(screenPoint);
-        return true;
+        this._graph.moveTo(screenPoint);
+        super.stepMove();
     }
 
     stepDown(screenPoint, step){
-
+        super.stepDown();
     }
+
     stepUp(screenPoint, step){
+        super.stepUp();
+    }
 
-    }
     stepOver(screenPoint, step){
+        this._stage.container().style.cursor = 'default';
         super.stepOver(screenPoint, step);
-        this._manager._stage.container().style.cursor = 'default';
-        super.afterStepOver(this._manager.currentGraph);
-        return this._manager.currentGraph;
     }
+
 
     get stepCount(){
         return 1;

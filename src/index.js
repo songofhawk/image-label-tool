@@ -1,5 +1,5 @@
 //测试webpack打包
-import {GraphAxis, GraphAxisManager} from "./graph/GraphAxis";
+import {GraphAxisManager} from "./graph/GraphAxis";
 import {GraphImageManager} from "./graph/GraphImage";
 
 let hello = function () {
