@@ -80,19 +80,19 @@ export class Graph {
         this._layer.draw();
     }
 
-    bindEvent(image) {
+    _bindEvent(graph) {
         let self = this;
-        image.on("mouseover", function (e) {
+        graph.on("mouseover", function (e) {
             //console.log('mouse over on image: '+self.code);
             self.mouseOver();
         });
 
-        image.on("mouseout", function (e) {
+        graph.on("mouseout", function (e) {
             //console.log('mouse out from image: '+self.code);
             self.mouseOut();
         });
 
-        image.on("click", function (e) {
+        graph.on("click", function (e) {
             //console.log('mouse click on image: '+self.code);
             self.mouseClick();
         });

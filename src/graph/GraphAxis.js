@@ -22,6 +22,7 @@ export class GraphAxis extends Graph{
         });
         this._vLine.add(vLine);
         this._vLine.line = vLine;
+        this._bindEvent(vLine);
 
 
         this._hLine = new Konva.Group({
@@ -35,6 +36,7 @@ export class GraphAxis extends Graph{
         });
         this._hLine.add(hLine);
         this._hLine.line = hLine;
+        this._bindEvent(hLine);
 
         this._graphWrapper.add(this._vLine);
         this._graphWrapper.add(this._hLine);

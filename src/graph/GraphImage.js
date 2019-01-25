@@ -46,7 +46,7 @@ export class GraphImage extends Graph{
             decor.hide();
             self._graphWrapper.decor = decor;
             self._graphWrapper.add(decor);
-            self.bindEvent(image);
+            self._bindEvent(image);
         };
         imageObj.src = config.src;
 
