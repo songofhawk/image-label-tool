@@ -17,7 +17,8 @@ export class Graph {
         this.code = StringUtil.getGuid();
         this._graphWrapper = new Konva.Group({
             x:0,
-            y:0
+            y:0,
+            draggable:true
         });
     }
 

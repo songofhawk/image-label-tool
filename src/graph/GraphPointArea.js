@@ -4,7 +4,7 @@ import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
 
 
-export class GraphPointArea extends Graph{
+export class GraphPointArea extends Graph {
 
     constructor(manager) {
         super(manager);
@@ -14,35 +14,35 @@ export class GraphPointArea extends Graph{
 
     }
 
-    create(callBack){
+    create(callBack) {
 
     }
 
-    moveTo(point){
+    moveTo(point) {
 
     }
 
 
-    delete(){
+    delete() {
 
     }
 
-    isPointOn(point){
+    isPointOn(point) {
 
     }
 
-    highlight(){
+    highlight() {
 
     }
 
-    unHighlight(){
+    unHighlight() {
 
     }
 
-    createPoint(screenPoint){
+    createPoint(screenPoint) {
         let circle = new Konva.Circle({
-            x: screenPoint? screenPoint.x: 0,
-            y: screenPoint? screenPoint.y: 0,
+            x: screenPoint ? screenPoint.x : 0,
+            y: screenPoint ? screenPoint.y : 0,
             radius: 3,
             fill: Graph.DEFAULT_FILL_COLOR,
             stroke: Graph.DEFAULT_STROKE_COLOR,
@@ -53,55 +53,66 @@ export class GraphPointArea extends Graph{
         this._currentPoint = circle;
         this._graphWrapper.add(circle);
         this._layer.add(circle);
-        this._bindEvent(circle);
+        circle.highlight=function () {
+            this.strokeWidth(Graph.HIGHLIGHT_STROKE_WITH);
+            this.stroke(Graph.HIGHLIGHT_STROKE_COLOR);
+        };
+        circle.unHighlight=function () {
+            this.strokeWidth(Graph.DEFAULT_STROKE_WITH);
+            this.stroke(Graph.DEFAULT_STROKE_COLOR);
+        }
+
         return circle;
     }
 
-    linkLine(point1, point2){
-        let line = this.createLine({x:point1.x(), y:point1.y()}, {x:point2.x(), y:point2.y()});
+    linkLine(point1, point2) {
+        let line = this.createLine({x: point1.x(), y: point1.y()}, {x: point2.x(), y: point2.y()});
         point1.outLine = line;
         point2.inLine = line;
     }
 
-    createLine(screenPoint1, screenPoint2){
+    createLine(screenPoint1, screenPoint2) {
         let line = new Konva.Line({
-            points:[screenPoint1.x, screenPoint1.y , screenPoint2.x, screenPoint2.y],
+            points: [screenPoint1.x, screenPoint1.y, screenPoint2.x, screenPoint2.y],
             strokeWidth: Graph.DEFAULT_STROKE_WITH,
             stroke: Graph.DEFAULT_STROKE_COLOR,
             draggable: false
         });
         let length = this._lines.push(line);
-        line.index = length -1 ;
+        line.index = length - 1;
         this._currentLine = line;
         this._graphWrapper.add(line);
         this._layer.add(line);
         return line;
     }
 
-    createLineWithNewPoint(screenPoint){
+    createLineWithNewPoint(screenPoint) {
         let fromPoint = this._currentPoint;
         let toPoint = this.createPoint(screenPoint);
         this.linkLine(fromPoint, toPoint);
     }
 
-    movePoint(screenPoint, point){
-        if(!point){
+    movePoint(screenPoint, point) {
+        if (!point) {
             point = this._currentPoint;
         }
 
         point.setX(screenPoint.x);
         point.setY(screenPoint.y);
+        this.moveLineWithPoint(point);
+    }
 
+    moveLineWithPoint(point){
         if (point.inLine) {
-            let inLine =point.inLine;
+            let inLine = point.inLine;
             let points = inLine.getPoints();
-            inLine.setPoints([points[0], points[1], screenPoint.x, screenPoint.y]);
+            inLine.setPoints([points[0], points[1], point.x(), point.y()]);
         }
 
         if (point.outLine) {
-            let outLine =point.outLine;
+            let outLine = point.outLine;
             let points = outLine.getPoints();
-            outLine.setPoints([screenPoint.x, screenPoint.y, points[2], points[3]]);
+            outLine.setPoints([ point.x(), point.y(), points[2], points[3]]);
         }
     }
 
@@ -109,52 +120,112 @@ export class GraphPointArea extends Graph{
      * 绘制完最后一个点后,封闭区域
      * 从最后一个点连接线到第一个点
      */
-    seal(){
+    seal() {
         let lastPoint = this._points[this._points.length - 1];
         let firstPoint = this._points[0];
         this.linkLine(lastPoint, firstPoint);
     }
+
+    rebound() {
+        let maxX = 0, maxY = 0, minX = Number.MAX_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER;
+        for (let point of this._points) {
+            let x = point.x(), y = point.y();
+            if (maxX < x) {
+                maxX = x;
+            }
+            if (maxY < y) {
+                maxY = y;
+            }
+            if (minX > x) {
+                minX = x;
+            }
+            if (minY > y) {
+                minY = y;
+            }
+        }
+        this._graphWrapper.x(minX);
+        this._graphWrapper.y(minY);
+        this._graphWrapper.width(maxX - minX);
+        this._graphWrapper.height(maxY - minY);
+    }
+
+    _bindEvent(graph) {
+        let self = this;
+        graph.on("mouseover", function (e) {
+            //console.log('mouse over on graph: '+graph.type);
+            graph.highlight();
+            self._layer.draw();
+        });
+
+        graph.on("mouseout", function (e) {
+            // console.log('mouse out from graph: '+graph.type);
+            graph.unHighlight();
+            self._layer.draw();
+        });
+
+        graph.on("click", function (e) {
+            self.mouseClick();
+            self._layer.draw();
+        });
+
+        graph.on("dragmove", function (e) {
+            self.moveLineWithPoint(this);
+            self._layer.draw();
+        });
+    }
+
+    bindEvent(){
+        for (let point of this._points){
+            this._bindEvent(point);
+        }
+    }
 }
 
-export class GraphPointAreaManager extends GraphManager{
-    constructor(panel){
+export class GraphPointAreaManager extends GraphManager {
+    constructor(panel) {
         super(panel);
         this._drawingHandler = new PointAreaDrawingHandler(this);
     }
 
 }
 
-class PointAreaDrawingHandler extends DrawingHandler{
-    constructor(manager){
+class PointAreaDrawingHandler extends DrawingHandler {
+    constructor(manager) {
         super(manager);
     }
 
-    stepStart(config){
+    stepStart(config) {
         let graph = new GraphPointArea(this._manager);
         graph.createPoint();
         super.stepStart(graph);
     }
 
-    stepMove(screenPoint, step){
+    stepMove(screenPoint, step) {
 
         this._graph.movePoint(screenPoint);
         super.stepMove(screenPoint, step);
     }
 
-    stepDown(screenPoint, step){
-        this._graph.createLineWithNewPoint(screenPoint);
+    stepDown(screenPoint, step) {
         super.stepDown(screenPoint, step);
     }
-    stepUp(screenPoint, step){
+
+    stepUp(screenPoint, step) {
         super.stepUp(screenPoint, step);
+        if (step<this.stepCount - 1){
+            this._graph.createLineWithNewPoint(screenPoint);
+        }
     }
-    stepOver(screenPoint, step){
+
+    stepOver(screenPoint, step) {
         this._graph.seal();
+        this._graph.rebound();
+        this._graph.bindEvent();
         super.stepOver(screenPoint, step);
     }
 
 
-    get stepCount(){
+    get stepCount() {
         return 4;
     }
 }
