@@ -49,9 +49,9 @@ export class GraphAxis extends Graph{
 
     }
 
-    moveTo(point){
-        this._vLine.setX(point.x);
-        this._hLine.setY(point.y);
+    moveTo(screenPoint){
+        this._vLine.setX(screenPoint.x);
+        this._hLine.setY(screenPoint.y);
     }
 
 

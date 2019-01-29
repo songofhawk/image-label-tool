@@ -5,6 +5,7 @@ import {EventHandler} from "./DrawingHandler";
  * 这是一个抽象类,封装了图形管理的通用方法
  */
 export class GraphManager {
+
     constructor(panel){
         this._panel = panel;
         this._stage = panel._stage;

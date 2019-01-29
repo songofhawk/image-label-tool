@@ -2,6 +2,12 @@ import {StringUtil} from "../util/StringUtil";
 import Konva from "konva";
 
 export class Graph {
+    static get DEFAULT_STROKE_WITH(){return 1;}
+    static get DEFAULT_STROKE_COLOR(){return '#999999';}
+    static get HIGHLIGHT_STROKE_WITH(){return 3;}
+    static get HIGHLIGHT_STROKE_COLOR(){return '#FFCC99';}
+    static get DEFAULT_FILL_COLOR(){return '#CC9933';}
+
     constructor(manager) {
         this._manager = manager;
         this._layer = manager._layer;

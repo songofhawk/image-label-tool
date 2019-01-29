@@ -61,12 +61,12 @@ export class GraphImage extends Graph{
 
     }
 
-    moveTo(point){
+    moveTo(screenPoint){
         if (!this._graphWrapper){
             return;
         }
-        this._graphWrapper.setX(point.x);
-        this._graphWrapper.setY(point.y);
+        this._graphWrapper.setX(screenPoint.x);
+        this._graphWrapper.setY(screenPoint.y);
     }
 
     select(){
