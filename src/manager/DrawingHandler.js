@@ -26,6 +26,7 @@ export class DrawingHandler{
 
     stepOver(screenPoint, step){
         this._listenEvent(false);
+        this._step = 0;
         this._render();
     }
 

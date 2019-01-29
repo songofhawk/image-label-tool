@@ -2,6 +2,9 @@ import {StringUtil} from "../util/StringUtil";
 import Konva from "konva";
 
 export class Graph {
+
+    static get DEFAULT_COLOR() {return 'gray';}
+
     static get DEFAULT_STROKE_WITH(){return 1;}
     static get DEFAULT_STROKE_COLOR(){return '#999999';}
     static get HIGHLIGHT_STROKE_WITH(){return 3;}
@@ -17,11 +20,6 @@ export class Graph {
             y:0
         });
     }
-
-    static get DEFAULT_COLOR() {
-        return 'gray';
-    }
-
 
     create(callBack) {
         if (callBack) {

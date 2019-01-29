@@ -104,6 +104,16 @@ export class GraphPointArea extends Graph{
             outLine.setPoints([screenPoint.x, screenPoint.y, points[2], points[3]]);
         }
     }
+
+    /**
+     * 绘制完最后一个点后,封闭区域
+     * 从最后一个点连接线到第一个点
+     */
+    seal(){
+        let lastPoint = this._points[this._points.length - 1];
+        let firstPoint = this._points[0];
+        this.linkLine(lastPoint, firstPoint);
+    }
 }
 
 export class GraphPointAreaManager extends GraphManager{
@@ -139,6 +149,7 @@ class PointAreaDrawingHandler extends DrawingHandler{
         super.stepUp(screenPoint, step);
     }
     stepOver(screenPoint, step){
+        this._graph.seal();
         super.stepOver(screenPoint, step);
     }
 
