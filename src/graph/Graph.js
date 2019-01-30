@@ -15,11 +15,13 @@ export class Graph {
         this._manager = manager;
         this._layer = manager._layer;
         this.code = StringUtil.getGuid();
+        // this._graphWrapper = null;
         this._graphWrapper = new Konva.Group({
             x:0,
             y:0,
             draggable:true
         });
+        this._layer.add(this._graphWrapper);
     }
 
     create(callBack) {
@@ -103,5 +105,43 @@ export class Graph {
         });
     }
 
+
+    /**
+     * 获取图形内所有形状的外界矩形, 需要各子类重写
+     * @return {{x: number, y: number, width: number, height: number}}
+     */
+    getBoundary(){
+        throw 'Graph的子类没有重写这个方法!';
+        // return {
+        //     x:0,
+        //     y:0,
+        //     width:0,
+        //     height:0
+        // }
+    }
+
+    createBoundaryBox(){
+        let wrapper = this._graphWrapper;;
+        let box = new Konva.Rect({
+            x: wrapper.x(),
+            y: wrapper.y(),
+            width: wrapper.width(),
+            height: wrapper.height(),
+            fill:'rgba(153, 204, 255, 15)',
+            opacity: 0.5,
+            stroke: Graph.DEFAULT_STROKE_COLOR,
+            strokeWidth: Graph.DEFAULT_STROKE_WITH,
+            draggable:true
+        });
+        //this._graphWrapper.add(box);
+        //box.moveToBottom();
+        let self = this;
+        box.on("dragmove", function (e) {
+            self._graphWrapper.setAbsolutePosition(box.getAbsolutePosition());
+        });
+
+
+        this._layer.add(box);
+    }
 }
 

@@ -12,6 +12,8 @@ export class GraphPointArea extends Graph {
         this._points = [];
         this._lines = [];
 
+
+
     }
 
     create(callBack) {
@@ -52,7 +54,7 @@ export class GraphPointArea extends Graph {
         this._points.push(circle);
         this._currentPoint = circle;
         this._graphWrapper.add(circle);
-        this._layer.add(circle);
+        //this._layer.add(circle);
         circle.highlight=function () {
             this.strokeWidth(Graph.HIGHLIGHT_STROKE_WITH);
             this.stroke(Graph.HIGHLIGHT_STROKE_COLOR);
@@ -67,6 +69,8 @@ export class GraphPointArea extends Graph {
 
     linkLine(point1, point2) {
         let line = this.createLine({x: point1.x(), y: point1.y()}, {x: point2.x(), y: point2.y()});
+        line.startPoint = point1;
+        line.endPoint = point2;
         point1.outLine = line;
         point2.inLine = line;
     }
@@ -82,7 +86,7 @@ export class GraphPointArea extends Graph {
         line.index = length - 1;
         this._currentLine = line;
         this._graphWrapper.add(line);
-        this._layer.add(line);
+        //this._layer.add(line);
         return line;
     }
 
@@ -126,7 +130,7 @@ export class GraphPointArea extends Graph {
         this.linkLine(lastPoint, firstPoint);
     }
 
-    rebound() {
+    getBoundary(){
         let maxX = 0, maxY = 0, minX = Number.MAX_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER;
         for (let point of this._points) {
             let x = point.x(), y = point.y();
@@ -143,34 +147,57 @@ export class GraphPointArea extends Graph {
                 minY = y;
             }
         }
-        this._graphWrapper.x(minX);
-        this._graphWrapper.y(minY);
-        this._graphWrapper.width(maxX - minX);
-        this._graphWrapper.height(maxY - minY);
+        return {
+            x:minX,
+            y:minY,
+            width:maxX - minX,
+            height:maxY - minY
+        }
     }
 
-    _bindEvent(graph) {
+    wrapperRebound() {
+        let rect = this.getBoundary();
+        let wrapper = this._graphWrapper;
+
+        wrapper.setX(rect.x);
+        wrapper.setY(rect.y);
+        wrapper.setWidth(rect.width);
+        wrapper.setHeight(rect.height);
+
+        for (let point of this._points) {
+            point.setAbsolutePosition(point.position());
+        }
+
+        for (let line of this._lines){
+            let start = line.startPoint, end = line.endPoint;
+            line.setPoints([start.x(), start.y(), end.x(), end.y()]);
+        }
+
+    }
+
+    _bindEvent(shape) {
         let self = this;
-        graph.on("mouseover", function (e) {
+        shape.on("mouseover", function (e) {
             //console.log('mouse over on graph: '+graph.type);
-            graph.highlight();
-            self._layer.draw();
+            shape.highlight();
+            shape.draw();
         });
 
-        graph.on("mouseout", function (e) {
+        shape.on("mouseout", function (e) {
             // console.log('mouse out from graph: '+graph.type);
-            graph.unHighlight();
+            shape.unHighlight();
+            //TODO:这个地方很奇怪,如果用shap.draw()就看不出重绘的效果,只有重绘整个层才可以,但按照官方文档的例子,明明就应该可以的:https://konvajs.github.io/docs/performance/Shape_Redraw.html
             self._layer.draw();
         });
 
-        graph.on("click", function (e) {
+        shape.on("click", function (e) {
             self.mouseClick();
-            self._layer.draw();
+            shape.draw();
         });
 
-        graph.on("dragmove", function (e) {
+        shape.on("dragmove", function (e) {
             self.moveLineWithPoint(this);
-            self._layer.draw();
+            shape.draw();
         });
     }
 
@@ -219,8 +246,9 @@ class PointAreaDrawingHandler extends DrawingHandler {
 
     stepOver(screenPoint, step) {
         this._graph.seal();
-        this._graph.rebound();
+        this._graph.wrapperRebound();
         this._graph.bindEvent();
+        this._graph.createBoundaryBox();
         super.stepOver(screenPoint, step);
     }
 
