@@ -175,7 +175,7 @@ export class GraphPointArea extends Graph {
 
     }
 
-    _bindEvent(shape) {
+    _bindPointEvent(shape) {
         let self = this;
         shape.on("mouseover", function (e) {
             //console.log('mouse over on graph: '+graph.type);
@@ -198,13 +198,65 @@ export class GraphPointArea extends Graph {
         shape.on("dragmove", function (e) {
             self.moveLineWithPoint(this);
             shape.draw();
+            if (this.polygon){
+                this.polygon.setPoints();
+            }
         });
+
+        shape.on("dragend", function (e) {
+            let area = self.area;
+            if (area){
+                let pointArray = self._extractPointArray();
+                area.setPoints(pointArray);
+                self._layer.draw();
+            }
+        });
+
+
     }
 
     bindEvent(){
         for (let point of this._points){
-            this._bindEvent(point);
+            this._bindPointEvent(point);
         }
+
+        let self = this;
+        let area = this.area;
+        if (area){
+            area.on("dragmove", function (e) {
+                self._graphWrapper.setAbsolutePosition(area.getAbsolutePosition());
+            });
+        }
+
+    }
+
+    createPolygonArea(){
+        let wrapper = this._graphWrapper;
+        let pointArray = this._extractPointArray();
+        /*对于多边形来说,如果给定了x,y那么所有points都是相对于x,y坐标原点的坐标了,所以这里既然取了Wrapper的左上角作为原点,那么points就取wrapper里点线的相对坐标*/
+        let polygon = new Konva.Line({
+            x: wrapper.x(),
+            y: wrapper.y(),
+            points: pointArray,
+            fill:'rgba(153, 204, 255, 15)',
+            opacity: 0.5,
+            stroke: Graph.DEFAULT_STROKE_COLOR,
+            strokeWidth: Graph.DEFAULT_STROKE_WITH,
+            draggable:true,
+            closed : true
+        });
+        this._layer.add(polygon);
+        this.area = polygon;
+    }
+
+    _extractPointArray() {
+        let pointArray = [];
+        for (let point of this._points) {
+            let pos = point.getPosition();
+            pointArray.push(pos.x);
+            pointArray.push(pos.y);
+        }
+        return pointArray;
     }
 }
 
@@ -247,8 +299,8 @@ class PointAreaDrawingHandler extends DrawingHandler {
     stepOver(screenPoint, step) {
         this._graph.seal();
         this._graph.wrapperRebound();
+        this._graph.createPolygonArea();
         this._graph.bindEvent();
-        this._graph.createBoundaryBox();
         super.stepOver(screenPoint, step);
     }
 

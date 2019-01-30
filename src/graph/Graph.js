@@ -87,7 +87,7 @@ export class Graph {
         this._layer.draw();
     }
 
-    _bindEvent(graph) {
+    _bindPointEvent(graph) {
         let self = this;
         graph.on("mouseover", function (e) {
             //console.log('mouse over on image: '+self.code);
@@ -120,28 +120,28 @@ export class Graph {
         // }
     }
 
-    createBoundaryBox(){
-        let wrapper = this._graphWrapper;;
-        let box = new Konva.Rect({
-            x: wrapper.x(),
-            y: wrapper.y(),
-            width: wrapper.width(),
-            height: wrapper.height(),
-            fill:'rgba(153, 204, 255, 15)',
-            opacity: 0.5,
-            stroke: Graph.DEFAULT_STROKE_COLOR,
-            strokeWidth: Graph.DEFAULT_STROKE_WITH,
-            draggable:true
-        });
-        //this._graphWrapper.add(box);
-        //box.moveToBottom();
-        let self = this;
-        box.on("dragmove", function (e) {
-            self._graphWrapper.setAbsolutePosition(box.getAbsolutePosition());
-        });
-
-
-        this._layer.add(box);
-    }
+    // createBoundaryBox(){
+    //     let wrapper = this._graphWrapper;;
+    //     let box = new Konva.Rect({
+    //         x: wrapper.x(),
+    //         y: wrapper.y(),
+    //         width: wrapper.width(),
+    //         height: wrapper.height(),
+    //         fill:'rgba(153, 204, 255, 15)',
+    //         opacity: 0.5,
+    //         stroke: Graph.DEFAULT_STROKE_COLOR,
+    //         strokeWidth: Graph.DEFAULT_STROKE_WITH,
+    //         draggable:true
+    //     });
+    //     //this._graphWrapper.add(box);
+    //     //box.moveToBottom();
+    //     let self = this;
+    //     box.on("dragmove", function (e) {
+    //         self._graphWrapper.setAbsolutePosition(box.getAbsolutePosition());
+    //     });
+    //
+    //
+    //     this._layer.add(box);
+    // }
 }
 
