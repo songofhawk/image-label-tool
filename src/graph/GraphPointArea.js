@@ -175,6 +175,15 @@ export class GraphPointArea extends Graph {
 
     }
 
+    bindEvent(){
+        for (let point of this._points){
+            this._bindPointEvent(point);
+        }
+        this._bindAreaEvent();
+
+    }
+
+
     _bindPointEvent(shape) {
         let self = this;
         shape.on("mouseover", function (e) {
@@ -211,23 +220,28 @@ export class GraphPointArea extends Graph {
                 self._layer.draw();
             }
         });
-
-
     }
 
-    bindEvent(){
-        for (let point of this._points){
-            this._bindPointEvent(point);
+    _bindAreaEvent() {
+        let area = this.area;
+        if (!area) {
+            return;
         }
+        area.opacity(0.1);
 
         let self = this;
-        let area = this.area;
-        if (area){
-            area.on("dragmove", function (e) {
-                self._graphWrapper.setAbsolutePosition(area.getAbsolutePosition());
-            });
-        }
 
+        area.on("dragmove", function (e) {
+            self._graphWrapper.setAbsolutePosition(area.getAbsolutePosition());
+        });
+        area.on("mouseover", function (e) {
+            area.opacity(0.5);
+            self._layer.draw();
+        });
+        area.on("mouseout", function (e) {
+            area.opacity(0.1);
+            self._layer.draw();
+        });
     }
 
     createPolygonArea(){
