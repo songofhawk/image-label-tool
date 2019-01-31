@@ -34,11 +34,13 @@ export class GraphPointArea extends Graph {
     }
 
     highlight() {
-
+        this.area.opacity(0.5);
+        super.highlight();
     }
 
     unHighlight() {
-
+        this.area.opacity(0.1);
+        super.unHighlight();
     }
 
     createPoint(screenPoint) {
@@ -227,20 +229,18 @@ export class GraphPointArea extends Graph {
         if (!area) {
             return;
         }
-        area.opacity(0.1);
-
         let self = this;
+
+        self.unHighlight();
 
         area.on("dragmove", function (e) {
             self._graphWrapper.setAbsolutePosition(area.getAbsolutePosition());
         });
         area.on("mouseover", function (e) {
-            area.opacity(0.5);
-            self._layer.draw();
+            self.highlight();
         });
         area.on("mouseout", function (e) {
-            area.opacity(0.1);
-            self._layer.draw();
+            self.unHighlight();
         });
     }
 

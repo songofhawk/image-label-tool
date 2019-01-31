@@ -66,20 +66,19 @@ export class Graph {
     }
 
     highlight() {
+        this._layer.draw();
     }
 
     unHighlight() {
-
+        this._layer.draw();
     }
 
     mouseOver() {
         this.highlight();
-        this._layer.draw();
     }
 
     mouseOut() {
         this.unHighlight();
-        this._layer.draw();
     }
 
     mouseClick() {
