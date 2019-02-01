@@ -43,6 +43,20 @@ export class GraphPointArea extends Graph {
         super.unHighlight();
     }
 
+    select(){
+        for (let line of this._lines){
+            line.stroke(Graph.SELECTED_STROKE_COLOR);
+        }
+        super.select();
+    }
+
+    deSelect(){
+        for (let line of this._lines){
+            line.stroke(Graph.DEFAULT_STROKE_COLOR);
+        }
+        super.deSelect();
+    }
+
     createPoint(screenPoint) {
         let circle = new Konva.Circle({
             x: screenPoint ? screenPoint.x : 0,
@@ -201,11 +215,6 @@ export class GraphPointArea extends Graph {
             self._layer.draw();
         });
 
-        shape.on("click", function (e) {
-            self.mouseClick();
-            shape.draw();
-        });
-
         shape.on("dragmove", function (e) {
             self.moveLineWithPoint(this);
             shape.draw();
@@ -241,6 +250,9 @@ export class GraphPointArea extends Graph {
         });
         area.on("mouseout", function (e) {
             self.unHighlight();
+        });
+        area.on("click", function (e) {
+            self.toggleSelect();
         });
     }
 

@@ -6,10 +6,14 @@ export class Graph {
     static get DEFAULT_COLOR() {return 'gray';}
 
     static get DEFAULT_STROKE_WITH(){return 1;}
-    static get DEFAULT_STROKE_COLOR(){return '#999999';}
     static get HIGHLIGHT_STROKE_WITH(){return 3;}
+
+    static get DEFAULT_STROKE_COLOR(){return '#999999';}
     static get HIGHLIGHT_STROKE_COLOR(){return '#FFCC99';}
     static get DEFAULT_FILL_COLOR(){return '#CC9933';}
+    static get SELECTED_STROKE_COLOR(){return '#FF6600';}
+
+
 
     constructor(manager) {
         this._manager = manager;
@@ -43,6 +47,7 @@ export class Graph {
     select() {
         this.selected = true;
         this._manager._container.broadcast('select', this.code);
+        this._layer.draw();
     }
 
     deSelect() {
