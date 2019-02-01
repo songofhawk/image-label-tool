@@ -1125,7 +1125,7 @@ fabric.CommonMethods = {
     /**
      * Draws a dashed line between two points
      *
-     * This method is used to draw dashed line around selection area.
+     * This method is used to draw dashed line around selection _area.
      * See <a href="http://stackoverflow.com/questions/4576724/dotted-stroke-in-canvas">dotted stroke in canvas</a>
      *
      * @param {CanvasRenderingContext2D} ctx context
@@ -1419,10 +1419,10 @@ fabric.CommonMethods = {
 
     /**
      * Given current aspect ratio, determines the max width and height that can
-     * respect the total allowed area for the cache.
+     * respect the total allowed _area for the cache.
      * @memberOf fabric.util
      * @param {Number} ar aspect ratio
-     * @param {Number} maximumArea Maximum area you want to achieve
+     * @param {Number} maximumArea Maximum _area you want to achieve
      * @return {Object.x} Limited dimensions by X
      * @return {Object.y} Limited dimensions by Y
      */
@@ -6667,11 +6667,11 @@ fabric.ElementsParser = function(elements, callback, options, reviver, parsingOp
     renderOnAddRemove: true,
 
     /**
-     * Function that determines clipping of entire canvas area
+     * Function that determines clipping of entire canvas _area
      * Being passed context as first argument.
      * If you are using code minification, ctx argument can be minified/manglied you should use
      * as a workaround `var ctx = arguments[0];` in the function;
-     * See clipping canvas area in {@link https://github.com/kangax/fabric.js/wiki/FAQ}
+     * See clipping canvas _area in {@link https://github.com/kangax/fabric.js/wiki/FAQ}
      * @deprecated since 2.0.0
      * @type Function
      * @default
@@ -6762,7 +6762,7 @@ fabric.ElementsParser = function(elements, callback, options, reviver, parsingOp
     skipOffscreen: true,
 
     /**
-     * a fabricObject that, without stroke define a clipping area with their shape. filled in black
+     * a fabricObject that, without stroke define a clipping _area with their shape. filled in black
      * the clipPath object gets used when the canvas has rendered, and the context is placed in the
      * top left corner of the canvas.
      * clipPath will clip away controls, if you do not want this to happen use controlsAboveOverlay = true
@@ -9671,11 +9671,11 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
     },
 
     /**
-     * Checks if point is contained within an area of given object
+     * Checks if point is contained within an _area of given object
      * @param {Event} e Event object
      * @param {fabric.Object} target Object to test against
      * @param {Object} [point] x,y object of point coordinates we want to check.
-     * @return {Boolean} true if point is contained within an area of given object
+     * @return {Boolean} true if point is contained within an _area of given object
      */
     containsPoint: function (e, target, point) {
       var ignoreZoom = true,
@@ -10405,7 +10405,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
      * @param {Object} [pointer] x,y object of point coordinates we want to check.
      * @param {fabric.Object} obj Object to test against
      * @param {Object} [globalPointer] x,y object of point coordinates relative to canvas used to search per pixel target.
-     * @return {Boolean} true if point is contained within an area of given object
+     * @return {Boolean} true if point is contained within an _area of given object
      * @private
      */
     _checkTarget: function(pointer, obj, globalPointer) {
@@ -11605,7 +11605,7 @@ fabric.PatternBrush = fabric.util.createClass(fabric.PencilBrush, /** @lends fab
 
       var groupSelector = this._groupSelector;
 
-      // We initially clicked in an empty area, so we draw a box for multiple selection
+      // We initially clicked in an empty _area, so we draw a box for multiple selection
       if (groupSelector) {
         pointer = this._pointer;
 
@@ -13008,7 +13008,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     ).split(' '),
 
     /**
-     * a fabricObject that, without stroke define a clipping area with their shape. filled in black
+     * a fabricObject that, without stroke define a clipping _area with their shape. filled in black
      * the clipPath object gets used when the object has rendered, and the context is placed in the center
      * of the object cacheCanvas.
      * If you want 0,0 of a clipPath to align with an object center, use clipPath.originX/Y to 'center'
@@ -14234,7 +14234,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
 
     /**
      * Centers object horizontally on canvas to which it was added last.
-     * You might need to call `setCoords` on an object after centering, to update controls area.
+     * You might need to call `setCoords` on an object after centering, to update controls _area.
      * @return {fabric.Object} thisArg
      * @chainable
      */
@@ -14245,7 +14245,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
 
     /**
      * Centers object horizontally on current viewport of canvas to which it was added last.
-     * You might need to call `setCoords` on an object after centering, to update controls area.
+     * You might need to call `setCoords` on an object after centering, to update controls _area.
      * @return {fabric.Object} thisArg
      * @chainable
      */
@@ -14256,7 +14256,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
 
     /**
      * Centers object vertically on canvas to which it was added last.
-     * You might need to call `setCoords` on an object after centering, to update controls area.
+     * You might need to call `setCoords` on an object after centering, to update controls _area.
      * @return {fabric.Object} thisArg
      * @chainable
      */
@@ -14267,7 +14267,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
 
     /**
      * Centers object vertically on current viewport of canvas to which it was added last.
-     * You might need to call `setCoords` on an object after centering, to update controls area.
+     * You might need to call `setCoords` on an object after centering, to update controls _area.
      * @return {fabric.Object} thisArg
      * @chainable
      */
@@ -14278,7 +14278,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
 
     /**
      * Centers object vertically and horizontally on canvas to which is was added last
-     * You might need to call `setCoords` on an object after centering, to update controls area.
+     * You might need to call `setCoords` on an object after centering, to update controls _area.
      * @return {fabric.Object} thisArg
      * @chainable
      */
@@ -14289,7 +14289,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
 
     /**
      * Centers object on current viewport of canvas to which it was added last.
-     * You might need to call `setCoords` on an object after centering, to update controls area.
+     * You might need to call `setCoords` on an object after centering, to update controls _area.
      * @return {fabric.Object} thisArg
      * @chainable
      */
@@ -14652,7 +14652,7 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
      * properties are tl,mt,tr,ml,mr,bl,mb,br,mtr for the main controls.
      * each property is an object with x, y and corner.
      * The `corner` property contains in a similar manner the 4 points of the
-     * interactive area of the corner.
+     * interactive _area of the corner.
      * The coordinates depends from this properties: width, height, scaleX, scaleY
      * skewX, skewY, angle, strokeWidth, viewportTransform, top, left, padding.
      * The coordinates get updated with @method setCoords.
@@ -14697,12 +14697,12 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     },
 
     /**
-     * Checks if object intersects with an area formed by 2 points
-     * @param {Object} pointTL top-left point of area
-     * @param {Object} pointBR bottom-right point of area
+     * Checks if object intersects with an _area formed by 2 points
+     * @param {Object} pointTL top-left point of _area
+     * @param {Object} pointBR bottom-right point of _area
      * @param {Boolean} [absolute] use coordinates without viewportTransform
      * @param {Boolean} [calculate] use coordinates of current position instead of .oCoords
-     * @return {Boolean} true if object intersects with an area formed by 2 points
+     * @return {Boolean} true if object intersects with an _area formed by 2 points
      */
     intersectsWithRect: function(pointTL, pointBR, absolute, calculate) {
       var coords = this.getCoords(absolute, calculate),
@@ -14733,11 +14733,11 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     },
 
     /**
-     * Checks if object is fully contained within area of another object
+     * Checks if object is fully contained within _area of another object
      * @param {Object} other Object to test
      * @param {Boolean} [absolute] use coordinates without viewportTransform
      * @param {Boolean} [calculate] use coordinates of current position instead of .oCoords
-     * @return {Boolean} true if object is fully contained within area of another object
+     * @return {Boolean} true if object is fully contained within _area of another object
      */
     isContainedWithinObject: function(other, absolute, calculate) {
       var points = this.getCoords(absolute, calculate),
@@ -14753,12 +14753,12 @@ fabric.util.object.extend(fabric.StaticCanvas.prototype, /** @lends fabric.Stati
     },
 
     /**
-     * Checks if object is fully contained within area formed by 2 points
-     * @param {Object} pointTL top-left point of area
-     * @param {Object} pointBR bottom-right point of area
+     * Checks if object is fully contained within _area formed by 2 points
+     * @param {Object} pointTL top-left point of _area
+     * @param {Object} pointBR bottom-right point of _area
      * @param {Boolean} [absolute] use coordinates without viewportTransform
      * @param {Boolean} [calculate] use coordinates of current position instead of .oCoords
-     * @return {Boolean} true if object is fully contained within area formed by 2 points
+     * @return {Boolean} true if object is fully contained within _area formed by 2 points
      */
     isContainedWithinRect: function(pointTL, pointBR, absolute, calculate) {
       var boundingRect = this.getBoundingRect(absolute, calculate);
@@ -19575,7 +19575,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
     /**
      * Sets image element for this instance to a specified one.
      * If filters defined they are applied to new image.
-     * You might need to call `canvas.renderAll` and `object.setCoords` after replacing, to render new image and update controls area.
+     * You might need to call `canvas.renderAll` and `object.setCoords` after replacing, to render new image and update controls _area.
      * @param {HTMLImageElement} element
      * @param {Object} [options] Options object
      * @return {fabric.Image} thisArg
@@ -26698,7 +26698,7 @@ fabric.Image.filters.BaseFilter.fromObject = function(object, callback) {
       clearTimeout(this._cursorTimeout2);
 
       this._currentCursorOpacity = 0;
-      // to clear just itext area we need to transform the context
+      // to clear just itext _area we need to transform the context
       // it may not be worth it
       if (shouldClear && canvas) {
         canvas.clearContext(canvas.contextTop || canvas.contextContainer);
@@ -27533,7 +27533,7 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
    * Default event handler for the basic functionalities needed on _mouseDown
    * can be overridden to do something different.
    * Scope of this implementation is: find the click position, set selectionStart
-   * find selectionEnd, initialize the operator of either cursor or selection area
+   * find selectionEnd, initialize the operator of either cursor or selection _area
    */
   _mouseDownHandler: function(options) {
     if (!this.canvas || !this.editable || (options.e.button && options.e.button !== 1)) {

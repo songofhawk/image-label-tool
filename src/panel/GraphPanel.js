@@ -4,7 +4,7 @@ import {Toolbar} from "../toolbar/Toolbar";
 
 export class GraphPanel {
 
-    constructor(containerId, bkImgUrl) {
+    constructor(containerId, bkImgUrl, onConfig, onDelete) {
         if (!containerId) {
             throw 'containerId parameter is mandatory!';
         }
@@ -21,7 +21,7 @@ export class GraphPanel {
         this._stage = stage;
         this._currentManager = null;
 
-        this._toolbar = new Toolbar(containerId);
+        this._toolbar = new Toolbar(containerId, onConfig, onDelete);
     }
 
     _loadBkImage(stage, bkImgUrl) {
@@ -95,9 +95,6 @@ export class GraphPanel {
             this._container.add(graph);
         }
     }
-
-
-
 
     /*---------------------------------------*/
     /*--------以下是供子类实例调用的方法--------*/

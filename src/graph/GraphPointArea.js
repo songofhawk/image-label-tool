@@ -26,7 +26,8 @@ export class GraphPointArea extends Graph {
 
 
     delete() {
-
+        this._area.remove();
+        super.delete();
     }
 
     isPointOn(point) {
@@ -34,12 +35,12 @@ export class GraphPointArea extends Graph {
     }
 
     highlight() {
-        this.area.opacity(0.5);
+        this._area.opacity(0.5);
         super.highlight();
     }
 
     unHighlight() {
-        this.area.opacity(0.1);
+        this._area.opacity(0.1);
         super.unHighlight();
     }
 
@@ -47,6 +48,7 @@ export class GraphPointArea extends Graph {
         for (let line of this._lines){
             line.stroke(Graph.SELECTED_STROKE_COLOR);
         }
+
         super.select();
     }
 
@@ -224,7 +226,7 @@ export class GraphPointArea extends Graph {
         });
 
         shape.on("dragend", function (e) {
-            let area = self.area;
+            let area = self._area;
             if (area){
                 let pointArray = self._extractPointArray();
                 area.setPoints(pointArray);
@@ -234,7 +236,7 @@ export class GraphPointArea extends Graph {
     }
 
     _bindAreaEvent() {
-        let area = this.area;
+        let area = this._area;
         if (!area) {
             return;
         }
@@ -272,7 +274,7 @@ export class GraphPointArea extends Graph {
             closed : true
         });
         this._layer.add(polygon);
-        this.area = polygon;
+        this._area = polygon;
     }
 
     _extractPointArray() {

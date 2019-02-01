@@ -16,6 +16,7 @@ export class Graph {
 
 
     constructor(manager) {
+        this._panel = manager._panel;
         this._manager = manager;
         this._layer = manager._layer;
         this.code = StringUtil.getGuid();
@@ -48,6 +49,7 @@ export class Graph {
         this.selected = true;
         this._manager._container.broadcast('select', this.code);
         this._layer.draw();
+        this._panel._toolbar.show(this);
     }
 
     deSelect() {
@@ -63,7 +65,8 @@ export class Graph {
     }
 
     delete() {
-
+        this._graphWrapper.remove();
+        this._layer.draw();
     }
 
     isPointOn(point) {
@@ -122,6 +125,13 @@ export class Graph {
         //     width:0,
         //     height:0
         // }
+    }
+
+    getPosition(){
+        return {
+            x:this._graphWrapper.x(),
+            y:this._graphWrapper.y()
+        }
     }
 
     // createBoundaryBox(){
