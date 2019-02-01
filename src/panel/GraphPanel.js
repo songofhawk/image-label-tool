@@ -1,5 +1,6 @@
 import {Graph} from '../graph/Graph';
 import Konva from "konva";
+import {Toolbar} from "../toolbar/Toolbar";
 
 export class GraphPanel {
 
@@ -19,6 +20,8 @@ export class GraphPanel {
 
         this._stage = stage;
         this._currentManager = null;
+
+        this._toolbar = new Toolbar(containerId);
     }
 
     _loadBkImage(stage, bkImgUrl) {

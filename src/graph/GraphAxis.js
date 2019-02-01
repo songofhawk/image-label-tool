@@ -10,7 +10,6 @@ export class GraphAxis extends Graph{
 
         let layer = this._layer;
 
-
         this._vLine = new Konva.Group({
             x:0,
             y:0
@@ -23,7 +22,6 @@ export class GraphAxis extends Graph{
         this._vLine.add(vLine);
         this._vLine.line = vLine;
         this._bindPointEvent(vLine);
-
 
         this._hLine = new Konva.Group({
             x:0,
