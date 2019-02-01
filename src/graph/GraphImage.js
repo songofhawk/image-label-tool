@@ -88,7 +88,8 @@ export class GraphImage extends Graph{
     }
 
     delete(){
-
+        this.setEditable(false);
+        super.delete();
     }
 
     isPointOn(point){
