@@ -3,8 +3,15 @@ import Konva from "konva";
 import {Toolbar} from "../toolbar/Toolbar";
 
 export class GraphPanel {
-
-    constructor(containerId, bkImgUrl, onConfig, onDelete) {
+    /**
+     * 画板初始化
+     * @param containerId 画板容器元素的id
+     * @param bkImgUrl 背景图url
+     * @param onDrawn 绘制完成图形以后的回调函数
+     * @param onSetProperty 点击图形设置属性以后的回调函数
+     * @param onDelete 删除图形以后的回调函数
+     */
+    constructor({containerId, bkImgUrl, onDrawn: onDrawn, onSetProperty, onDelete}) {
         if (!containerId) {
             throw 'containerId parameter is mandatory!';
         }
@@ -21,7 +28,7 @@ export class GraphPanel {
         this._stage = stage;
         this._currentManager = null;
 
-        this._toolbar = new Toolbar(containerId, onConfig, onDelete);
+        this._toolbar = new Toolbar(containerId, onSetProperty, onDelete);
     }
 
     _loadBkImage(stage, bkImgUrl) {

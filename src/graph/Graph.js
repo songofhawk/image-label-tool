@@ -157,5 +157,9 @@ export class Graph {
     //
     //     this._layer.add(box);
     // }
+
+    onMove(position){
+        this._panel._toolbar.onMove(position, this);
+    }
 }
 

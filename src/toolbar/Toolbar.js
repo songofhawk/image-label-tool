@@ -1,7 +1,7 @@
 import {StyleUtil} from "../util/StyleUtil";
 
 export class Toolbar {
-    constructor(containerId, onConfig, onDelete) {
+    constructor(containerId, onSetProperty, onDelete) {
         let container = this._container = document.getElementById(containerId);
         if (!container) {
             throw 'can not find an element with id "' + containerId + '"!';
@@ -56,8 +56,8 @@ export class Toolbar {
 
         let configBtn = bar.querySelector("#gpanel-btn-config");
         configBtn.addEventListener("click",() => {
-            if (onConfig){
-                onConfig(this._graph);
+            if (onSetProperty){
+                onSetProperty(this._graph);
             }
         });
 
@@ -90,6 +90,15 @@ export class Toolbar {
         this._bar.style.display = 'none';
     }
 
+    onMove({x,y}, graph){
+        if (graph !== this._graph){
+            return;
+        }
+        let bar = this._bar;
+        let style = bar.style;
+        style.left = x+'px';
+        style.top = y - bar.offsetHeight + 'px';
+    }
 }
 
 ``

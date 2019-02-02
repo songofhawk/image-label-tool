@@ -16,7 +16,18 @@ hello();
  */
 import {GraphPanel} from './panel/GraphPanel.js';
 import {GraphPointAreaManager} from "./graph/GraphPointArea";
-const panel = new GraphPanel('image-label-area', './resource/image/jd.jpg');
+const panel = new GraphPanel({containerId:'image-label-area',
+                                bkImgUrl:'./resource/image/jd.jpg',
+                                onDrawn:(graph)=>{
+                                    console.log('graph "'+graph.code + '" is drawn.');
+                                },
+                                onSetProperty:(graph)=>{
+                                    console.log('graph "'+graph.code + '" will be set properties.');
+                                },
+                                onDelete:(graph)=>{
+                                    console.log('graph "'+graph.code + '" is deleted.');
+                                }
+                            });
 const axisManager = new GraphAxisManager(panel);
 const imageManager = new GraphImageManager(panel);
 const pointAreaManager = new GraphPointAreaManager(panel);
@@ -26,7 +37,7 @@ document.querySelector('#btn-draw-coord').addEventListener('click',function (eve
     panel.draw(axisManager);
 });
 document.querySelector('#btn-draw-image').addEventListener('click',function (event) {
-    panel.draw(imageManager, {
+    imageManager.draw({
         x:10,
         y:10,
         width:50,
@@ -36,7 +47,7 @@ document.querySelector('#btn-draw-image').addEventListener('click',function (eve
 });
 
 document.querySelector('#btn-draw-point-area').addEventListener('click',function (event) {
-    panel.draw(pointAreaManager);
+    pointAreaManager.draw();
 });
 
 // 选择不再是一个Operator
@@ -44,10 +55,9 @@ document.querySelector('#btn-draw-point-area').addEventListener('click',function
 //     panel.select(graphImageManager);
 // });
 
-
-document.querySelector('#btn-listen').addEventListener('click',function (event) {
-    panel.listenEvent(true);
-});
-document.querySelector('#btn-notlisten').addEventListener('click',function (event) {
-    panel.listenEvent(false);
-});
+// document.querySelector('#btn-listen').addEventListener('click',function (event) {
+//     panel.listenEvent(true);
+// });
+// document.querySelector('#btn-notlisten').addEventListener('click',function (event) {
+//     panel.listenEvent(false);
+// });

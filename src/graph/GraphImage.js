@@ -10,14 +10,14 @@ export class GraphImage extends Graph{
         super(manager);
 
         let layer = this._layer;
-        this._graphWrapper = new Konva.Group({
+        let wrapper = this._graphWrapper = new Konva.Group({
             x:0,
             y:0,
             width: config.width,
             height: config.height,
             draggable:true
         });
-        layer.add(this._graphWrapper);
+        layer.add(wrapper);
 
         let imageObj = new Image();
         let self = this;
@@ -31,8 +31,8 @@ export class GraphImage extends Graph{
                 height: config.height,
                 listening:true
             });
-            self._graphWrapper.add(image);
-            self._graphWrapper.image = image;
+            wrapper.add(image);
+            wrapper.image = image;
 
             let decor = new Konva.Rect({
                 x: - 1,
@@ -44,15 +44,15 @@ export class GraphImage extends Graph{
                 strokeWidth: 3
             })
             decor.hide();
-            self._graphWrapper.decor = decor;
-            self._graphWrapper.add(decor);
+            wrapper.decor = decor;
+            wrapper.add(decor);
             self._bindPointEvent(image);
         };
         imageObj.src = config.src;
 
-        // this._graphWrapper.on("mouseover", function (e) {
-        //     console.log('mouse over on group: '+self.code);
-        // })
+        wrapper.on("dragmove", function (e) {
+            self.onMove(wrapper.getPosition());
+        })
 
 
     }

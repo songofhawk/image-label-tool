@@ -73,7 +73,7 @@ export class DrawingHandler{
             });
 
             stage.on('mousemove', function(e){
-                console.log('mousemove on: ', e.target);
+                //console.log('mousemove on: ', e.target);
                 let pointer = stage.getPointerPosition();
                 self.mouseMove(pointer);
             });

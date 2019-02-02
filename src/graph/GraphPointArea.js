@@ -245,7 +245,9 @@ export class GraphPointArea extends Graph {
         self.unHighlight();
 
         area.on("dragmove", function (e) {
-            self._graphWrapper.setAbsolutePosition(area.getAbsolutePosition());
+            let pos = area.getAbsolutePosition();
+            self._graphWrapper.setAbsolutePosition(pos);
+            self.onMove(pos);
         });
         area.on("mouseover", function (e) {
             self.highlight();
