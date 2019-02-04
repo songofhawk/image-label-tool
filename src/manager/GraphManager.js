@@ -1,12 +1,13 @@
 import Konva from "konva";
 import {EventHandler} from "./DrawingHandler";
+import {DataMapping} from "../datamapping/DataMapping";
 
 /**
  * 这是一个抽象类,封装了图形管理的通用方法
  */
 export class GraphManager {
 
-    constructor(panel){
+    constructor(panel,dataMappingConfig){
         this._panel = panel;
         this._stage = panel._stage;
         this._layer = new Konva.Layer();
@@ -15,13 +16,18 @@ export class GraphManager {
         this._drawingHandler = null;
         this._container = new Container(this);
 
-        this.over = (graph)=>{
-            if (graph !== null){
-                this._container.add(graph);
-            }
+        // 本来用于绘制完成的回调,但可能不在这个地方调用了
+        // this.over = (graph)=>{
+        //     if (graph !== null){
+        //         this._container.add(graph);
+        //     }
+        //
+        //     return graph;
+        // };
 
-            return graph;
-        };
+        if (dataMappingConfig){
+            this._dataMapping = new DataMapping(dataMappingConfig.data, dataMappingConfig.mapping);
+        }
     }
 
     draw(config){

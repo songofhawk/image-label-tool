@@ -2,6 +2,7 @@ import Konva from 'konva';
 import {Graph} from "./Graph";
 import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
+import {DataMapping} from "../datamapping/DataMapping";
 
 
 export class GraphPointArea extends Graph {
@@ -11,8 +12,6 @@ export class GraphPointArea extends Graph {
 
         this._points = [];
         this._lines = [];
-
-
 
     }
 
@@ -72,7 +71,6 @@ export class GraphPointArea extends Graph {
         this._points.push(circle);
         this._currentPoint = circle;
         this._graphWrapper.add(circle);
-        //this._layer.add(circle);
         circle.highlight=function () {
             this.strokeWidth(Graph.HIGHLIGHT_STROKE_WITH);
             this.stroke(Graph.HIGHLIGHT_STROKE_COLOR);
@@ -291,11 +289,10 @@ export class GraphPointArea extends Graph {
 }
 
 export class GraphPointAreaManager extends GraphManager {
-    constructor(panel) {
-        super(panel);
+    constructor(panel,dataMappingConfig) {
+        super(panel,dataMappingConfig);
         this._drawingHandler = new PointAreaDrawingHandler(this);
     }
-
 }
 
 class PointAreaDrawingHandler extends DrawingHandler {
