@@ -4,6 +4,7 @@ export class DrawingHandler{
         this._stage = manager._stage;
         this._layer = manager._layer;
         this._container = manager._container;
+        this._dataMapping = manager._dataMapping;
         this._step = 0;
     }
 
@@ -27,6 +28,9 @@ export class DrawingHandler{
     stepOver(screenPoint, step){
         this._listenEvent(false);
         this._step = 0;
+        if (this._dataMapping){
+            this._dataMapping.create(this._graph);
+        }
         this._render();
     }
 

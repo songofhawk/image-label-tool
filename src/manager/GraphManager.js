@@ -1,5 +1,4 @@
 import Konva from "konva";
-import {EventHandler} from "./DrawingHandler";
 import {DataMapping} from "../datamapping/DataMapping";
 
 /**
@@ -26,7 +25,7 @@ export class GraphManager {
         // };
 
         if (dataMappingConfig){
-            this._dataMapping = new DataMapping(dataMappingConfig.data, dataMappingConfig.mapping);
+            this._dataMapping = new DataMapping(dataMappingConfig);
         }
     }
 

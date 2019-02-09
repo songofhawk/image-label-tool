@@ -106,18 +106,16 @@ const axisManager = new GraphAxisManager(panel);
 const imageManager = new GraphImageManager(panel);
 const pointAreaManager = new GraphPointAreaManager(panel,{
     data:data,
-    mapping:{
-        for:'productImageWithMark.pgAreaImageLabels',
-        in: [{
-                data:'points["x","y"]',
-                graph:'points["x()","y()"]',
-                dataType:'json'
-            },{
-                data:'id',
-                graph:'code'
-            }],
-        key: 'id'
-    }
+    for:'productImageWithMark.pgAreaImageLabels',
+    mapping:[{
+        data:'points["x","y"]',
+        graph:'points["x()","y()"]',
+        dataType:"Json"
+    },{
+        data:'id',
+        graph:'code'
+    }],
+    dataKey: 'id'
 });
 
 /*处理事件*/
@@ -130,7 +128,8 @@ document.querySelector('#btn-draw-image').addEventListener('click',function (eve
         y:10,
         width:50,
         height:50,
-        src:'./resource/image/f.jpg'
+        src:'./resource/image/f.jpg',
+        infoType:'LOGO'
     });
 });
 

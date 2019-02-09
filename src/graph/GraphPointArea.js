@@ -15,6 +15,10 @@ export class GraphPointArea extends Graph {
 
     }
 
+    get points(){
+        return this._points;
+    }
+
     create(callBack) {
 
     }

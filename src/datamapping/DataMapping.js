@@ -1,59 +1,30 @@
+// import  {LangUtil} from '../util/LangUtil';
+import {LangUtil, PropertyType} from "../util/LangUtil";
+import {JsonUtil} from "../util/JsonUtil";
+
 export class DataMapping{
     /**
      *
      * @param data 原始数据节点
      * @param config 映射配置信息
      */
-    constructor (data, config) {
-        if (!data) {
+    constructor (config) {
+
+        if (!config) {
+            throw '没有映射配置信息，无法创建数据映射对象！';
+        }
+        if (!config.data) {
             throw '没有源数据，无法创建数据映射对象！';
         }
-        if (!config) {
+        if (!config.mapping) {
             throw '没有映射规则，无法创建数据映射对象！';
         }
 
-        /**
-         * 把映射字符串,解析成映射节点
-         * @param mappingStr
-         * @return {*}
-         */
-        function getMappingNode(mappingStr) {
-            let pos = mappingStr.indexOf('[');
-            if (pos < 0) {
-                return {name: mappingStr};
-            } else {
-                let nodeName = mappingStr.substring(0, pos);
-                let properStr = mappingStr.substring(pos);
-                let properArray = JSON.parse(properStr);
-                let properMap = {};
-                for (let i = 0; i < properArray.length; i++) {
-                    //把rule里的properties转化成map,便于以后查找
-                    properMap[properArray[i]] = i;
-                }
-                return {
-                    name: nodeName,
-                    properArray: properArray,
-                    properMap: properMap
-                }
-            }
-        }
-
-        //在data中找到要映射的根节点
-        let forData = JsonNode.getNodeByPath(config.for, data);
-        this.rule = {};
-        if (forData instanceof Array) {
-            this.rule.key = config.key;
-        }
-        this.rule.in = LangUtil.copyPropertiesOfArrayOrObject(config.in, function (key, obj) {
-            if (key == 'data' || key == 'graph') {
-                //把带属性名数组的字符串转化成特定格式的数据结构, 以便以后处理映射
-                return getMappingNode(obj);
-            } else {
-                return obj;
-            }
-        });
-
-        this.data = forData;
+        this.rule = {
+            key:config.key,
+            data:JsonUtil.getNodeByPath(config.data, config.for),
+            mapping:this._parseMappingConfig(config.mapping)
+        };
     }
 
     /**
@@ -154,37 +125,13 @@ export class DataMapping{
      */
     _generateOne(graph, dataOption){
         let data = {};
-        let inRules = this.rule.in;
-        for (let i=0; i< inRules.length; i++){
-            let inRule = inRules[i];
-            let graphFiltered = {} //根据指定的properties, 过滤以后的图形属性
-            let graphProperMap = inRule.graph.properMap;
-            let dataProperArray = inRule.data.properArray;
-            if (graphProperMap){ //如果指定了properties, 那么就不能整个对象转换, 而是只转换特定的属性
-                graphFiltered = LangUtil.copyPropertiesOfArrayOrObject(graph[inRule.graph.name], function(key, obj){
-                    if (graphProperMap[key]==undefined){
-                        return undefined;
-                    }else{
-                        return {
-                            key: dataProperArray[graphProperMap[key]],
-                            value: obj,
-                            isMapping: true
-                        }
-                    }
-                });
-            }else{
-                graphFiltered = graph[inRule.graph.name];
+        let g2dRules = this.rule.mapping.g2d;
+        g2dRules.forEach((g2dRule)=>{
+            LangUtil.copyProperties(graph,data,g2dRule);
+            if (dataOption){
+                LangUtil.copyProperties(dataOption,data);
             }
-
-            if (inRule.dataType && inRule.dataType.toLowerCase() == "json"){ //如果数据类型是json, 那么要把graph指向的对象转换成json串
-                data[inRule.data.name] = JSON.stringify(graphFiltered);
-            }else{ //未指定数据类型, 或者未知的类型, 都
-                data[inRule.data.name] = graphFiltered;
-            }
-        }
-        if (dataOption){
-            LangUtil.copyProperties(dataOption, data);
-        }
+        });
         return data;
     }
 
@@ -253,39 +200,53 @@ export class DataMapping{
         }
         return description;
     }
+
+    _parseMappingConfig(mappingConfigArray) {
+        let d2g = [];
+        let g2d = [];
+        mappingConfigArray.forEach((configItem) => {
+            let item = this._parseMappingConfigItem(configItem);
+            d2g.push(item.d2g);
+            g2d.push(item.g2d);
+        });
+        return {
+            d2g,
+            g2d
+        };
+    }
+
+    _parseMappingConfigItem(configItem) {
+        let data = LangUtil.parseMappingStr(configItem.data, null);
+        let graph = LangUtil.parseMappingStr(configItem.graph, null);
+
+        let d2gSub = LangUtil.composeMappingArray(data.subMappingArray, graph.subMappingArray);
+        let g2dSub = LangUtil.composeMappingArray(graph.subMappingArray, data.subMappingArray);
+        data.subMappingArray=null;
+        graph.subMappingArray=null;
+
+
+        let dataType = PropertyType.fromString(configItem.dataType);
+
+        let d2gSource = LangUtil.clone(data);
+        d2gSource.type = dataType? dataType: d2gSource.type;
+
+        let g2dTarget = LangUtil.clone(data);
+        g2dTarget.type = dataType? dataType: g2dTarget.type;
+
+        return {
+            d2g: {
+                source: d2gSource,
+                target: graph,
+                subMappings: d2gSub
+            },
+            g2d: {
+                source: graph,
+                target: g2dTarget,
+                subMappings: g2dSub
+            }
+        }
+    }
+
 }
 
 
-class JsonNode {
-    static getNodeByPath (mappingPath, jsonData){
-        if (!jsonData){
-            throw '数据为空,无法获取路径节点"'+path+'"';
-        }
-        let pArray = this.getPArrayByPath(mappingPath);
-        return this.getNodeByPArray(pArray, jsonData);
-    }
-
-    static getPArrayByPath(path){
-        return path.split('.');
-    }
-
-    static getNodeByPArray(pArray, jsonData){
-        let targetData = jsonData;
-        for (let i=0;i<pArray.length;i++){
-            let forName = pArray[i];
-            if (forName==null && forName==''){
-                continue;
-            }
-            let nextData = targetData[forName];
-            if (!nextData){
-                nextData = targetData[forName] = {};
-            }
-            targetData = nextData;
-        }
-        if (!targetData){
-            throw '找不到指定的节点"'+path+'"';
-        }
-        return targetData;
-    }
-
-}
