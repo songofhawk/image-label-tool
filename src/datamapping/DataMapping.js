@@ -21,7 +21,7 @@ export class DataMapping{
         }
 
         this.rule = {
-            key:config.key,
+            dataKey:config.dataKey,
             mapping:this._parseMappingConfig(config.mapping)
         };
         this.data = JsonUtil.getNodeByPath(config.data, config.for);
@@ -54,17 +54,17 @@ export class DataMapping{
      * @param key
      */
     delete(key){
-        let data = this.data;
-        let keyName = this.rule.key;
+        let rootData = this.data;
+        let keyName = this.rule.dataKey;
         let i;
-        for (i=0; i<data.length; i++){
-            let data = data[i];
+        for (i=0; i<rootData.length; i++){
+            let data = rootData[i];
             if (data[keyName]==key){
                 break;
             }
         }
-        if (i<data.length){
-            data.splice(i,1);
+        if (i<rootData.length){
+            rootData.splice(i,1);
         }
     };
 
@@ -100,7 +100,7 @@ export class DataMapping{
         let i=0;
         for (; i<rootData.length; i++){
             let item = rootData[i];
-            if (item[rule.key] && item[rule.key] == graph.code){
+            if (item[rule.dataKey] && item[rule.dataKey] == graph.code){
                 break;
             };
         }
@@ -116,6 +116,9 @@ export class DataMapping{
      */
     _generateOne(graph){
         let data = {};
+        if (graph.code && this.rule.dataKey){
+            data[this.rule.dataKey]=graph.code;
+        }
         let g2dRules = this.rule.mapping.g2d;
 
         LangUtil.copyProperties(graph,data,g2dRules);

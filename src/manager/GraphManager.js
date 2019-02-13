@@ -44,6 +44,9 @@ export class GraphManager {
         if (this._dataMapping){
             this._dataMapping.create(graph);
         }
+        if (this._panel._onDrawn){
+            this._panel._onDrawn(graph);
+        }
     }
 
     onChange(graph){

@@ -159,6 +159,10 @@ export class Graph {
     //     this._layer.add(box);
     // }
 
+    onDrawingOver(){
+        this._manager.onDrawingOver(this);
+    }
+
     onMove(position){
         this._panel._toolbar.onMove(position, this);
     }

@@ -87,16 +87,22 @@ let data = {
 import {GraphPanel} from './panel/GraphPanel.js';
 import {GraphPointAreaManager} from "./graph/GraphPointArea";
 const panel = new GraphPanel({
-        containerId:'image-label-area',
-        bkImgUrl:'./resource/image/jd.jpg',
-        onDrawn:(graph)=>{
-            console.log('graph "'+graph.code + '" is drawn.');
-        },
-        onSetProperty:(graph)=>{
-            console.log('graph "'+graph.code + '" will be set properties.');
-        },
-        onDelete:(graph)=>{
-            console.log('graph "'+graph.code + '" is deleted.');
+    containerId:'image-label-area',
+    bkImgUrl:'./resource/image/jd.jpg',
+    onDrawn: (graph) => {
+        console.log('graph "' + graph.code + '" is drawn.');
+        showJsonData();
+    },
+    onSetProperty: (graph) => {
+        console.log('graph "' + graph.code + '" will be set properties.');
+    },
+    onDelete: (graph) => {
+        console.log('graph "' + graph.code + '" is deleted.');
+        showJsonData();
+    },
+    onUpdate: (graph) =>{
+        console.log('graph "' + graph.code + '" is updated.');
+        showJsonData();
     }
 });
 /**
@@ -105,14 +111,15 @@ const panel = new GraphPanel({
 const axisManager = new GraphAxisManager(panel);
 const imageManager = new GraphImageManager(panel,{
     data:data,
-    for:'side',
+    for:'side.areas',
     mapping:[{
-        data:'originX',
+        data:'imageX',
         graph:'x'
     },{
-        data:'originY',
+        data:'imageY',
         graph:'y'
-    }]
+    }],
+    dataKey: 'id'
 });
 const pointAreaManager = new GraphPointAreaManager(panel,{
     data:data,
@@ -148,6 +155,22 @@ document.querySelector('#btn-draw-image').addEventListener('click',function (eve
 document.querySelector('#btn-draw-point-area').addEventListener('click',function (event) {
     pointAreaManager.draw();
 });
+
+function showJsonData() {
+    let jsonArea = document.querySelector('#json');
+    jsonArea.textContent = JSON.stringify(data, null, '  ');
+
+    let jsonContainer = document.querySelector('#json-container');
+
+    if (showJsonData.color === true){
+        jsonContainer.style.backgroundColor='White';
+        showJsonData.color = false;
+    }else{
+        jsonContainer.style.backgroundColor = 'AntiqueWhite';
+        showJsonData.color = true;
+    }
+}
+showJsonData();
 
 // 选择不再是一个Operator
 // document.querySelector('#btn-select-image').addEventListener('click',function (event) {

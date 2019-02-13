@@ -151,13 +151,19 @@ export class GraphImage extends Graph{
     }
 
     onDrawingOver(){
+        this.genAbsolutePosition();
         super.onDrawingOver();
     }
 
-
     onChange(){
-        this.genAbsolutePoints();
+        this.genAbsolutePosition();
         super.onChange();
+    }
+
+    genAbsolutePosition(){
+        let pos = this._graphWrapper.getAbsolutePosition();
+        this.x = pos.x;
+        this.y = pos.y;
     }
 
 }

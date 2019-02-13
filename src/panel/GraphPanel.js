@@ -11,7 +11,7 @@ export class GraphPanel {
      * @param onSetProperty 点击图形设置属性以后的回调函数
      * @param onDelete 删除图形以后的回调函数
      */
-    constructor({containerId, bkImgUrl, onDrawn, onSetProperty, onDelete}) {
+    constructor({containerId, bkImgUrl, onDrawn, onSetProperty, onDelete, onUpdate}) {
         if (!containerId) {
             throw 'containerId parameter is mandatory!';
         }
@@ -29,6 +29,7 @@ export class GraphPanel {
         this._currentManager = null;
 
         this._toolbar = new Toolbar(containerId, onSetProperty, onDelete);
+        this._onDrawn = onDrawn;
     }
 
     _loadBkImage(stage, bkImgUrl) {
