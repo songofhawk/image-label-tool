@@ -8,7 +8,7 @@ export class DataMapping{
      * @param data 原始数据节点
      * @param config 映射配置信息
      */
-    constructor (config) {
+    constructor(config) {
 
         if (!config) {
             throw '没有映射配置信息，无法创建数据映射对象！';
@@ -22,9 +22,13 @@ export class DataMapping{
 
         this.rule = {
             key:config.key,
-            data:JsonUtil.getNodeByPath(config.data, config.for),
             mapping:this._parseMappingConfig(config.mapping)
         };
+        this.data = JsonUtil.getNodeByPath(config.data, config.for);
+    }
+
+    setDataOption(dataOption){
+        this._dataOption = dataOption;
     }
 
     /**
@@ -33,14 +37,14 @@ export class DataMapping{
      * @param graphs
      * @param dataOption
      */
-    create(graphs, dataOption){
+    create(graphs){
         if (graphs instanceof Array){
             for (let i=0;i<graphs.length;i++){
                 let graphObj = graphs[i];
-                this.createOne(graphObj, dataOption);
+                this.createOne(graphObj);
             }
         }else{
-            this.createOne(graphs, dataOption);
+            this.createOne(graphs);
         }
     };
 
@@ -50,29 +54,17 @@ export class DataMapping{
      * @param key
      */
     delete(key){
-        let forData = this.data;
+        let data = this.data;
         let keyName = this.rule.key;
-        for (let i = 0; i<forData.length; i++){
-            let data = forData[i];
+        let i;
+        for (i=0; i<data.length; i++){
+            let data = data[i];
             if (data[keyName]==key){
                 break;
             }
         }
-        forData.splice(i,1);
-    };
-
-    /**
-     * 根据图形对象,更新对应的数据节点
-     * @param graphs
-     */
-    update(graphs){
-        if (graphs instanceof Array){
-            for (let i=0;i<graphs.length;i++){
-                let graph = graphs[i];
-                this.updateOne(graph);
-            }
-        }else{
-            this.updateOne(graphs);
+        if (i<data.length){
+            data.splice(i,1);
         }
     };
 
@@ -86,10 +78,9 @@ export class DataMapping{
     /**
      * 创建一个数据节点
      * @param graph
-     * @param dataOption
      */
-    createOne(graph, dataOption){
-        let data = this._generateOne(graph, dataOption);
+    createOne(graph){
+        let data = this._generateOne(graph);
         if (this.data instanceof Array){
             this.data.push(data);
         }else{
@@ -101,20 +92,20 @@ export class DataMapping{
      * 更新一个数据节点
      * @param graph
      */
-    updateOne(graph){
-        let forData = this.data;
-        let mappingRule = this.rule;
-        let data = this._generateOne(graph);
+    update(graph){
+        let rootData = this.data;
+        let rule = this.rule;
+        let newData = this._generateOne(graph);
 
         let i=0;
-        for (; i<forData.length; i++){
-            let item = forData[i];
-            if (item[mappingRule.key] && item[mappingRule.key] == graph.key){
+        for (; i<rootData.length; i++){
+            let item = rootData[i];
+            if (item[rule.key] && item[rule.key] == graph.code){
                 break;
             };
         }
-        if (i<forData.length){
-            forData[i] = data;
+        if (i<rootData.length){
+            rootData[i] = newData;
         }
     }
 
@@ -123,15 +114,15 @@ export class DataMapping{
      * @param {Object} graph
      * @param {Object} dataOption
      */
-    _generateOne(graph, dataOption){
+    _generateOne(graph){
         let data = {};
         let g2dRules = this.rule.mapping.g2d;
-        g2dRules.forEach((g2dRule)=>{
-            LangUtil.copyProperties(graph,data,g2dRule);
-            if (dataOption){
-                LangUtil.copyProperties(dataOption,data);
-            }
-        });
+
+        LangUtil.copyProperties(graph,data,g2dRules);
+        let dataOption = this._dataOption;
+        if (dataOption){
+            LangUtil.copyProperties(dataOption,data);
+        }
         return data;
     }
 

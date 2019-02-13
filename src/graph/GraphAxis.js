@@ -120,7 +120,7 @@ class AxisDrawingHandler extends DrawingHandler{
         super(manager);
     }
 
-    stepStart(config){
+    stepStart(graphOption){
         let graph = new GraphAxis(this._manager);
         super.stepStart(graph);
     }

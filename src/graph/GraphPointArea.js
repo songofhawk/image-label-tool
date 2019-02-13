@@ -124,6 +124,7 @@ export class GraphPointArea extends Graph {
         point.setX(screenPoint.x);
         point.setY(screenPoint.y);
         this.moveLineWithPoint(point);
+        this.onChange();
     }
 
     moveLineWithPoint(point){
@@ -192,7 +193,13 @@ export class GraphPointArea extends Graph {
             let start = line.startPoint, end = line.endPoint;
             line.setPoints([start.x(), start.y(), end.x(), end.y()]);
         }
+    }
 
+    genAbsolutePoints(){
+        this.absolutePoints = [];
+        this.points.forEach((point)=>{
+            this.absolutePoints.push(point.getAbsolutePosition());
+        })
     }
 
     bindEvent(){
@@ -234,6 +241,7 @@ export class GraphPointArea extends Graph {
                 area.setPoints(pointArray);
                 self._layer.draw();
             }
+            self.onChange();
         });
     }
 
@@ -251,6 +259,9 @@ export class GraphPointArea extends Graph {
             self._graphWrapper.setAbsolutePosition(pos);
             self.onMove(pos);
         });
+        area.on("dragend", function (e) {
+            self.onChange();
+        })
         area.on("mouseover", function (e) {
             self.highlight();
         });
@@ -290,6 +301,21 @@ export class GraphPointArea extends Graph {
         }
         return pointArray;
     }
+
+    onDrawingOver(){
+        this.seal();
+        this.wrapperRebound();
+        this.genAbsolutePoints();
+        this.createPolygonArea();
+        this.bindEvent();
+        super.onDrawingOver();
+    }
+
+
+    onChange(){
+        this.genAbsolutePoints();
+        super.onChange();
+    }
 }
 
 export class GraphPointAreaManager extends GraphManager {
@@ -304,7 +330,7 @@ class PointAreaDrawingHandler extends DrawingHandler {
         super(manager);
     }
 
-    stepStart(config) {
+    stepStart(graphOption) {
         let graph = new GraphPointArea(this._manager);
         graph.createPoint();
         super.stepStart(graph);
@@ -328,10 +354,7 @@ class PointAreaDrawingHandler extends DrawingHandler {
     }
 
     stepOver(screenPoint, step) {
-        this._graph.seal();
-        this._graph.wrapperRebound();
-        this._graph.createPolygonArea();
-        this._graph.bindEvent();
+        this._graph.onDrawingOver();
         super.stepOver(screenPoint, step);
     }
 

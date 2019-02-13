@@ -29,14 +29,34 @@ export class GraphManager {
         }
     }
 
-    draw(config){
-        this._drawingHandler.stepStart(config);
+    draw(graphOption,dataOption){
+        this._drawingHandler.stepStart(graphOption);
+        if (dataOption){
+            this._dataMapping.setDataOption(dataOption);
+        }
     }
 
     getAllGraph(){
         return this._container.getAll();
     }
 
+    onDrawingOver(graph){
+        if (this._dataMapping){
+            this._dataMapping.create(graph);
+        }
+    }
+
+    onChange(graph){
+        if (this._dataMapping){
+            this._dataMapping.update(graph);
+        }
+    }
+
+    onDelete(graph){
+        if (this._dataMapping){
+            this._dataMapping.delete(graph.code);
+        }
+    }
 }
 
 class Container {

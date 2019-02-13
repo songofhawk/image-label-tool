@@ -6,15 +6,15 @@ import {DrawingHandler} from "../manager/DrawingHandler";
 
 
 export class GraphImage extends Graph{
-    constructor(manager,config) {
+    constructor(manager,graphOption) {
         super(manager);
 
         let layer = this._layer;
         let wrapper = this._graphWrapper = new Konva.Group({
             x:0,
             y:0,
-            width: config.width,
-            height: config.height,
+            width: graphOption.width,
+            height: graphOption.height,
             draggable:true
         });
         layer.add(wrapper);
@@ -27,8 +27,8 @@ export class GraphImage extends Graph{
                 x: 0,
                 y: 0,
                 image: imageObj,
-                width: config.width,
-                height: config.height,
+                width: graphOption.width,
+                height: graphOption.height,
                 listening:true
             });
             wrapper.add(image);
@@ -37,8 +37,8 @@ export class GraphImage extends Graph{
             let decor = new Konva.Rect({
                 x: - 1,
                 y: - 1,
-                width: config.width+1,
-                height: config.height+1,
+                width: graphOption.width+1,
+                height: graphOption.height+1,
                 fillEnabled: false,
                 stroke: 'LightGray',
                 strokeWidth: 3
@@ -48,12 +48,15 @@ export class GraphImage extends Graph{
             wrapper.add(decor);
             self._bindPointEvent(image);
         };
-        imageObj.src = config.src;
+        imageObj.src = graphOption.src;
 
         wrapper.on("dragmove", function (e) {
             self.onMove(wrapper.getPosition());
         })
 
+        wrapper.on("dragend", function (e) {
+            self.onChange();
+        })
 
     }
 
@@ -147,11 +150,21 @@ export class GraphImage extends Graph{
         // });
     }
 
+    onDrawingOver(){
+        super.onDrawingOver();
+    }
+
+
+    onChange(){
+        this.genAbsolutePoints();
+        super.onChange();
+    }
+
 }
 
 export class GraphImageManager extends GraphManager{
-    constructor(panel){
-        super(panel);
+    constructor(panel,dataMappingConfig){
+        super(panel,dataMappingConfig);
         this._drawingHandler = new ImageDrawingHandler(this);
     }
 
@@ -162,8 +175,8 @@ class ImageDrawingHandler extends DrawingHandler{
         super(manager);
     }
 
-    stepStart(config){
-        let graph = new GraphImage(this._manager, config);
+    stepStart(graphOption){
+        let graph = new GraphImage(this._manager, graphOption);
         this._stage.container().style.cursor = 'crosshair';
         super.stepStart(graph);
     }
@@ -183,6 +196,7 @@ class ImageDrawingHandler extends DrawingHandler{
 
     stepOver(screenPoint, step){
         this._stage.container().style.cursor = 'default';
+        this._graph.onDrawingOver();
         super.stepOver(screenPoint, step);
     }
 

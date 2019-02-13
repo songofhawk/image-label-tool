@@ -35,20 +35,20 @@ export class LangUtil {
             if (sType === PropertyType.Json) {
                 tValue = JSON.parse(sValue);
             } else if (sType === PropertyType.Function) {
-                tValue = sValue();
+                tValue = source[sKey]();
             } else if (sType === PropertyType.Normal) {
                 tValue = sValue;
             } else if (sType === PropertyType.Array) {
                 tValue = [];
                 sValue.forEach((subSValue) => {
                     let subTValue = {};
-                    LangUtil.copyProperties(subSValue, subTValue, mapping.source.subMappings)
-                    tValue.push(subSValue);
+                    LangUtil.copyProperties(subSValue, subTValue, mapping.subMappings)
+                    tValue.push(subTValue);
                 })
             }
 
             if (tType === PropertyType.Json) {
-                tValue = JSON.toString(tValue);
+                tValue = JSON.stringify(tValue);
             }
 
             target[tKey] = tValue;
@@ -103,13 +103,12 @@ export class LangUtil {
         let mappingArray = [];
         for (let i = 0; i < sArray.length; i++) {
             mappingArray.push({
-                source:parseMappingStr(sArray[i]),
-                target:parseMappingStr(tArray[i])
+                source:LangUtil.parseMappingStr(sArray[i]),
+                target:LangUtil.parseMappingStr(tArray[i])
             });
         }
+        return mappingArray;
     }
-
-
 
 }
 

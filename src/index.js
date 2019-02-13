@@ -103,14 +103,24 @@ const panel = new GraphPanel({
  *  初始化绘制工具
  */
 const axisManager = new GraphAxisManager(panel);
-const imageManager = new GraphImageManager(panel);
+const imageManager = new GraphImageManager(panel,{
+    data:data,
+    for:'side',
+    mapping:[{
+        data:'originX',
+        graph:'x'
+    },{
+        data:'originY',
+        graph:'y'
+    }]
+});
 const pointAreaManager = new GraphPointAreaManager(panel,{
     data:data,
     for:'productImageWithMark.pgAreaImageLabels',
     mapping:[{
-        data:'points["x","y"]',
-        graph:'points["x()","y()"]',
-        dataType:"Json"
+        data:'points[x,y]',
+        dataType:"Json",
+        graph:'absolutePoints[x,y]',
     },{
         data:'id',
         graph:'code'
@@ -129,6 +139,8 @@ document.querySelector('#btn-draw-image').addEventListener('click',function (eve
         width:50,
         height:50,
         src:'./resource/image/f.jpg',
+
+    },{
         infoType:'LOGO'
     });
 });

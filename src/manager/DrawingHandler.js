@@ -28,9 +28,6 @@ export class DrawingHandler{
     stepOver(screenPoint, step){
         this._listenEvent(false);
         this._step = 0;
-        if (this._dataMapping){
-            this._dataMapping.create(this._graph);
-        }
         this._render();
     }
 

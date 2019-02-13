@@ -65,6 +65,7 @@ export class Graph {
     }
 
     delete() {
+        this._manager.onDelete(this);
         this._graphWrapper.remove();
         this._layer.draw();
     }
@@ -160,6 +161,10 @@ export class Graph {
 
     onMove(position){
         this._panel._toolbar.onMove(position, this);
+    }
+
+    onChange(){
+        this._manager.onChange(this);
     }
 }
 
