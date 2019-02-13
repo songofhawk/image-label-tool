@@ -82,8 +82,8 @@ export class Toolbar {
         let bar = this._bar;
         let style = bar.style;
         style.display = 'block';
-        style.left = pos.x+'px';
-        style.top = pos.y - bar.offsetHeight + 'px';
+        style.left = pos.x - 20+'px';
+        style.top = pos.y - 10 - bar.offsetHeight + 'px';
     }
 
     hide(){
@@ -100,5 +100,3 @@ export class Toolbar {
         style.top = y - bar.offsetHeight + 'px';
     }
 }
-
-``
