@@ -53,6 +53,9 @@ export class GraphManager {
         if (this._dataMapping){
             this._dataMapping.update(graph);
         }
+        if (this._panel._onChange){
+            this._panel._onChange(graph);
+        }
     }
 
     onDelete(graph){

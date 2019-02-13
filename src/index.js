@@ -100,7 +100,7 @@ const panel = new GraphPanel({
         console.log('graph "' + graph.code + '" is deleted.');
         showJsonData();
     },
-    onUpdate: (graph) =>{
+    onChange: (graph) =>{
         console.log('graph "' + graph.code + '" is updated.');
         showJsonData();
     }
