@@ -21,7 +21,6 @@ export class GraphAxis extends Graph{
         });
         this._vLine.add(vLine);
         this._vLine.line = vLine;
-        this._bindPointEvent(vLine);
 
         this._hLine = new Konva.Group({
             x:0,
@@ -34,7 +33,6 @@ export class GraphAxis extends Graph{
         });
         this._hLine.add(hLine);
         this._hLine.line = hLine;
-        this._bindPointEvent(hLine);
 
         this._graphWrapper.add(this._vLine);
         this._graphWrapper.add(this._hLine);
@@ -69,7 +67,7 @@ export class GraphAxis extends Graph{
                 points: [x, 0, x, vLine.line.height()],
                 stroke: 'rgba(156,156,156,10)',
                 strokeWidth: 3
-            })
+            });
             vLine.add(vLine.hl);
         }else{
             //vLine.hl.setX(x);
@@ -84,7 +82,7 @@ export class GraphAxis extends Graph{
                 points: [0, y, hLine.line.width(), y],
                 stroke: 'rgba(156,156,156,10)',
                 strokeWidth: 3
-            })
+            });
             hLine.add(hLine.hl);
         }else{
             //hLine.hl.setY(y);
