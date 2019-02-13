@@ -42,19 +42,20 @@ export class GraphImage extends Graph{
                 fillEnabled: false,
                 stroke: 'LightGray',
                 strokeWidth: 3
-            })
+            });
             decor.hide();
             wrapper.decor = decor;
             wrapper.add(decor);
-            self._bindPointEvent(image);
+            self._image = image;
         };
         imageObj.src = graphOption.src;
 
-        wrapper.on("dragmove", function (e) {
-            self.onMove(wrapper.getPosition());
-        })
 
-        wrapper.on("dragend", function (e) {
+        wrapper.on("dragmove", function () {
+            self.onMove(wrapper.getPosition());
+        });
+
+        wrapper.on("dragend", function () {
             self.onChange();
         })
 
@@ -101,18 +102,18 @@ export class GraphImage extends Graph{
         let minX = graph.x(), minY = graph.y(),
             maxX = graph.x()+graph.width(),
             maxY = graph.y()+graph.height();
-        if (x>=minX && y>=minY && x<=maxX && y<=maxY){
-            return true;
-        }
-        return false;
+        return x >= minX && y >= minY && x <= maxX && y <= maxY;
+
     }
 
     highlight(){
         this._graphWrapper.decor.show();
+        super.highlight();
     }
 
     unHighlight(){
         this._graphWrapper.decor.hide();
+        super.unHighlight();
     }
 
     setEditable(editable){
@@ -135,22 +136,13 @@ export class GraphImage extends Graph{
             // this.tr.destroy();
             // this.tr = null;
         }
-        this.ediable = editable;
+        //this.ediable = editable;
 
-        // 在transform结束的时候,把scale调整为实际的宽和高,但效果并不好, 点击图片中心会缩回去
-        // 代码来自官网的一个回答: https://konvajs.github.io/docs/select_and_transform/Basic_demo.html
-        // group.on('transformend', function () {
-        //     console.log('transform end');
-        //     group.setAttrs({
-        //         width: group.width() * group.scaleX(),
-        //         height: group.height() * group.scaleY(),
-        //         scaleX: 1,
-        //         scaleY: 1,
-        //     })
-        // });
     }
 
     onDrawingOver(){
+        this._bindEvent(this._image);
+
         this.genAbsolutePosition();
         super.onDrawingOver();
     }

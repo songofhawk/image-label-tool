@@ -39,7 +39,7 @@ export class Graph {
 
     }
 
-    onBoradcast(msgName, sourceCode){
+    onBoradcast(msgName){
         if (msgName==='select'){
             this.deSelect();
         }
@@ -95,19 +95,19 @@ export class Graph {
         this._layer.draw();
     }
 
-    _bindPointEvent(graph) {
+    _bindEvent(graph) {
         let self = this;
-        graph.on("mouseover", function (e) {
+        graph.on("mouseover", function () {
             //console.log('mouse over on image: '+self.code);
             self.mouseOver();
         });
 
-        graph.on("mouseout", function (e) {
+        graph.on("mouseout", function () {
             //console.log('mouse out from image: '+self.code);
             self.mouseOut();
         });
 
-        graph.on("click", function (e) {
+        graph.on("click", function () {
             //console.log('mouse click on image: '+self.code);
             self.mouseClick();
         });
