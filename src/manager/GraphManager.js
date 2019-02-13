@@ -42,7 +42,7 @@ export class GraphManager {
 
     onDrawingOver(graph){
         if (this._dataMapping){
-            this._dataMapping.create(graph);
+            this._dataMapping.createData(graph);
         }
         if (this._panel._onDrawn){
             this._panel._onDrawn(graph);
@@ -51,7 +51,7 @@ export class GraphManager {
 
     onChange(graph){
         if (this._dataMapping){
-            this._dataMapping.update(graph);
+            this._dataMapping.updateData(graph);
         }
         if (this._panel._onChange){
             this._panel._onChange(graph);
@@ -60,7 +60,7 @@ export class GraphManager {
 
     onDelete(graph){
         if (this._dataMapping){
-            this._dataMapping.delete(graph.code);
+            this._dataMapping.deleteData(graph.code);
         }
     }
 }
@@ -114,7 +114,7 @@ class Container {
 
     /**
      * 获取指定本容器下的所有图形
-     * @returns {Array of Graph} 图形列表
+     * @returns {Array} 图形对象列表
      */
     getAll(){
         return this._graphList;
@@ -173,7 +173,7 @@ class Container {
 
     broadcast(msgName, sourceCode){
         this._graphList.
-        filter((graph)=>graph.code!=sourceCode).
+        filter((graph)=>graph.code!==sourceCode).
         forEach((graph)=>graph.onBoradcast(msgName, sourceCode));
     }
 }

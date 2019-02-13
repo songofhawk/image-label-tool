@@ -5,7 +5,6 @@ import {JsonUtil} from "../util/JsonUtil";
 export class DataMapping{
     /**
      *
-     * @param data 原始数据节点
      * @param config 映射配置信息
      */
     constructor(config) {
@@ -35,16 +34,15 @@ export class DataMapping{
      * 根据图形对象,创建数据节点
      *
      * @param graphs
-     * @param dataOption
      */
-    create(graphs){
+    createMulti(graphs){
         if (graphs instanceof Array){
             for (let i=0;i<graphs.length;i++){
                 let graphObj = graphs[i];
-                this.createOne(graphObj);
+                this.createData(graphObj);
             }
         }else{
-            this.createOne(graphs);
+            this.createData(graphs);
         }
     };
 
@@ -53,13 +51,13 @@ export class DataMapping{
      * 根据指定的图形对象key, 删除数据节点
      * @param key
      */
-    delete(key){
+    deleteData(key){
         let rootData = this.data;
         let keyName = this.rule.dataKey;
         let i;
         for (i=0; i<rootData.length; i++){
             let data = rootData[i];
-            if (data[keyName]==key){
+            if (data[keyName]===key){
                 break;
             }
         }
@@ -79,7 +77,7 @@ export class DataMapping{
      * 创建一个数据节点
      * @param graph
      */
-    createOne(graph){
+    createData(graph){
         let data = this._generateOne(graph);
         if (this.data instanceof Array){
             this.data.push(data);
@@ -92,7 +90,7 @@ export class DataMapping{
      * 更新一个数据节点
      * @param graph
      */
-    update(graph){
+    updateData(graph){
         let rootData = this.data;
         let rule = this.rule;
         let newData = this._generateOne(graph);
@@ -100,9 +98,9 @@ export class DataMapping{
         let i=0;
         for (; i<rootData.length; i++){
             let item = rootData[i];
-            if (item[rule.dataKey] && item[rule.dataKey] == graph.code){
+            if (item[rule.dataKey] && item[rule.dataKey] === graph.code){
                 break;
-            };
+            }
         }
         if (i<rootData.length){
             rootData[i] = newData;
@@ -112,7 +110,6 @@ export class DataMapping{
     /**
      * 生成一个数据节点(创建和更新的时候都需要)
      * @param {Object} graph
-     * @param {Object} dataOption
      */
     _generateOne(graph){
         let data = {};
@@ -165,19 +162,19 @@ export class DataMapping{
             let inRule = inRules[i];
             let dataItem = data[inRule.data.name];
             let graphItem;
-            if (inRule.dataType && inRule.dataType.toLowerCase() == "json"){ //如果数据类型是json, 那么要把graph指向的对象转换成json串
+            if (inRule.dataType && inRule.dataType.toLowerCase() === "json"){ //如果数据类型是json, 那么要把graph指向的对象转换成json串
                 graphItem = JSON.parse(dataItem);
             }else{ //未指定数据类型, 或者未知的类型, 都
                 graphItem = dataItem;
             }
 
-            let graphFiltered = {} //根据指定的properties, 过滤以后的图形属性
+            let graphFiltered = {}; //根据指定的properties, 过滤以后的图形属性
             let graphProperArray = inRule.graph.properArray;
             let dataProperMap = inRule.data.properMap;
             if (dataProperMap){ //如果指定了properties, 那么就不能整个对象转换, 而是只转换特定的属性
                 graphFiltered = LangUtil.copyPropertiesOfArrayOrObject(graphItem, function(key, obj){
                     let dataProperIndex = dataProperMap[key];
-                    if (dataProperIndex==undefined || dataProperIndex==null) {
+                    if (dataProperIndex===undefined || dataProperIndex===null) {
                         return undefined;
                     }else{
                         return {
@@ -199,7 +196,7 @@ export class DataMapping{
         let d2g = [];
         let g2d = [];
         mappingConfigArray.forEach((configItem) => {
-            let item = this._parseMappingConfigItem(configItem);
+            let item = DataMapping._parseMappingConfigItem(configItem);
             d2g.push(item.d2g);
             g2d.push(item.g2d);
         });
@@ -209,7 +206,7 @@ export class DataMapping{
         };
     }
 
-    _parseMappingConfigItem(configItem) {
+    static _parseMappingConfigItem(configItem) {
         let data = LangUtil.parseMappingStr(configItem.data, null);
         let graph = LangUtil.parseMappingStr(configItem.graph, null);
 
