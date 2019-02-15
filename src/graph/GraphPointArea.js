@@ -44,10 +44,6 @@ export class GraphPointArea extends Graph {
         super.delete();
     }
 
-    isPointOn(point) {
-
-    }
-
     highlight() {
         this._area.opacity(0.5);
         super.highlight();

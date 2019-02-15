@@ -51,8 +51,12 @@ export class Graph {
         }
     }
 
-    moveTo() {
-
+    moveTo(screenPoint){
+        if (!this._graphWrapper){
+            return;
+        }
+        this._graphWrapper.setX(screenPoint.x);
+        this._graphWrapper.setY(screenPoint.y);
     }
 
     onBoradcast(msgName){
@@ -84,10 +88,6 @@ export class Graph {
         this._manager.onDelete(this);
         this._graphWrapper.remove();
         this._layer.draw();
-    }
-
-    isPointOn(point) {
-
     }
 
     highlight() {

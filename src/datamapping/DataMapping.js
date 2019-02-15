@@ -172,7 +172,6 @@ export class DataMapping{
         //     LangUtil.copyProperties(dataOption,description);
         // }
         return description;
-
     }
 
     _parseMappingConfig(mappingConfigArray) {

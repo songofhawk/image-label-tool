@@ -128,39 +128,6 @@ class Container {
         return this._graphList;
     }
 
-    /**
-     * 查找指定点是否某个图形对象坐标范围内
-     * @param point
-     * @return {*}
-     */
-    findByPoint(point){
-        for (let graph of this._graphList){
-            if (graph.isPointOn(point)){
-                return graph;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 将指定点悬浮的图形对象高亮
-     * @param point
-     * @return {*}
-     */
-    highlightByPoint(point){
-        let theGraph = null;
-        for (let graph of this._graphList){
-            if (graph.isPointOn(point)){
-                graph.highlight();
-                theGraph= graph;
-                this.currentGraph = theGraph;
-            }else{
-                graph.unHighlight();
-            }
-        }
-        return theGraph;
-    }
-
     select(graphToBeSelected){
         if (!graphToBeSelected){
             graphToBeSelected = this.currentGraph;

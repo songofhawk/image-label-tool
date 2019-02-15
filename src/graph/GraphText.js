@@ -12,7 +12,7 @@ export class GraphText extends Graph{
 
         let self = this;
 
-        let text = new Konva.Text({
+        let text = this._text = new Konva.Text({
             x: 0,
             y: 0,
             text: graphOption.text,
@@ -43,17 +43,7 @@ export class GraphText extends Graph{
 
     }
 
-    moveTo(screenPoint){
-        if (!this._graphWrapper){
-            return;
-        }
-        this._graphWrapper.setX(screenPoint.x);
-        this._graphWrapper.setY(screenPoint.y);
-    }
-
     select(){
-        // this._graphWrapper.decor.stroke('#FFCC99');
-        // this._graphWrapper.decor.show();
         this.setEditable(true);
         super.select();
     }
@@ -62,9 +52,6 @@ export class GraphText extends Graph{
      * 取消选择
      */
     deSelect(){
-        // this._graphWrapper.decor.stroke('LightGray');
-        // this._graphWrapper.decor.hide();
-
         this.setEditable(false);
         super.deSelect();
     }
@@ -72,16 +59,6 @@ export class GraphText extends Graph{
     delete(){
         this.setEditable(false);
         super.delete();
-    }
-
-    isPointOn(point){
-        let x=point.x, y=point.y;
-        let graph = this._graphWrapper;
-        let minX = graph.x(), minY = graph.y(),
-            maxX = graph.x()+graph.width(),
-            maxY = graph.y()+graph.height();
-        return x >= minX && y >= minY && x <= maxX && y <= maxY;
-
     }
 
     highlight(){

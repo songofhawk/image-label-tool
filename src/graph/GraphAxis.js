@@ -46,12 +46,7 @@ export class GraphAxis extends Graph{
         this._hLine.setY(screenPoint.y);
     }
 
-
     delete(){
-
-    }
-
-    isPointOn(point){
 
     }
 

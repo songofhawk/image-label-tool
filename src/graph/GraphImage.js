@@ -14,7 +14,7 @@ export class GraphImage extends Graph{
         let self = this;
 
         imageObj.onload = function() {
-            let image = new Konva.Image({
+            let image = self._image = new Konva.Image({
                 x: 0,
                 y: 0,
                 image: imageObj,
@@ -45,14 +45,6 @@ export class GraphImage extends Graph{
         };
         imageObj.src = graphOption.src;
 
-        // wrapper.on("dragmove", function () {
-        //     self.onMove(wrapper.getAbsolutePosition());
-        // });
-        //
-        // wrapper.on("dragend", function () {
-        //     self.onChange();
-        // });
-
     }
 
     moveTo(screenPoint){
@@ -64,8 +56,6 @@ export class GraphImage extends Graph{
     }
 
     select(){
-        // this._graphWrapper.decor.stroke('#FFCC99');
-        // this._graphWrapper.decor.show();
         this.setEditable(true);
         super.select();
     }
@@ -74,9 +64,6 @@ export class GraphImage extends Graph{
      * 取消选择
      */
     deSelect(){
-        // this._graphWrapper.decor.stroke('LightGray');
-        // this._graphWrapper.decor.hide();
-
         this.setEditable(false);
         super.deSelect();
     }
@@ -84,16 +71,6 @@ export class GraphImage extends Graph{
     delete(){
         this.setEditable(false);
         super.delete();
-    }
-
-    isPointOn(point){
-        let x=point.x, y=point.y;
-        let graph = this._graphWrapper;
-        let minX = graph.x(), minY = graph.y(),
-            maxX = graph.x()+graph.width(),
-            maxY = graph.y()+graph.height();
-        return x >= minX && y >= minY && x <= maxX && y <= maxY;
-
     }
 
     highlight(){
