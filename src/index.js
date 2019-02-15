@@ -43,8 +43,8 @@ let data = {
             "aspectRatio": 1,
             "matterColor": "",
             "craftCode": "",
-            "imageWidth": 96,
-            "imageHeight": 98,
+            "imageWidth": 50,
+            "imageHeight": 50,
             "imageX": 125,
             "imageY": 181,
             "imageColor": "#000000",
@@ -148,10 +148,10 @@ const pointAreaManager = new GraphPointAreaManager(panel,{
 });
 
 /*处理事件*/
-document.querySelector('#btn-draw-coord').addEventListener('click',function (event) {
+document.querySelector('#btn-draw-coord').addEventListener('click',function () {
     panel.draw(axisManager);
 });
-document.querySelector('#btn-draw-image').addEventListener('click',function (event) {
+document.querySelector('#btn-draw-image').addEventListener('click',function () {
     imageManager.draw({
         x:10,
         y:10,
@@ -164,7 +164,7 @@ document.querySelector('#btn-draw-image').addEventListener('click',function (eve
     });
 });
 
-document.querySelector('#btn-draw-point-area').addEventListener('click',function (event) {
+document.querySelector('#btn-draw-point-area').addEventListener('click',function () {
     pointAreaManager.draw();
 });
 

@@ -96,7 +96,7 @@ export class Toolbar {
         }
         let bar = this._bar;
         let style = bar.style;
-        style.left = x+'px';
-        style.top = y - bar.offsetHeight + 'px';
+        style.left = x - 20+'px';
+        style.top = y - 10 - bar.offsetHeight + 'px';
     }
 }
