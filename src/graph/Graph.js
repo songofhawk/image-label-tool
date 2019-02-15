@@ -24,14 +24,24 @@ export class Graph {
             graphOption={};
         }
         this.code = graphOption.code ? graphOption.code : LangUtil.getGuid();
-        // this._graphWrapper = null;
-        this._graphWrapper = new Konva.Group({
+
+        let wrapper = this._graphWrapper = new Konva.Group({
             x:graphOption.x ? graphOption.x :0,
             y:graphOption.y?graphOption.y:0,
             width: graphOption.width?graphOption.width:50,
             height: graphOption.height?graphOption.height:50,
             draggable:true
         });
+
+        let self = this;
+        wrapper.on("dragmove", function () {
+            self.onMove(wrapper.getAbsolutePosition());
+        });
+
+        wrapper.on("dragend", function () {
+            self.onChange();
+        });
+
         this._layer.add(this._graphWrapper);
     }
 

@@ -10,53 +10,36 @@ export class GraphText extends Graph{
 
         let wrapper = this._graphWrapper;
 
-        let imageObj = new Image();
         let self = this;
 
-        imageObj.onload = function() {
-            let image = new Konva.Image({
-                x: 0,
-                y: 0,
-                image: imageObj,
-                width: graphOption.width,
-                height: graphOption.height,
-                listening:true
-            });
-            wrapper.add(image);
-            wrapper.image = image;
+        let text = new Konva.Text({
+            x: 0,
+            y: 0,
+            text: graphOption.text,
+            fontSize:graphOption.fontSize?graphOption.fontSize:12,
+            fontFamily:graphOption.fontFamily?graphOption.fontFamily:'Calibri',
+            fill:graphOption.color?graphOption.color:'black',
+            listening:true
+        });
+        wrapper.add(text);
+        wrapper.text = text;
 
-            let decor = new Konva.Rect({
-                x: - 1,
-                y: - 1,
-                width: graphOption.width+1,
-                height: graphOption.height+1,
-                fillEnabled: false,
-                stroke: 'LightGray',
-                strokeWidth: 3
-            });
-            decor.hide();
-            wrapper.decor = decor;
-            wrapper.add(decor);
-            self._image = image;
+        let decor = new Konva.Rect({
+            x: - 1,
+            y: - 1,
+            width: graphOption.width+1,
+            height: graphOption.height+1,
+            fillEnabled: false,
+            stroke: 'LightGray',
+            strokeWidth: 3
+        });
+        decor.hide();
+        wrapper.decor = decor;
+        wrapper.add(decor);
 
-            if (graphOption.bindEvent){
-                self._bindEvent(image);
-            }
-
-        };
-        imageObj.src = graphOption.src;
-
-        if (graphOption.x && graphOption.y){
-            this.moveTo(graphOption);
+        if (graphOption.bindEvent){
+            self._bindEvent(text);
         }
-
-        wrapper.on("dragmove", function () {
-            self.onMove(wrapper.getAbsolutePosition());
-        });
-
-        wrapper.on("dragend", function () {
-            self.onChange();
-        });
 
     }
 
@@ -174,8 +157,6 @@ export class GraphTextManager extends GraphManager{
         });
         super.create(data);
     }
-
-
 }
 
 class ImageDrawingHandler extends DrawingHandler{

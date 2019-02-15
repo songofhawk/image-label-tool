@@ -37,7 +37,6 @@ export class GraphImage extends Graph{
             decor.hide();
             wrapper.decor = decor;
             wrapper.add(decor);
-            self._image = image;
 
             if (graphOption.bindEvent){
                 self._bindEvent(image);
@@ -46,17 +45,13 @@ export class GraphImage extends Graph{
         };
         imageObj.src = graphOption.src;
 
-        if (graphOption.x && graphOption.y){
-            this.moveTo(graphOption);
-        }
-
-        wrapper.on("dragmove", function () {
-            self.onMove(wrapper.getAbsolutePosition());
-        });
-
-        wrapper.on("dragend", function () {
-            self.onChange();
-        });
+        // wrapper.on("dragmove", function () {
+        //     self.onMove(wrapper.getAbsolutePosition());
+        // });
+        //
+        // wrapper.on("dragend", function () {
+        //     self.onChange();
+        // });
 
     }
 
