@@ -20,11 +20,16 @@ export class Graph {
         this._manager = manager;
         this._layer = manager._layer;
 
-        this.code = (graphOption && graphOption.code) ? graphOption.code : LangUtil.getGuid();
+        if (!graphOption){
+            graphOption={};
+        }
+        this.code = graphOption.code ? graphOption.code : LangUtil.getGuid();
         // this._graphWrapper = null;
         this._graphWrapper = new Konva.Group({
-            x:0,
-            y:0,
+            x:graphOption.x ? graphOption.x :0,
+            y:graphOption.y?graphOption.y:0,
+            width: graphOption.width?graphOption.width:50,
+            height: graphOption.height?graphOption.height:50,
             draggable:true
         });
         this._layer.add(this._graphWrapper);

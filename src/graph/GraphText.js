@@ -1,10 +1,10 @@
 import Konva from 'konva';
 import {Graph} from "./Graph";
-import {AbstractDrawingOperator, GraphManager} from "../manager/GraphManager";
+import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
 
 
-export class GraphImage extends Graph{
+export class GraphText extends Graph{
     constructor(manager,graphOption) {
         super(manager,graphOption);
 
@@ -155,7 +155,7 @@ export class GraphImage extends Graph{
 
 }
 
-export class GraphImageManager extends GraphManager{
+export class GraphTextManager extends GraphManager{
     constructor(panel,dataMappingConfig){
         super(panel,dataMappingConfig);
         this._drawingHandler = new ImageDrawingHandler(this);
@@ -169,7 +169,7 @@ export class GraphImageManager extends GraphManager{
         data.forEach((dataOne)=>{
             let desc = this._dataMapping.createGraph(dataOne);
             desc.bindEvent=true;
-            let graph = new GraphImage(this,desc);
+            let graph = new GraphText(this,desc);
             super.onCreateOne(graph);
         });
         super.create(data);
@@ -184,7 +184,7 @@ class ImageDrawingHandler extends DrawingHandler{
     }
 
     stepStart(graphOption){
-        let graph = new GraphImage(this._manager, graphOption);
+        let graph = new GraphText(this._manager, graphOption);
         this._stage.container().style.cursor = 'crosshair';
         super.stepStart(graph);
     }
