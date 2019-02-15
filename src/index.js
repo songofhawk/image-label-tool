@@ -49,6 +49,7 @@ let data = {
             "imageY": 181,
             "imageColor": "#000000",
             "shape": "SQUARE_DIAMOND",
+            "image": "./resource/image/f.jpg",
             "font": "宋体,b,i",
             "text": "请输入",
             "areaForSpecs": [
@@ -118,9 +119,20 @@ const imageManager = new GraphImageManager(panel,{
     },{
         data:'imageY',
         graph:'y'
+    },{
+        data:'imageWidth',
+        graph:'width'
+    },{
+        data:'imageHeight',
+        graph:'height'
+    },{
+        data:'image',
+        graph:'src'
     }],
     dataKey: 'id'
 });
+imageManager.create();
+
 const pointAreaManager = new GraphPointAreaManager(panel,{
     data:data,
     for:'productImageWithMark.pgAreaImageLabels',

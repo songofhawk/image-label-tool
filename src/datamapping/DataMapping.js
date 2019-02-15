@@ -30,12 +30,16 @@ export class DataMapping{
         this._dataOption = dataOption;
     }
 
+    setGraphOption(graphOption){
+        this._graphOption = graphOption;
+    }
+
     /**
      * 根据图形对象,创建数据节点
      *
      * @param graphs
      */
-    createMulti(graphs){
+    createDataMulti(graphs){
         if (graphs instanceof Array){
             for (let i=0;i<graphs.length;i++){
                 let graphObj = graphs[i];
@@ -103,7 +107,7 @@ export class DataMapping{
             }
         }
         if (i<rootData.length){
-            rootData[i] = newData;
+            LangUtil.copyAllProperties(newData, rootData[i]);
         }
     }
 
@@ -129,25 +133,24 @@ export class DataMapping{
     /**
      * 根据给定的数据节点,生成对应的图形描述对象(graphConfig, 真正的图形对象,是要由具体的manager生成的,这里只负责处理映射关系, 生成需要的参数)
      * @param {Object} data 数据节点,可以是数组, 也可以是一个单节点
-     * @return 图形包装对象
+     * @return {Array} 图形包装对象
      */
-    createGraphDesciption(data){
+    createGraphMulti(data){
         if (!data){
-            data = forData;
+            data = this.data;
         }
         if (!data){
             return null;
         }
         if (data instanceof Array){
-            let discriptions = [];
-            for (let i=0;i<data.length;i++){
-                let dataOne = data[i];
-                let wrapperOne = this.createOneGraphDescription(dataOne);
-                discriptions.push(wrapperOne);
-            }
-            return discriptions;
+            let descriptions = [];
+            data.forEach((dataOne)=>{
+                let desc = this.createGraph(dataOne);
+                descriptions.push(desc);
+            });
+            return descriptions;
         }else{
-            return this.createOneGraphDescription(data);
+            return this.createGraph(data);
         }
     }
 
@@ -155,41 +158,21 @@ export class DataMapping{
      * 根据给定的单个数据节点,生成对应的图形描述对象
      * @param {Object} data 单数据节点
      */
-    createOneGraphDescription(data){
+    createGraph(data){
         let description = {};
-        let inRules = this.rule.in;
-        for (let i=0; i< inRules.length; i++){
-            let inRule = inRules[i];
-            let dataItem = data[inRule.data.name];
-            let graphItem;
-            if (inRule.dataType && inRule.dataType.toLowerCase() === "json"){ //如果数据类型是json, 那么要把graph指向的对象转换成json串
-                graphItem = JSON.parse(dataItem);
-            }else{ //未指定数据类型, 或者未知的类型, 都
-                graphItem = dataItem;
-            }
-
-            let graphFiltered = {}; //根据指定的properties, 过滤以后的图形属性
-            let graphProperArray = inRule.graph.properArray;
-            let dataProperMap = inRule.data.properMap;
-            if (dataProperMap){ //如果指定了properties, 那么就不能整个对象转换, 而是只转换特定的属性
-                graphFiltered = LangUtil.copyPropertiesOfArrayOrObject(graphItem, function(key, obj){
-                    let dataProperIndex = dataProperMap[key];
-                    if (dataProperIndex===undefined || dataProperIndex===null) {
-                        return undefined;
-                    }else{
-                        return {
-                            key: graphProperArray[dataProperMap[key]],
-                            value: obj,
-                            isMapping: true
-                        }
-                    }
-                })
-            }else{
-                graphFiltered = graphItem;
-            }
-            description[inRule.graph.name] = graphFiltered;
+        let dataKey = this.rule.dataKey;
+        if (dataKey && data[dataKey]){
+            description.code=data[dataKey];
         }
+        let d2gRules = this.rule.mapping.d2g;
+
+        LangUtil.copyProperties(data,description,d2gRules);
+        // let dataOption = this._dataOption;
+        // if (dataOption){
+        //     LangUtil.copyProperties(dataOption,description);
+        // }
         return description;
+
     }
 
     _parseMappingConfig(mappingConfigArray) {
@@ -216,13 +199,15 @@ export class DataMapping{
         graph.subMappingArray=null;
 
 
-        let dataType = PropertyType.fromString(configItem.dataType);
+        let dataTypeFromConfig = PropertyType.fromString(configItem.dataType);
 
         let d2gSource = LangUtil.clone(data);
-        d2gSource.type = dataType? dataType: d2gSource.type;
+        d2gSource.type = (dataTypeFromConfig===PropertyType.Unknown) ?
+            d2gSource.type : dataTypeFromConfig;
 
         let g2dTarget = LangUtil.clone(data);
-        g2dTarget.type = dataType? dataType: g2dTarget.type;
+        g2dTarget.type = (dataTypeFromConfig===PropertyType.Unknown) ?
+            g2dTarget.type : dataTypeFromConfig;
 
         return {
             d2g: {

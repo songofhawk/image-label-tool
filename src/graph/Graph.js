@@ -1,5 +1,5 @@
-import {StringUtil} from "../util/StringUtil";
 import Konva from "konva";
+import {LangUtil} from "../util/LangUtil";
 
 export class Graph {
 
@@ -15,11 +15,12 @@ export class Graph {
 
 
 
-    constructor(manager) {
+    constructor(manager,graphOption) {
         this._panel = manager._panel;
         this._manager = manager;
         this._layer = manager._layer;
-        this.code = StringUtil.getGuid();
+
+        this.code = (graphOption && graphOption.code) ? graphOption.code : LangUtil.getGuid();
         // this._graphWrapper = null;
         this._graphWrapper = new Konva.Group({
             x:0,
@@ -98,17 +99,17 @@ export class Graph {
     _bindEvent(graph) {
         let self = this;
         graph.on("mouseover", function () {
-            //console.log('mouse over on image: '+self.code);
+            //console.log('mouse over on graph: '+self.code);
             self.mouseOver();
         });
 
         graph.on("mouseout", function () {
-            //console.log('mouse out from image: '+self.code);
+            //console.log('mouse out from graph: '+self.code);
             self.mouseOut();
         });
 
         graph.on("click", function () {
-            //console.log('mouse click on image: '+self.code);
+            //console.log('mouse click on graph: '+self.code);
             self.mouseClick();
         });
     }

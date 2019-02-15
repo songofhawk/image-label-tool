@@ -3,16 +3,17 @@ import {Graph} from "./Graph";
 import {GraphManager} from "../manager/GraphManager";
 import {AbstractDrawingOperator} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
+import {LangUtil} from "../util/LangUtil";
 
 
 export class GraphImage extends Graph{
     constructor(manager,graphOption) {
-        super(manager);
+        super(manager,graphOption);
 
         let layer = this._layer;
         let wrapper = this._graphWrapper = new Konva.Group({
-            x:0,
-            y:0,
+            x:graphOption.x?graphOption.x:0,
+            y:graphOption.y?graphOption.y:0,
             width: graphOption.width,
             height: graphOption.height,
             draggable:true
@@ -47,21 +48,25 @@ export class GraphImage extends Graph{
             wrapper.decor = decor;
             wrapper.add(decor);
             self._image = image;
+
+            if (graphOption.bindEvent){
+                self._bindEvent(image);
+            }
+
         };
         imageObj.src = graphOption.src;
 
+        if (graphOption.x && graphOption.y){
+            this.moveTo(graphOption);
+        }
 
         wrapper.on("dragmove", function () {
-            self.onMove(wrapper.getPosition());
-        });
+            self.onMove(wrapper.getAbsolutePosition());
+        })
 
         wrapper.on("dragend", function () {
             self.onChange();
-        })
-
-    }
-
-    create(callBack){
+        });
 
     }
 
@@ -164,7 +169,22 @@ export class GraphImageManager extends GraphManager{
     constructor(panel,dataMappingConfig){
         super(panel,dataMappingConfig);
         this._drawingHandler = new ImageDrawingHandler(this);
+        //this.create();
     }
+
+    create(data){
+        if (!data){
+            data = this._dataMapping.data;
+        }
+        data.forEach((dataOne)=>{
+            let desc = this._dataMapping.createGraph(dataOne);
+            desc.bindEvent=true;
+            let graph = new GraphImage(this,desc);
+            super.onCreateOne(graph);
+        })
+        super.create(data);
+    }
+
 
 }
 

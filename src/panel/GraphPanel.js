@@ -36,6 +36,7 @@ export class GraphPanel {
     _loadBkImage(stage, bkImgUrl) {
         let bkLayer = new Konva.Layer();
         let jsImage = new Image();
+        let self = this;
         jsImage.onload = function () {
 
             let bkImage = new Konva.Image({
@@ -52,6 +53,7 @@ export class GraphPanel {
             // add the layer to the stage
             stage.add(bkLayer);
             bkLayer.moveToBottom();
+            self.render();
         };
         jsImage.src = bkImgUrl;
     }
@@ -115,4 +117,7 @@ export class GraphPanel {
      * @private
      */
 
+    render(){
+        this._stage.draw();
+    }
 }

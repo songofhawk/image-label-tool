@@ -63,6 +63,14 @@ export class GraphManager {
             this._dataMapping.deleteData(graph.code);
         }
     }
+
+    onCreateOne(graph){
+        this._container.add(graph);
+    }
+
+    create(data){
+        this._layer.draw();
+    }
 }
 
 class Container {

@@ -3,6 +3,7 @@ import {Graph} from "./Graph";
 import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
 import {DataMapping} from "../datamapping/DataMapping";
+import {GraphImage} from "./GraphImage";
 
 
 export class GraphPointArea extends Graph {
@@ -17,10 +18,6 @@ export class GraphPointArea extends Graph {
 
     get points(){
         return this._points;
-    }
-
-    create(callBack) {
-
     }
 
     moveTo(point) {
@@ -322,6 +319,11 @@ export class GraphPointAreaManager extends GraphManager {
     constructor(panel,dataMappingConfig) {
         super(panel,dataMappingConfig);
         this._drawingHandler = new PointAreaDrawingHandler(this);
+    }
+
+    create(description){
+        let graph = new GraphPointArea(this);
+
     }
 }
 

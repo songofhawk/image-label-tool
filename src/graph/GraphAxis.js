@@ -41,10 +41,6 @@ export class GraphAxis extends Graph{
 
     }
 
-    create(callBack){
-
-    }
-
     moveTo(screenPoint){
         this._vLine.setX(screenPoint.x);
         this._hLine.setY(screenPoint.y);
@@ -109,6 +105,12 @@ export class GraphAxisManager extends GraphManager{
     constructor(panel){
         super(panel);
         this._drawingHandler = new AxisDrawingHandler(this);
+    }
+
+    create(description){
+        let graph = new GraphAxis();
+        graph.moveTo(description);
+        super.onCreate(graph);
     }
 
 }
