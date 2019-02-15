@@ -2,18 +2,32 @@ import Konva from 'konva';
 import {Graph} from "./Graph";
 import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
-import {DataMapping} from "../datamapping/DataMapping";
-import {GraphImage} from "./GraphImage";
 
 
 export class GraphPointArea extends Graph {
 
-    constructor(manager) {
-        super(manager);
+    constructor(manager,graphOption) {
+        super(manager,graphOption);
 
         this._points = [];
         this._lines = [];
 
+        if (graphOption){
+            this.create(graphOption);
+        }
+    }
+
+    create(graphOption){
+        let abPoints = graphOption.absolutePoints;
+        for (let i=0;i<abPoints.length;i++){
+            let abPoint = abPoints[i];
+            if (i===0){
+                this.createPoint(abPoint);
+            }else{
+                this.createLineWithNewPoint(abPoint);
+            }
+        }
+        this._closeArea();
     }
 
     get points(){
@@ -79,7 +93,7 @@ export class GraphPointArea extends Graph {
         circle.unHighlight=function () {
             this.strokeWidth(Graph.DEFAULT_STROKE_WITH);
             this.stroke(Graph.DEFAULT_STROKE_COLOR);
-        }
+        };
 
         return circle;
     }
@@ -120,11 +134,11 @@ export class GraphPointArea extends Graph {
 
         point.setX(screenPoint.x);
         point.setY(screenPoint.y);
-        this.moveLineWithPoint(point);
+        GraphPointArea.moveLineWithPoint(point);
         this.onChange();
     }
 
-    moveLineWithPoint(point){
+    static moveLineWithPoint(point){
         if (point.inLine) {
             let inLine = point.inLine;
             let points = inLine.getPoints();
@@ -210,28 +224,28 @@ export class GraphPointArea extends Graph {
 
     _bindPointEvent(shape) {
         let self = this;
-        shape.on("mouseover", function (e) {
+        shape.on("mouseover", function () {
             //console.log('mouse over on graph: '+graph.type);
             shape.highlight();
             shape.draw();
         });
 
-        shape.on("mouseout", function (e) {
+        shape.on("mouseout", function () {
             // console.log('mouse out from graph: '+graph.type);
             shape.unHighlight();
             //TODO:这个地方很奇怪,如果用shap.draw()就看不出重绘的效果,只有重绘整个层才可以,但按照官方文档的例子,明明就应该可以的:https://konvajs.github.io/docs/performance/Shape_Redraw.html
             self._layer.draw();
         });
 
-        shape.on("dragmove", function (e) {
-            self.moveLineWithPoint(this);
+        shape.on("dragmove", function () {
+            GraphPointArea.moveLineWithPoint(this);
             shape.draw();
             if (this.polygon){
                 this.polygon.setPoints();
             }
         });
 
-        shape.on("dragend", function (e) {
+        shape.on("dragend", function () {
             let area = self._area;
             if (area){
                 let pointArray = self._extractPointArray();
@@ -251,21 +265,21 @@ export class GraphPointArea extends Graph {
 
         self.unHighlight();
 
-        area.on("dragmove", function (e) {
+        area.on("dragmove", function () {
             let pos = area.getAbsolutePosition();
             self._graphWrapper.setAbsolutePosition(pos);
             self.onMove(pos);
         });
-        area.on("dragend", function (e) {
+        area.on("dragend", function () {
             self.onChange();
-        })
-        area.on("mouseover", function (e) {
+        });
+        area.on("mouseover", function () {
             self.highlight();
         });
-        area.on("mouseout", function (e) {
+        area.on("mouseout", function () {
             self.unHighlight();
         });
-        area.on("click", function (e) {
+        area.on("click", function () {
             self.toggleSelect();
         });
     }
@@ -299,13 +313,18 @@ export class GraphPointArea extends Graph {
         return pointArray;
     }
 
+
     onDrawingOver(){
+        this._closeArea();
+        super.onDrawingOver();
+    }
+
+    _closeArea(){
         this.seal();
         this.wrapperRebound();
         this.genAbsolutePoints();
         this.createPolygonArea();
         this.bindEvent();
-        super.onDrawingOver();
     }
 
 
@@ -321,10 +340,21 @@ export class GraphPointAreaManager extends GraphManager {
         this._drawingHandler = new PointAreaDrawingHandler(this);
     }
 
-    create(description){
-        let graph = new GraphPointArea(this);
-
+    create(data){
+        if (!data){
+            data = this._dataMapping.data;
+        }
+        data.forEach((dataOne)=>{
+            let desc = this._dataMapping.createGraph(dataOne);
+            desc.bindEvent=true;
+            let graph = new GraphPointArea(this,desc);
+            //graph.create(desc);
+            super.onCreateOne(graph);
+        });
+        super.create(data);
     }
+
+
 }
 
 class PointAreaDrawingHandler extends DrawingHandler {

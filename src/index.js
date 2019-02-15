@@ -146,6 +146,7 @@ const pointAreaManager = new GraphPointAreaManager(panel,{
     }],
     dataKey: 'id'
 });
+pointAreaManager.create();
 
 /*处理事件*/
 document.querySelector('#btn-draw-coord').addEventListener('click',function () {
