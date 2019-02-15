@@ -103,7 +103,7 @@ export class GraphImage extends Graph{
             // this.tr.destroy();
             // this.tr = null;
         }
-        //this.ediable = editable;
+        //this.editable = editable;
 
     }
 

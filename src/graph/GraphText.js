@@ -91,12 +91,12 @@ export class GraphText extends Graph{
             // this.tr.destroy();
             // this.tr = null;
         }
-        //this.ediable = editable;
+        //this.editable = editable;
 
     }
 
     onDrawingOver(){
-        this._bindEvent(this._image);
+        this._bindEvent(this._text);
 
         this.genAbsolutePosition();
         super.onDrawingOver();
@@ -118,7 +118,7 @@ export class GraphText extends Graph{
 export class GraphTextManager extends GraphManager{
     constructor(panel,dataMappingConfig){
         super(panel,dataMappingConfig);
-        this._drawingHandler = new ImageDrawingHandler(this);
+        this._drawingHandler = new TextDrawingHandler(this);
         //this.create();
     }
 
@@ -136,7 +136,7 @@ export class GraphTextManager extends GraphManager{
     }
 }
 
-class ImageDrawingHandler extends DrawingHandler{
+class TextDrawingHandler extends DrawingHandler{
     constructor(manager){
         super(manager);
     }
