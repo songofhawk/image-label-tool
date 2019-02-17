@@ -134,20 +134,9 @@ export class GraphImageManager extends GraphManager{
         //this.create();
     }
 
-    create(data){
-        if (!data){
-            data = this._dataMapping.data;
-        }
-        data.forEach((dataOne)=>{
-            let desc = this._dataMapping.createGraph(dataOne);
-            desc.bindEvent=true;
-            let graph = new GraphImage(this,desc);
-            super.onCreateOne(graph);
-        });
-        super.create(data);
+    _createGraphObjByDesc(desc){
+        return new GraphImage(this,desc);
     }
-
-
 }
 
 class ImageDrawingHandler extends DrawingHandler{

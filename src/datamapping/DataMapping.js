@@ -24,6 +24,9 @@ export class DataMapping{
             mapping:this._parseMappingConfig(config.mapping)
         };
         this.data = JsonUtil.getNodeByPath(config.data, config.for);
+        if (config.filter){
+            this.filtedData = this.data.filter(config.filter);
+        }
     }
 
     setDataOption(dataOption){

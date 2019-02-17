@@ -64,13 +64,36 @@ export class GraphManager {
         }
     }
 
-    onCreateOne(graph){
+    create(data){
+        if (!data){
+            data = this._dataMapping.filtedData ?
+                this._dataMapping.filtedData :
+                this._dataMapping.data;
+        }
+        data.forEach(this._createOne, this);
+        this._layer.draw();
+    }
+
+    /**
+     * 创建一个图形对象,供子类重写
+     * 子类的这个方法最后,应该回调父类的onAfterCreateOne方法
+     */
+    _createOne(dataOne) {
+        let desc = this._createGraphDesc(dataOne);
+        let graph = this._createGraphObjByDesc(desc);
         this._container.add(graph);
     }
 
-    create(data){
-        this._layer.draw();
+    _createGraphDesc(dataOne){
+        let desc = this._dataMapping.createGraph(dataOne);
+        desc.bindEvent=true;
+        return desc;
     }
+
+    _createGraphObjByDesc(desc){
+        throw 'SubClass of GraphManager mush implements _createGraphObjByDesc method!';
+    }
+
 }
 
 class Container {

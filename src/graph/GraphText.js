@@ -15,10 +15,12 @@ export class GraphText extends Graph{
         let text = this._text = new Konva.Text({
             x: 0,
             y: 0,
+            width: graphOption.width,
+            height: graphOption.height,
             text: graphOption.text,
             fontSize:graphOption.fontSize?graphOption.fontSize:12,
             fontFamily:graphOption.fontFamily?graphOption.fontFamily:'Calibri',
-            fill:graphOption.color?graphOption.color:'black',
+            fill:graphOption.color?graphOption.color:'FloralWhite',
             listening:true
         });
         wrapper.add(text);
@@ -122,17 +124,8 @@ export class GraphTextManager extends GraphManager{
         //this.create();
     }
 
-    create(data){
-        if (!data){
-            data = this._dataMapping.data;
-        }
-        data.forEach((dataOne)=>{
-            let desc = this._dataMapping.createGraph(dataOne);
-            desc.bindEvent=true;
-            let graph = new GraphText(this,desc);
-            super.onCreateOne(graph);
-        });
-        super.create(data);
+    _createGraphObjByDesc(desc){
+        return new GraphText(this,desc);
     }
 }
 

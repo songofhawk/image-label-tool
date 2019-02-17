@@ -336,21 +336,9 @@ export class GraphPointAreaManager extends GraphManager {
         this._drawingHandler = new PointAreaDrawingHandler(this);
     }
 
-    create(data){
-        if (!data){
-            data = this._dataMapping.data;
-        }
-        data.forEach((dataOne)=>{
-            let desc = this._dataMapping.createGraph(dataOne);
-            desc.bindEvent=true;
-            let graph = new GraphPointArea(this,desc);
-            //graph.create(desc);
-            super.onCreateOne(graph);
-        });
-        super.create(data);
+    _createGraphObjByDesc(desc){
+        return new GraphPointArea(this,desc);
     }
-
-
 }
 
 class PointAreaDrawingHandler extends DrawingHandler {

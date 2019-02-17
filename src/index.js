@@ -77,6 +77,20 @@ let data = {
             "updateTime": "2018-11-01 18:53:59",
             "createBy": 1,
             "updateBy": 1
+        },{
+            "pgDesignId": 186,
+            "pgDesignSideId": 91,
+            "infoType": "TEXT",
+            "infoValue": "",
+            "imageWidth": 80,
+            "imageHeight": 20,
+            "imageX": 285,
+            "imageY": 281,
+            "imageColor": "#000000",
+            "font": "宋体,b,i",
+            "text": "买啥都有自家Logo",
+            "createBy": 1,
+            "updateBy": 1
         }]
     }
 };
@@ -87,6 +101,7 @@ let data = {
  */
 import {GraphPanel} from './panel/GraphPanel.js';
 import {GraphPointAreaManager} from "./graph/GraphPointArea";
+import {GraphTextManager} from "./graph/GraphText";
 const panel = new GraphPanel({
     containerId:'image-label-area',
     bkImgUrl:'./resource/image/jd.jpg',
@@ -110,6 +125,31 @@ const panel = new GraphPanel({
  *  初始化绘制工具
  */
 const axisManager = new GraphAxisManager(panel);
+
+const textManager = new GraphTextManager(panel,{
+    data:data,
+    for:'side.areas',
+    mapping:[{
+        data:'imageX',
+        graph:'x'
+    },{
+        data:'imageY',
+        graph:'y'
+    },{
+        data:'imageWidth',
+        graph:'width'
+    },{
+        data:'imageHeight',
+        graph:'height'
+    },{
+        data:'text',
+        graph:'text'
+    }],
+    filter:(area)=>{return area.infoType==="TEXT"},
+    dataKey: 'id'
+});
+textManager.create();
+
 const imageManager = new GraphImageManager(panel,{
     data:data,
     for:'side.areas',
@@ -129,6 +169,7 @@ const imageManager = new GraphImageManager(panel,{
         data:'image',
         graph:'src'
     }],
+    filter:(area)=>{return area.infoType==="LOGO"},
     dataKey: 'id'
 });
 imageManager.create();
