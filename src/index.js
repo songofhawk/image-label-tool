@@ -1,6 +1,12 @@
 //测试webpack打包
 import {GraphAxisManager} from "./graph/GraphAxis";
-import {GraphImageManager} from "./graph/GraphImage";
+/**-------------------------
+ * 正式开始初始化画板
+ * -------------------------
+ */
+import {GraphPanel} from './panel/GraphPanel.js';
+import {GraphPointAreaManager} from "./graph/GraphPointArea";
+import {GraphImageTextManager} from "./graph/GraphImageText";
 
 let hello = function () {
     let textWrapper = document.createElement("div");
@@ -95,13 +101,6 @@ let data = {
     }
 };
 
-/**-------------------------
- * 正式开始初始化画板
- * -------------------------
- */
-import {GraphPanel} from './panel/GraphPanel.js';
-import {GraphPointAreaManager} from "./graph/GraphPointArea";
-import {GraphTextManager} from "./graph/GraphText";
 const panel = new GraphPanel({
     containerId:'image-label-area',
     bkImgUrl:'./resource/image/jd.jpg',
@@ -126,7 +125,7 @@ const panel = new GraphPanel({
  */
 const axisManager = new GraphAxisManager(panel);
 
-const textManager = new GraphTextManager(panel,{
+const imageTextManager = new GraphImageTextManager(panel,{
     data:data,
     for:'side.areas',
     mapping:[{
@@ -144,35 +143,16 @@ const textManager = new GraphTextManager(panel,{
     },{
         data:'text',
         graph:'text'
-    }],
-    filter:(area)=>{return area.infoType==="TEXT"},
-    dataKey: 'id'
-});
-textManager.create();
-
-const imageManager = new GraphImageManager(panel,{
-    data:data,
-    for:'side.areas',
-    mapping:[{
-        data:'imageX',
-        graph:'x'
-    },{
-        data:'imageY',
-        graph:'y'
-    },{
-        data:'imageWidth',
-        graph:'width'
-    },{
-        data:'imageHeight',
-        graph:'height'
     },{
         data:'image',
         graph:'src'
+    },{
+        data:'infoType',
+        graph:'graphType'
     }],
-    filter:(area)=>{return area.infoType==="LOGO"},
     dataKey: 'id'
 });
-imageManager.create();
+imageTextManager.create();
 
 const pointAreaManager = new GraphPointAreaManager(panel,{
     data:data,
@@ -194,15 +174,24 @@ document.querySelector('#btn-draw-coord').addEventListener('click',function () {
     panel.draw(axisManager);
 });
 document.querySelector('#btn-draw-image').addEventListener('click',function () {
-    imageManager.draw({
+    imageTextManager.draw({
         x:10,
         y:10,
         width:50,
         height:50,
         src:'./resource/image/f.jpg',
+        graphType:'LOGO'
+    });
+});
 
-    },{
-        infoType:'LOGO'
+document.querySelector('#btn-draw-text').addEventListener('click',function () {
+    imageTextManager.draw({
+        x:10,
+        y:10,
+        width:80,
+        height:20,
+        text:'买啥都有自家logo',
+        graphType:'TEXT'
     });
 });
 

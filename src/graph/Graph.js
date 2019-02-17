@@ -42,7 +42,12 @@ export class Graph {
             self.onChange();
         });
 
+        if (graphOption.graphType){
+            this.graphType = graphOption.graphType;
+        }
+
         this._layer.add(this._graphWrapper);
+
     }
 
     create(callBack) {

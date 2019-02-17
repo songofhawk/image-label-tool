@@ -1,21 +1,21 @@
-import Konva from 'konva';
-import {Graph} from "./Graph";
-import {AbstractDrawingOperator, GraphManager} from "../manager/GraphManager";
+import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
+import {GraphText} from "./GraphText";
+import {GraphImage} from "./GraphImage";
 
 
 export class GraphImageTextManager extends GraphManager{
     constructor(panel,dataMappingConfig){
         super(panel,dataMappingConfig);
-        this._drawingHandler = new ImageDrawingHandler(this);
+        this._drawingHandler = new GraphImageTextDrawingHandler(this);
         //this.create();
     }
 
     _createGraphObjByDesc(desc){
         if (desc.graphType==='TEXT'){
-            return new GraphText(this.desc);
+            return new GraphText(this, desc);
         }else{
-            return new GraphImage(this.desc);
+            return new GraphImage(this, desc);
         }
     }
 }
@@ -26,7 +26,7 @@ class GraphImageTextDrawingHandler extends DrawingHandler{
     }
 
     stepStart(graphOption){
-        let graph = new GraphImage(this._manager, graphOption);
+        let graph = this._manager._createGraphObjByDesc(graphOption);
         this._stage.container().style.cursor = 'crosshair';
         super.stepStart(graph);
     }
