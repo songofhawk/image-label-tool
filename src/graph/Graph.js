@@ -28,8 +28,8 @@ export class Graph {
         let wrapper = this._graphWrapper = new Konva.Group({
             x:graphOption.x ? graphOption.x :0,
             y:graphOption.y?graphOption.y:0,
-            width: graphOption.width?graphOption.width:50,
-            height: graphOption.height?graphOption.height:50,
+            width: graphOption.realWidth?graphOption.realWidth:50,
+            height: graphOption.realHeight?graphOption.realHeight:50,
             draggable:true
         });
 
@@ -147,6 +147,39 @@ export class Graph {
         //     width:0,
         //     height:0
         // }
+    }
+
+    setEditable(editable){
+        if (editable){
+            if (this.tr){
+                this.tr.show();
+                return;
+            }
+            let tr = new Konva.Transformer();
+            this._layer.add(tr);
+
+            let group = this._graphWrapper;
+            tr.attachTo(group);
+            this.tr = tr;
+
+            let self = this;
+            group.on('transformend', function () {
+                console.log('transform end');
+                self.realWidth = self._graphWrapper.getWidth()*self._graphWrapper.scaleX();
+                self.realHeight = self._graphWrapper.getHeight()*self._graphWrapper.scaleY();
+                self.onChange();
+            });
+
+        }else{
+            if (!this.tr){
+                return;
+            }
+            this.tr.hide();
+            // this.tr.destroy();
+            // this.tr = null;
+        }
+        //this.editable = editable;
+
     }
 
     getPosition(){

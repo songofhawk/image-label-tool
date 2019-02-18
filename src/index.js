@@ -84,12 +84,13 @@ let data = {
             "createBy": 1,
             "updateBy": 1
         },{
+            "id":192,
             "pgDesignId": 186,
             "pgDesignSideId": 91,
             "infoType": "TEXT",
             "infoValue": "",
-            "imageWidth": 80,
-            "imageHeight": 20,
+            "imageWidth": 160,
+            "imageHeight": 40,
             "imageX": 285,
             "imageY": 281,
             "imageColor": "#000000",
@@ -136,10 +137,10 @@ const imageTextManager = new GraphImageTextManager(panel,{
         graph:'y'
     },{
         data:'imageWidth',
-        graph:'width'
+        graph:'realWidth'
     },{
         data:'imageHeight',
-        graph:'height'
+        graph:'realHeight'
     },{
         data:'text',
         graph:'text'
@@ -177,8 +178,8 @@ document.querySelector('#btn-draw-image').addEventListener('click',function () {
     imageTextManager.draw({
         x:10,
         y:10,
-        width:50,
-        height:50,
+        realWidth:50,
+        realHeight:50,
         src:'./resource/image/f.jpg',
         graphType:'LOGO'
     });
@@ -188,8 +189,8 @@ document.querySelector('#btn-draw-text').addEventListener('click',function () {
     imageTextManager.draw({
         x:10,
         y:10,
-        width:80,
-        height:20,
+        realWidth:80,
+        realHeight:20,
         text:'买啥都有自家logo',
         graphType:'TEXT'
     });

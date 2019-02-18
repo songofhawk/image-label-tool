@@ -18,8 +18,8 @@ export class GraphImage extends Graph{
                 x: 0,
                 y: 0,
                 image: imageObj,
-                width: graphOption.width,
-                height: graphOption.height,
+                width: graphOption.realWidth,
+                height: graphOption.realHeight,
                 listening:true
             });
             wrapper.add(image);
@@ -28,8 +28,8 @@ export class GraphImage extends Graph{
             let decor = new Konva.Rect({
                 x: - 1,
                 y: - 1,
-                width: graphOption.width+1,
-                height: graphOption.height+1,
+                width: graphOption.realWidth+1,
+                height: graphOption.realHeight+1,
                 fillEnabled: false,
                 stroke: 'LightGray',
                 strokeWidth: 3
@@ -81,30 +81,6 @@ export class GraphImage extends Graph{
     unHighlight(){
         this._graphWrapper.decor.hide();
         super.unHighlight();
-    }
-
-    setEditable(editable){
-        if (editable){
-            if (this.tr){
-                this.tr.show();
-                return;
-            }
-            let tr = new Konva.Transformer();
-            this._layer.add(tr);
-
-            let group = this._graphWrapper;
-            tr.attachTo(group);
-            this.tr = tr;
-        }else{
-            if (!this.tr){
-                return;
-            }
-            this.tr.hide();
-            // this.tr.destroy();
-            // this.tr = null;
-        }
-        //this.editable = editable;
-
     }
 
     onDrawingOver(){
