@@ -18,7 +18,7 @@ export class GraphText extends Graph{
             width: graphOption.realWidth,
             height: graphOption.realHeight,
             text: graphOption.text,
-            fontSize:graphOption.fontSize?graphOption.fontSize:12,
+            fontSize:graphOption.realHeight?graphOption.realHeight - 2:12,
             fontFamily:graphOption.fontFamily?graphOption.fontFamily:'Calibri',
             fill:graphOption.color?graphOption.color:'FloralWhite',
             listening:true

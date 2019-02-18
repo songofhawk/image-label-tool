@@ -55,6 +55,3 @@ class GraphImageTextDrawingHandler extends DrawingHandler{
         return 1;
     }
 }
-
-
-

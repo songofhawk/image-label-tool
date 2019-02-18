@@ -140,5 +140,3 @@ class AxisDrawingHandler extends DrawingHandler{
         return 1;
     }
 }
-
-

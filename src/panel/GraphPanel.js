@@ -2,6 +2,11 @@ import {Graph} from '../graph/Graph';
 import Konva from "konva";
 import {Toolbar} from "../toolbar/Toolbar";
 
+import {GraphImageTextManager} from "../graph/GraphImageText";
+import {GraphAxisManager} from "../graph/GraphAxis";
+import {GraphPointAreaManager} from "../graph/GraphPointArea";
+
+
 export class GraphPanel {
     /**
      * 画板初始化
@@ -10,6 +15,7 @@ export class GraphPanel {
      * @param onDrawn 绘制完成图形以后的回调函数
      * @param onSetProperty 点击图形设置属性以后的回调函数
      * @param onDelete 删除图形以后的回调函数
+     * @param onChange 修改图形以后的回调函数
      */
     constructor({containerId, bkImgUrl, onDrawn, onSetProperty, onDelete, onChange}) {
         if (!containerId) {
@@ -112,8 +118,7 @@ export class GraphPanel {
     /*---------------------------------------*/
 
     /**
-     *
-     * @param callBack
+     * 重绘整个画板
      * @private
      */
 
@@ -121,3 +126,11 @@ export class GraphPanel {
         this._stage.draw();
     }
 }
+
+if(window){
+    window.GraphPanel = GraphPanel;
+    window.GraphImageTextManager = GraphImageTextManager;
+    window.GraphAxisManager = GraphAxisManager;
+    window.GraphPointAreaManager = GraphPointAreaManager;
+}
+

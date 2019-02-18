@@ -1,8 +1,8 @@
 // webpack.config.js
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/panel/GraphPanel.js',
     output: {
-        filename: 'main.js'
+        filename: 'graph-label-tool.js'
     },
     module: {
         // rules: [

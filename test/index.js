@@ -1,21 +1,3 @@
-//测试webpack打包
-import {GraphAxisManager} from "./graph/GraphAxis";
-/**-------------------------
- * 正式开始初始化画板
- * -------------------------
- */
-import {GraphPanel} from './panel/GraphPanel.js';
-import {GraphPointAreaManager} from "./graph/GraphPointArea";
-import {GraphImageTextManager} from "./graph/GraphImageText";
-
-let hello = function () {
-    let textWrapper = document.createElement("div");
-    textWrapper.innerText = "hello from webpack";
-    document.body.appendChild(textWrapper);
-};
-
-hello();
-
 /**
  * 测试数据
  * @type {{productImageWithMark: {pgAreaImageLabels: {infoType: string, pImageId: number, points: string, id: number, deleteState: number, createTime: string, updateTime: string, createBy: number, updateBy: number}[]}, side: {originX: number, originY: number, areas: {pgDesignId: number, pgDesignSideId: number, infoType: string, infoValue: string, matterWidth: number, matterHeight: number, matterX: number, matterY: number, aspectRatio: number, matterColor: string, craftCode: string, imageWidth: number, imageHeight: number, imageX: number, imageY: number, imageColor: string, shape: string, font: string, text: string, areaForSpecs: {pgDesignAreaId: number, specName: string, specValue: string, matterWidth: number, matterHeight: number, matterX: number, matterY: number, matterColor: string, craftCode: string, id: number, deleteState: number, createTime: string, updateTime: string, createBy: number, updateBy: number}[], id: number, deleteState: number, createTime: string, updateTime: string, createBy: number, updateBy: number}[]}}}
@@ -90,7 +72,7 @@ let data = {
             "infoType": "TEXT",
             "infoValue": "",
             "imageWidth": 160,
-            "imageHeight": 40,
+            "imageHeight": 20,
             "imageX": 285,
             "imageY": 281,
             "imageColor": "#000000",
@@ -102,6 +84,10 @@ let data = {
     }
 };
 
+/**-------------------------
+ * 正式开始初始化画板
+ * -------------------------
+ */
 const panel = new GraphPanel({
     containerId:'image-label-area',
     bkImgUrl:'./resource/image/jd.jpg',
@@ -121,6 +107,8 @@ const panel = new GraphPanel({
         showJsonData();
     }
 });
+
+
 /**
  *  初始化绘制工具
  */
@@ -170,7 +158,10 @@ const pointAreaManager = new GraphPointAreaManager(panel,{
 });
 pointAreaManager.create();
 
-/*处理事件*/
+/**
+ * 处理事件
+ *
+ */
 document.querySelector('#btn-draw-coord').addEventListener('click',function () {
     panel.draw(axisManager);
 });
@@ -200,6 +191,9 @@ document.querySelector('#btn-draw-point-area').addEventListener('click',function
     pointAreaManager.draw();
 });
 
+/**
+ * 显示调试数据
+ */
 function showJsonData() {
     let jsonArea = document.querySelector('#json');
     jsonArea.textContent = JSON.stringify(data, null, '  ');
