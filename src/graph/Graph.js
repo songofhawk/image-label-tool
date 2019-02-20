@@ -165,9 +165,7 @@ export class Graph {
             let self = this;
             group.on('transformend', function () {
                 console.log('transform end');
-                self.realWidth = self._graphWrapper.getWidth()*self._graphWrapper.scaleX();
-                self.realHeight = self._graphWrapper.getHeight()*self._graphWrapper.scaleY();
-                self.onChange();
+                self.onResize();
             });
 
         }else{
@@ -219,6 +217,13 @@ export class Graph {
 
     onMove(position){
         this._panel._toolbar.onMove(position, this);
+    }
+
+    onResize(){
+        let wrapper = this._graphWrapper;
+        this.realWidth = wrapper.getWidth()*wrapper.scaleX();
+        this.realHeight = wrapper.getHeight()*wrapper.scaleY();
+        this.onChange();
     }
 
     onChange(){

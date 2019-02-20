@@ -2,6 +2,7 @@
  * 测试数据
  * @type {{productImageWithMark: {pgAreaImageLabels: {infoType: string, pImageId: number, points: string, id: number, deleteState: number, createTime: string, updateTime: string, createBy: number, updateBy: number}[]}, side: {originX: number, originY: number, areas: {pgDesignId: number, pgDesignSideId: number, infoType: string, infoValue: string, matterWidth: number, matterHeight: number, matterX: number, matterY: number, aspectRatio: number, matterColor: string, craftCode: string, imageWidth: number, imageHeight: number, imageX: number, imageY: number, imageColor: string, shape: string, font: string, text: string, areaForSpecs: {pgDesignAreaId: number, specName: string, specValue: string, matterWidth: number, matterHeight: number, matterX: number, matterY: number, matterColor: string, craftCode: string, id: number, deleteState: number, createTime: string, updateTime: string, createBy: number, updateBy: number}[], id: number, deleteState: number, createTime: string, updateTime: string, createBy: number, updateBy: number}[]}}}
  */
+
 let data = {
     "productImageWithMark": {
         "pgAreaImageLabels": [{
@@ -158,6 +159,9 @@ const pointAreaManager = new GraphPointAreaManager(panel,{
 });
 pointAreaManager.create();
 
+const threeDImageTextManager = new Graph3DImageTextManager(panel);
+
+
 /**
  * 处理事件
  *
@@ -189,6 +193,18 @@ document.querySelector('#btn-draw-text').addEventListener('click',function () {
 
 document.querySelector('#btn-draw-point-area').addEventListener('click',function () {
     pointAreaManager.draw();
+});
+
+
+document.querySelector('#btn-draw-3d-image').addEventListener('click',function () {
+    threeDImageTextManager.draw({
+        x:10,
+        y:10,
+        realWidth:50,
+        realHeight:50,
+        src:'./resource/image/f.jpg',
+        graphType:'LOGO'
+    });
 });
 
 /**

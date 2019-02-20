@@ -5,6 +5,7 @@ import {Toolbar} from "../toolbar/Toolbar";
 import {GraphImageTextManager} from "../graph/GraphImageText";
 import {GraphAxisManager} from "../graph/GraphAxis";
 import {GraphPointAreaManager} from "../graph/GraphPointArea";
+import {Graph3DImageTextManager} from "../cssgraph/Graph3DImageText";
 
 
 export class GraphPanel {
@@ -37,6 +38,8 @@ export class GraphPanel {
         this._toolbar = new Toolbar(containerId, onSetProperty, onDelete);
         this._onDrawn = onDrawn;
         this._onChange = onChange;
+
+        this._container = document.getElementById(containerId);
     }
 
     _loadBkImage(stage, bkImgUrl) {
@@ -132,5 +135,6 @@ if(window){
     window.GraphImageTextManager = GraphImageTextManager;
     window.GraphAxisManager = GraphAxisManager;
     window.GraphPointAreaManager = GraphPointAreaManager;
+    window.Graph3DImageTextManager = Graph3DImageTextManager;
 }
 
