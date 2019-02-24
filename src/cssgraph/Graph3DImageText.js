@@ -10,6 +10,10 @@ export class Graph3DImageText extends Graph{
 
         let wrapper = this._graphWrapper;
 
+        let offsetX = wrapper.width()/2, offsetY = wrapper.height()/2;
+        wrapper.offsetX(offsetX);
+        wrapper.offsetY(offsetY);
+
         let imageObj = new Image();
         let self = this;
 
@@ -20,6 +24,9 @@ export class Graph3DImageText extends Graph{
             imageObj.style.position = 'absolute';
             imageObj.style.left = graphOption.x+'px';
             imageObj.style.top = graphOption.y+'px';
+            imageObj.style.marginLeft = - offsetX + 'px';
+            imageObj.style.marginTop = - offsetY  + 'px';
+
             imageObj.show=function(){
                 this.style.display = '';
             };
@@ -29,7 +36,7 @@ export class Graph3DImageText extends Graph{
             imageObj.moveTo=function(x,y){
                 let left = this.style.left;
                 let top = this.style.top;
-                this.style.left =  x +'px';
+                this.style.left =  x  +'px';
                 this.style.top =  y + 'px';
             };
             imageObj.moveLeftUp=function(distance){
@@ -41,7 +48,13 @@ export class Graph3DImageText extends Graph{
             imageObj.resize=function(width, height){
                 this.width = width;
                 this.height = height;
+                this.style.marginLeft = - width/2 + 'px';
+                this.style.marginTop = -height/2  + 'px';
             };
+            imageObj.rotateTo=function(rotationDegree){
+                this.style.transform='rotateZ('+rotationDegree+'deg)';
+            };
+            imageObj.hide();
 
             let image = self._image = new Konva.Image({
                 x: 0,
@@ -54,8 +67,10 @@ export class Graph3DImageText extends Graph{
             wrapper.add(image);
             wrapper.image = image;
 
-
-            self._panel._container.appendChild(imageObj);
+            let container = self._panel._container;
+            container.style.transformStyle = 'preserve-3d';
+            container.style.perspective = '600px';
+            container.appendChild(imageObj);
 
             self._image = imageObj;
 
@@ -68,18 +83,22 @@ export class Graph3DImageText extends Graph{
                 stroke: 'LightGray',
                 strokeWidth: 3
             });
-            decor.hide();
+            // decor.hide();
             wrapper.decor = decor;
             wrapper.add(decor);
 
             if (graphOption.bindEvent){
-                self._bindEvent(image);
+                self._bindEvent(wrapper);
                 self._bindImageEvent(imageObj);
             }
+            wrapper.on("dragstart",function () {
+                wrapper.listening(false);
+            })
 
             wrapper.on("dragend",function () {
                 let pos = wrapper.getAbsolutePosition();
                 self._image.moveTo(pos.x, pos.y);
+                wrapper.listening(true);
             })
 
         };
@@ -88,19 +107,19 @@ export class Graph3DImageText extends Graph{
     }
 
     _bindImageEvent(imageObj){
-        let self = this;
-        imageObj.addEventListener('mouseover',function () {
-            imageObj.hide();
-            self.mouseOver();
-        });
-
-        imageObj.addEventListener('mouseout',function () {
-            //self.mouseOut();
-        });
-
-        imageObj.addEventListener('click',function () {
-            self.mouseClick();
-        });
+        // let self = this;
+        // imageObj.addEventListener('mouseover',function () {
+        //     imageObj.hide();
+        //     self.mouseOver();
+        // });
+        //
+        // imageObj.addEventListener('mouseout',function () {
+        //     self.mouseOut();
+        // });
+        //
+        // imageObj.addEventListener('click',function () {
+        //     self.mouseClick();
+        // });
 
     }
 
@@ -111,7 +130,7 @@ export class Graph3DImageText extends Graph{
         this._graphWrapper.setX(screenPoint.x);
         this._graphWrapper.setY(screenPoint.y);
 
-        this._image.moveTo(screenPoint.x+1, screenPoint.y+1);
+        this._image.moveTo(screenPoint.x, screenPoint.y);
     }
 
     select(){
@@ -133,21 +152,23 @@ export class Graph3DImageText extends Graph{
     }
 
     highlight(){
-        this._graphWrapper.decor.show();
-        this._image.hide();
+        //this._graphWrapper.decor.show();
+        //this._image.hide();
+        //this._graphWrapper.image.show();
         super.highlight();
     }
 
     unHighlight(){
-        this._graphWrapper.decor.hide();
-        this._image.show();
+        //this._graphWrapper.decor.hide();
+        //this._image.show();
+        //this._graphWrapper.image.hide();
         super.unHighlight();
     }
 
     onDrawingOver(){
         this._image.moveLeftUp(1);
 
-        this._bindEvent(this._graphWrapper.image);
+        this._bindEvent(this._graphWrapper);
         this._bindImageEvent(this._image);
 
 
@@ -157,7 +178,17 @@ export class Graph3DImageText extends Graph{
 
     onResize(){
         super.onResize();
+        this._graphWrapper.offsetX(this._graphWrapper.width()/2);
+        this._graphWrapper.offsetY(this._graphWrapper.height()/2);
+
+        this._image.moveTo(this.x, this.y);
+
         this._image.resize(this.realWidth, this.realHeight);
+    }
+
+    onRotate(rotationDegree){
+        this._image.rotateTo(rotationDegree);
+        super.onRotate();
     }
 
     onChange(){
@@ -197,7 +228,7 @@ class Graph3DImageTextDrawingHandler extends DrawingHandler{
     }
 
     stepMove(screenPoint, step){
-        this._graph.moveTo(screenPoint);
+        this._graph.moveTo({x:screenPoint.x+1,y:screenPoint.y+1});
         super.stepMove();
     }
 

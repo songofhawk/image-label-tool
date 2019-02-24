@@ -7,12 +7,14 @@ import {GraphImage} from "./GraphImage";
 export class GraphImageTextManager extends GraphManager{
     constructor(panel,dataMappingConfig){
         super(panel,dataMappingConfig);
+        this.textTypes = dataMappingConfig.textType;
         this._drawingHandler = new GraphImageTextDrawingHandler(this);
         //this.create();
     }
 
     _createGraphObjByDesc(desc){
-        if (desc.graphType==='TEXT'){
+        let textTypes = this.textTypes ? this.textTypes: ['TEXT'];
+        if (textTypes.indexOf(desc.graphType)>=0){
             return new GraphText(this, desc);
         }else{
             return new GraphImage(this, desc);

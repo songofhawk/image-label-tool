@@ -135,6 +135,7 @@ export class Graph {
     }
 
 
+
     /**
      * 获取图形内所有形状的外界矩形, 需要各子类重写
      * @return {{x: number, y: number, width: number, height: number}}
@@ -158,14 +159,27 @@ export class Graph {
             let tr = new Konva.Transformer();
             this._layer.add(tr);
 
-            let group = this._graphWrapper;
-            tr.attachTo(group);
+            let wrapper = this._graphWrapper;
+            tr.attachTo(wrapper);
             this.tr = tr;
 
             let self = this;
-            group.on('transformend', function () {
+
+            wrapper.on('transformstart', function () {
+                console.log('transform start');
+                wrapper.startRotation = wrapper.rotation();
+            });
+
+            wrapper.on('transformend', function () {
                 console.log('transform end');
-                self.onResize();
+                let currentRotation = wrapper.rotation();
+                if (currentRotation!==wrapper.startRotation){
+                    console.log('rotate!');
+                    self.onRotate(currentRotation);
+                }else{
+                    console.log('resize!');
+                    self.onResize();
+                }
             });
 
         }else{
@@ -223,6 +237,10 @@ export class Graph {
         let wrapper = this._graphWrapper;
         this.realWidth = wrapper.getWidth()*wrapper.scaleX();
         this.realHeight = wrapper.getHeight()*wrapper.scaleY();
+        this.onChange();
+    }
+
+    onRotate(rotationDegree){
         this.onChange();
     }
 
