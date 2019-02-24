@@ -51,7 +51,7 @@ export class Graph3DImageText extends Graph{
                 this.style.marginLeft = - width/2 + 'px';
                 this.style.marginTop = -height/2  + 'px';
             };
-            imageObj.rotateTo=function(rotationDegree){
+            imageObj.rotateZTo=function(rotationDegree){
                 this.style.transform='rotateZ('+rotationDegree+'deg)';
             };
             imageObj.hide();
@@ -68,13 +68,24 @@ export class Graph3DImageText extends Graph{
             wrapper.image = image;
 
             let container = self._panel._container;
-            container.style.transformStyle = 'preserve-3d';
-            container.style.perspective = '600px';
             container.appendChild(imageObj);
 
             self._image = imageObj;
 
             let decor = new Konva.Rect({
+                x: offsetX - (100/2),
+                y: offsetY * 2 + 30,
+                width: 100,
+                height: 100,
+                fillEnabled: false,
+                stroke: 'LightGray',
+                strokeWidth: 1
+            });
+            // decor.hide();
+            wrapper.decor = decor;
+            wrapper.add(decor);
+
+            let rotate3dArea = new Konva.Rect({
                 x: - 1,
                 y: - 1,
                 width: graphOption.realWidth+1,
@@ -86,6 +97,7 @@ export class Graph3DImageText extends Graph{
             // decor.hide();
             wrapper.decor = decor;
             wrapper.add(decor);
+
 
             if (graphOption.bindEvent){
                 self._bindEvent(wrapper);
@@ -187,7 +199,7 @@ export class Graph3DImageText extends Graph{
     }
 
     onRotate(rotationDegree){
-        this._image.rotateTo(rotationDegree);
+        this._image.rotateZTo(rotationDegree);
         super.onRotate();
     }
 
@@ -207,6 +219,10 @@ export class Graph3DImageText extends Graph{
 export class Graph3DImageTextManager extends GraphManager{
     constructor(panel,dataMappingConfig){
         super(panel,dataMappingConfig);
+        let container = this._panel._container;
+        container.style.transformStyle = 'preserve-3d';
+        container.style.perspective = '600px';
+
         this._drawingHandler = new Graph3DImageTextDrawingHandler(this);
         //this.create();
     }
