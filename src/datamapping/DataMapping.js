@@ -23,9 +23,9 @@ export class DataMapping{
             dataKey:config.dataKey,
             mapping:this._parseMappingConfig(config.mapping)
         };
-        this.data = JsonUtil.getNodeByPath(config.data, config.for);
+        this._data = JsonUtil.getNodeByPath(config.data, config.for);
         if (config.filter){
-            this.filtedData = this.data.filter(config.filter);
+            this._filtedData = this._data.filter(config.filter);
         }
     }
 
@@ -59,7 +59,7 @@ export class DataMapping{
      * @param key
      */
     deleteData(key){
-        let rootData = this.data;
+        let rootData = this._data;
         let keyName = this.rule.dataKey;
         let i;
         for (i=0; i<rootData.length; i++){
@@ -77,7 +77,7 @@ export class DataMapping{
      *清除所有数据节点
      */
     clear(){
-        this.data.splice(0,this.data.length);
+        this._data.splice(0,this._data.length);
     }
 
     /**
@@ -86,10 +86,10 @@ export class DataMapping{
      */
     createData(graph){
         let data = this._generateOne(graph);
-        if (this.data instanceof Array){
-            this.data.push(data);
+        if (this._data instanceof Array){
+            this._data.push(data);
         }else{
-            this.data = data;
+            this._data = data;
         }
     }
 
@@ -98,7 +98,7 @@ export class DataMapping{
      * @param graph
      */
     updateData(graph){
-        let rootData = this.data;
+        let rootData = this._data;
         let rule = this.rule;
         let newData = this._generateOne(graph);
 
@@ -140,7 +140,7 @@ export class DataMapping{
      */
     createGraphMulti(data){
         if (!data){
-            data = this.data;
+            data = this._data;
         }
         if (!data){
             return null;
@@ -230,12 +230,18 @@ export class DataMapping{
             return null;
         }
         let dataKeyValue = code;
-        for (let i=0;i<this.data.length;i++){
-            if (this.data[i][this.rule.dataKey]===dataKeyValue){
-                return this.data[i];
+        let data = this.data;
+
+        for (let i=0;i<data.length;i++){
+            if (data[i][this.rule.dataKey]===dataKeyValue){
+                return data[i];
             }
         }
         return null;
+    }
+
+    get data(){
+        return this._filtedData? this._filtedData : this._data;
     }
 }
 

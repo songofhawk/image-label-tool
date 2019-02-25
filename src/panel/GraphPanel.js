@@ -23,16 +23,14 @@ export class GraphPanel {
             throw 'containerId parameter is mandatory!';
         }
 
-        let stage = new Konva.Stage({
+        this._stage= new Konva.Stage({
             container: containerId,
             width: 600,
             height: 600,
             listening:true
         });
 
-        this._loadBkImage(stage, bkImgUrl);
-
-        this._stage = stage;
+        this._loadBkImage(bkImgUrl);
         this._currentManager = null;
 
         this._toolbar = new Toolbar(containerId, onSetProperty, onDelete);
@@ -42,7 +40,11 @@ export class GraphPanel {
         this._container = document.getElementById(containerId);
     }
 
-    _loadBkImage(stage, bkImgUrl) {
+    _unloadBkImage(){
+        this._bkLayer.destroy();
+    }
+
+    _loadBkImage(bkImgUrl) {
         let bkLayer = new Konva.Layer();
         let jsImage = new Image();
         let self = this;
@@ -60,8 +62,9 @@ export class GraphPanel {
             bkLayer.add(bkImage);
 
             // add the layer to the stage
-            stage.add(bkLayer);
+            this._stage.add(bkLayer);
             bkLayer.moveToBottom();
+            self._bkLayer = bkLayer;
             self.render();
         };
         jsImage.src = bkImgUrl;
@@ -127,6 +130,18 @@ export class GraphPanel {
 
     render(){
         this._stage.draw();
+    }
+
+    regist(manager){
+        if (!this._managers){
+            this._managers = [];
+        }
+        this._managers.push(manager);
+    }
+
+    reloadBackground(bkImgUrl){
+        this._unloadBkImage();
+        this._loadBkImage(bkImgUrl);
     }
 }
 

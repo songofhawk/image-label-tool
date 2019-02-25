@@ -15,14 +15,7 @@ export class GraphManager {
         this._drawingHandler = null;
         this._container = new Container(this);
 
-        // 本来用于绘制完成的回调,但可能不在这个地方调用了
-        // this.over = (graph)=>{
-        //     if (graph !== null){
-        //         this._container.add(graph);
-        //     }
-        //
-        //     return graph;
-        // };
+        this._panel.regist(this);
 
         if (dataMappingConfig){
             this._dataMapping = new DataMapping(dataMappingConfig);
@@ -36,7 +29,7 @@ export class GraphManager {
         }
     }
 
-    getAllGraph(){
+    getAllGraphs(){
         return this._container.getAll();
     }
 
@@ -66,13 +59,22 @@ export class GraphManager {
 
     create(data){
         if (!data){
-            data = this._dataMapping.filtedData ?
-                this._dataMapping.filtedData :
-                this._dataMapping.data;
+            data = this._dataMapping.data;
+        }
+
+        if (!data){
+            throw 'GraphManager的create方法,必须传递data参数';
         }
         data.forEach(this._createOne, this);
         this._layer.draw();
     }
+
+
+    reload(data){
+        this._container.removeAll();
+        this.create(data);
+    }
+
 
     /**
      * 创建一个图形对象,供子类重写
@@ -136,11 +138,20 @@ class Container {
             let deleted = this._graphList[i];
             //这里不是真的从各种列表和map中删除,只是把主列表中的指向标记为null,可以有效提高性能,get的时候返回null就可以了
             //当然反复删除以后,主列表会越来越大, 但考虑到反正也不会画很多的标注, 这点损失还可以接受
+            this._graphList[i].delete();
             this._graphList[i]=null;
             return deleted;
         }else{
             return null;
         }
+    }
+
+    removeAll(){
+        this._graphList.forEach((graph)=>{
+            graph.delete();
+        });
+        this._graphList=[];
+        this._graphMap={};
     }
 
     /**
