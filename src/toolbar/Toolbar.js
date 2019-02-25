@@ -57,7 +57,7 @@ export class Toolbar {
         let configBtn = bar.querySelector("#gpanel-btn-config");
         configBtn.addEventListener("click",() => {
             if (onSetProperty){
-                onSetProperty(this._graph);
+                onSetProperty(this._graph, this._graph.getMappingData());
             }
         });
 
@@ -68,7 +68,7 @@ export class Toolbar {
             }
             this.hide();
             if (onDelete){
-                onDelete(this._graph);
+                onDelete(this._graph, this._graph.getMappingData());
             }
         });
     }

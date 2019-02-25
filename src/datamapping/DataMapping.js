@@ -225,6 +225,18 @@ export class DataMapping{
         }
     }
 
+    getDataItemByGraphCode(code){
+        if (!code){
+            return null;
+        }
+        let dataKeyValue = code;
+        for (let i=0;i<this.data.length;i++){
+            if (this.data[i][this.rule.dataKey]===dataKeyValue){
+                return this.data[i];
+            }
+        }
+        return null;
+    }
 }
 
 

@@ -201,6 +201,14 @@ export class Graph {
         }
     }
 
+    getMappingData(){
+        let mapping = this._manager._dataMapping;
+        if (!mapping){
+            return null;
+        }
+        return mapping.getDataItemByGraphCode(this.code);
+    }
+
     // createBoundaryBox(){
     //     let wrapper = this._graphWrapper;;
     //     let box = new Konva.Rect({
