@@ -73,6 +73,7 @@ export class GraphManager {
     reload(data){
         this._container.removeAll();
         this.create(data);
+        this._layer.draw();
     }
 
 

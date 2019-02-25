@@ -11,6 +11,7 @@ export class Graph {
     static get DEFAULT_STROKE_COLOR(){return '#999999';}
     static get HIGHLIGHT_STROKE_COLOR(){return '#FFCC99';}
     static get DEFAULT_FILL_COLOR(){return '#CC9933';}
+    static get AREA_FILL_COLOR(){return 'rgba(153, 204, 255, 15)';}
     static get SELECTED_STROKE_COLOR(){return '#FF6600';}
 
 
@@ -159,21 +160,21 @@ export class Graph {
             let tr = new Konva.Transformer();
             this._layer.add(tr);
 
-            let wrapper = this._graphWrapper;
-            tr.attachTo(wrapper);
+            let graph = this._graphWrapper;
+            tr.attachTo(graph);
             this.tr = tr;
 
             let self = this;
 
-            wrapper.on('transformstart', function () {
+            graph.on('transformstart', function () {
                 console.log('transform start');
-                wrapper.startRotation = wrapper.rotation();
+                graph.startRotation = graph.rotation();
             });
 
-            wrapper.on('transformend', function () {
+            graph.on('transformend', function () {
                 console.log('transform end');
-                let currentRotation = wrapper.rotation();
-                if (currentRotation!==wrapper.startRotation){
+                let currentRotation = graph.rotation();
+                if (currentRotation!==graph.startRotation){
                     console.log('rotate!');
                     self.onRotate(currentRotation);
                 }else{

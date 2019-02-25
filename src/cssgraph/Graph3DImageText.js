@@ -55,8 +55,11 @@ export class Graph3DImageText extends Graph{
                 this.style.transform='rotateZ('+rotationDegree+'deg)';
             };
             imageObj.hide();
+            let container = self._panel._container;
+            container.appendChild(imageObj);
+            self._image = imageObj;
 
-            let image = self._image = new Konva.Image({
+            let image = new Konva.Image({
                 x: 0,
                 y: 0,
                 image: imageObj,
@@ -67,45 +70,13 @@ export class Graph3DImageText extends Graph{
             wrapper.add(image);
             wrapper.image = image;
 
-            let container = self._panel._container;
-            container.appendChild(imageObj);
-
-            self._image = imageObj;
-
-            let decor = new Konva.Rect({
-                x: offsetX - (100/2),
-                y: offsetY * 2 + 30,
-                width: 100,
-                height: 100,
-                fillEnabled: false,
-                stroke: 'LightGray',
-                strokeWidth: 1
-            });
-            // decor.hide();
-            wrapper.decor = decor;
-            wrapper.add(decor);
-
-            let rotate3dArea = new Konva.Rect({
-                x: - 1,
-                y: - 1,
-                width: graphOption.realWidth+1,
-                height: graphOption.realHeight+1,
-                fillEnabled: false,
-                stroke: 'LightGray',
-                strokeWidth: 3
-            });
-            // decor.hide();
-            wrapper.decor = decor;
-            wrapper.add(decor);
-
-
             if (graphOption.bindEvent){
                 self._bindEvent(wrapper);
                 self._bindImageEvent(imageObj);
             }
             wrapper.on("dragstart",function () {
                 wrapper.listening(false);
-            })
+            });
 
             wrapper.on("dragend",function () {
                 let pos = wrapper.getAbsolutePosition();
@@ -214,6 +185,58 @@ export class Graph3DImageText extends Graph{
         this.y = pos.y;
     }
 
+    setEditable(editable){
+        super.setEditable(editable);
+
+        if (editable) {
+            let rotate3dArea = this._rotate3dArea;
+            let wrapper = this._graphWrapper;
+            if (rotate3dArea) {
+                rotate3dArea.setX(wrapper.x()+wrapper.width()*wrapper.scaleX()/2);
+                rotate3dArea.setY(wrapper.y()+wrapper.height()*wrapper.scaleY()+30);
+                rotate3dArea.show();
+                return;
+            }
+            rotate3dArea = new Konva.Rect({
+                x: wrapper.x()+wrapper.width()*wrapper.scaleX()/2,
+                y: wrapper.y()+wrapper.height()*wrapper.scaleY()+30,
+                width: 100,
+                height: 100,
+                fillEnabled: true,
+                fill: Graph.AREA_FILL_COLOR,
+                opacity: 0.1,
+                stroke: Graph.DEFAULT_STROKE_COLOR,
+                strokeWidth: 1
+            });
+            let offsetX = rotate3dArea.width()/2, offsetY = rotate3dArea.height()/2;
+            rotate3dArea.offsetX(offsetX);
+            rotate3dArea.offsetY(offsetY);
+            this._layer.add(rotate3dArea);
+            this._rotate3dArea = rotate3dArea;
+
+            let rotate3dHandler = new Konva.Rect({
+                x: wrapper.x()+wrapper.width()*wrapper.scaleX()/2,
+                y: wrapper.y()+wrapper.height()*wrapper.scaleY()+50,
+                width: 10,
+                height: 10,
+                draggable:true,
+                fillEnabled: true,
+                fill: Graph.DEFAULT_STROKE_COLOR,
+                stroke: Graph.DEFAULT_STROKE_COLOR,
+                strokeWidth: 1
+            });
+            rotate3dHandler.offsetX(offsetX);
+            rotate3dHandler.offsetY(offsetY);
+
+            this._layer.add(rotate3dHandler);
+            this._rotate3dHandler = rotate3dHandler;
+        }else{
+            let rotate3dArea = this._rotate3dArea;
+            if (rotate3dArea) {
+                rotate3dArea.hide();
+            }
+        }
+    }
 }
 
 export class Graph3DImageTextManager extends GraphManager{

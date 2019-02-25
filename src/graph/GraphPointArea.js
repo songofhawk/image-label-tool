@@ -288,7 +288,7 @@ export class GraphPointArea extends Graph {
             x: wrapper.x(),
             y: wrapper.y(),
             points: pointArray,
-            fill:'rgba(153, 204, 255, 15)',
+            fill:Graph.AREA_FILL_COLOR,
             opacity: 0.5,
             stroke: Graph.DEFAULT_STROKE_COLOR,
             strokeWidth: Graph.DEFAULT_STROKE_WITH,
