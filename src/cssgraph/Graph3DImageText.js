@@ -51,24 +51,34 @@ export class Graph3DImageText extends Graph{
                 this.style.marginLeft = - width/2 + 'px';
                 this.style.marginTop = -height/2  + 'px';
             };
+            imageObj.rotateXTo=function(rotationDegree){
+                this.style.transform='rotateX('+rotationDegree+'deg)';
+            };
+            imageObj.rotateYTo=function(rotationDegree){
+                this.style.transform='rotateY('+rotationDegree+'deg)';
+            };
             imageObj.rotateZTo=function(rotationDegree){
                 this.style.transform='rotateZ('+rotationDegree+'deg)';
+            };
+            imageObj.rotateXY=function(x,y){
+                this.style.transform='rotateX('+x+'deg) rotateY('+y+'deg)';
             };
             imageObj.hide();
             let container = self._panel._container;
             container.appendChild(imageObj);
             self._image = imageObj;
 
-            let image = new Konva.Image({
+            let rect = new Konva.Rect({
                 x: 0,
                 y: 0,
                 image: imageObj,
+                fillEnabled:true,
+                fill:Graph.DEFAULT_FILL_COLOR,
                 width: graphOption.realWidth,
                 height: graphOption.realHeight,
                 listening:true
             });
-            wrapper.add(image);
-            wrapper.image = image;
+            wrapper.add(rect);
 
             if (graphOption.bindEvent){
                 self._bindEvent(wrapper);
@@ -90,16 +100,16 @@ export class Graph3DImageText extends Graph{
     }
 
     _bindImageEvent(imageObj){
-        // let self = this;
-        // imageObj.addEventListener('mouseover',function () {
-        //     imageObj.hide();
-        //     self.mouseOver();
-        // });
-        //
+        let self = this;
+        imageObj.addEventListener('mouseover',function () {
+            imageObj.hide();
+            self.mouseOver();
+        });
+
         // imageObj.addEventListener('mouseout',function () {
         //     self.mouseOut();
         // });
-        //
+
         // imageObj.addEventListener('click',function () {
         //     self.mouseClick();
         // });
@@ -136,20 +146,21 @@ export class Graph3DImageText extends Graph{
 
     highlight(){
         //this._graphWrapper.decor.show();
-        //this._image.hide();
+        this._image.hide();
         //this._graphWrapper.image.show();
         super.highlight();
     }
 
     unHighlight(){
         //this._graphWrapper.decor.hide();
-        //this._image.show();
+        this._image.show();
         //this._graphWrapper.image.hide();
         super.unHighlight();
     }
 
     onDrawingOver(){
-        this._image.moveLeftUp(1);
+        //this._image.moveLeftUp(1);
+        this._image.show();
 
         this._bindEvent(this._graphWrapper);
         this._bindImageEvent(this._image);
@@ -189,34 +200,43 @@ export class Graph3DImageText extends Graph{
         super.setEditable(editable);
 
         if (editable) {
-            let rotate3dArea = this._rotate3dArea;
-            let wrapper = this._graphWrapper;
-            if (rotate3dArea) {
-                rotate3dArea.setX(wrapper.x()+wrapper.width()*wrapper.scaleX()/2);
-                rotate3dArea.setY(wrapper.y()+wrapper.height()*wrapper.scaleY()+30);
-                rotate3dArea.show();
+            let retate3dGroup = this._retate3dGroup;
+            if (retate3dGroup) {
+                retate3dGroup.setX(wrapper.x()+wrapper.width()*wrapper.scaleX()/2);
+                retate3dGroup.setY(wrapper.y()+wrapper.height()*wrapper.scaleY()+30);
+                retate3dGroup.show();
                 return;
             }
-            rotate3dArea = new Konva.Rect({
-                x: wrapper.x()+wrapper.width()*wrapper.scaleX()/2,
-                y: wrapper.y()+wrapper.height()*wrapper.scaleY()+30,
-                width: 100,
-                height: 100,
+
+            let wrapper = this._graphWrapper;
+            retate3dGroup = new Konva.Group({
+                x: wrapper.x(),
+                y: wrapper.y()+wrapper.height()*wrapper.scaleY(),
+                width: 90,
+                height: 90
+            });
+            this._layer.add(retate3dGroup);
+            let offsetX = retate3dGroup.width()/2, offsetY = retate3dGroup.height()/2;
+            retate3dGroup.offsetX(offsetX);
+
+            let rotate3dArea = new Konva.Rect({
+                x: 0,
+                y: 0,
+                width: retate3dGroup.width(),
+                height: retate3dGroup.height(),
                 fillEnabled: true,
                 fill: Graph.AREA_FILL_COLOR,
                 opacity: 0.1,
                 stroke: Graph.DEFAULT_STROKE_COLOR,
                 strokeWidth: 1
             });
-            let offsetX = rotate3dArea.width()/2, offsetY = rotate3dArea.height()/2;
-            rotate3dArea.offsetX(offsetX);
-            rotate3dArea.offsetY(offsetY);
-            this._layer.add(rotate3dArea);
+
+            retate3dGroup.add(rotate3dArea);
             this._rotate3dArea = rotate3dArea;
 
             let rotate3dHandler = new Konva.Rect({
-                x: wrapper.x()+wrapper.width()*wrapper.scaleX()/2,
-                y: wrapper.y()+wrapper.height()*wrapper.scaleY()+50,
+                x: 0,
+                y: 0,
                 width: 10,
                 height: 10,
                 draggable:true,
@@ -225,11 +245,18 @@ export class Graph3DImageText extends Graph{
                 stroke: Graph.DEFAULT_STROKE_COLOR,
                 strokeWidth: 1
             });
-            rotate3dHandler.offsetX(offsetX);
-            rotate3dHandler.offsetY(offsetY);
+            rotate3dHandler.offsetX(-offsetX+5);
+            rotate3dHandler.offsetY(-offsetY+5);
 
-            this._layer.add(rotate3dHandler);
+            retate3dGroup.add(rotate3dHandler);
             this._rotate3dHandler = rotate3dHandler;
+
+            let self = this;
+            rotate3dHandler.on('dragmove',()=>{
+                //console.log('x:'+rotate3dHandler.x()+', y:'+rotate3dHandler.y());
+                self._image.rotateXY(rotate3dHandler.y(),rotate3dHandler.x());
+            })
+
         }else{
             let rotate3dArea = this._rotate3dArea;
             if (rotate3dArea) {
