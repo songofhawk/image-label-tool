@@ -7,7 +7,7 @@ import {GraphImage} from "./GraphImage";
 export class GraphImageTextManager extends GraphManager{
     constructor(panel,dataMappingConfig){
         super(panel,dataMappingConfig);
-        this.textTypes = dataMappingConfig.textType;
+        this.textTypes = dataMappingConfig.textTypes;
         this._drawingHandler = new GraphImageTextDrawingHandler(this);
         //this.create();
     }
