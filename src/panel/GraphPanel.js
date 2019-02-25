@@ -62,7 +62,7 @@ export class GraphPanel {
             bkLayer.add(bkImage);
 
             // add the layer to the stage
-            this._stage.add(bkLayer);
+            self._stage.add(bkLayer);
             bkLayer.moveToBottom();
             self._bkLayer = bkLayer;
             self.render();
