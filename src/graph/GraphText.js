@@ -90,7 +90,7 @@ export class GraphText extends Graph{
         let pos = wrapper.getAbsolutePosition();
         this.x = pos.x;
         this.y = pos.y;
-        this.realWidth = wrapper.width()*wrapper*scaleX();
+        this.realWidth = wrapper.width()*wrapper.scaleX();
         this.realHeight = wrapper.height()*wrapper.scaleY();
     }
 
