@@ -75,6 +75,8 @@ export class GraphManager {
      * @param keepDataMapping 是否保持原来的数据映射,缺省操作是先分离数据映射,清空图形以后,按新的数据重新加载数据映射
      */
     reload(data, keepDataMapping){
+        this._panel._toolbar.hide();
+
         let oldDataMapping = this._dataMapping;
 
         if (!keepDataMapping){
