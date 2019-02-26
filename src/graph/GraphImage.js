@@ -14,7 +14,7 @@ export class GraphImage extends Graph{
         let self = this;
 
         imageObj.onload = function() {
-            let image = self._image = new Konva.Image({
+            let image = new Konva.Image({
                 x: 0,
                 y: 0,
                 image: imageObj,
@@ -23,7 +23,7 @@ export class GraphImage extends Graph{
                 listening:true
             });
             wrapper.add(image);
-            wrapper.image = image;
+            wrapper._image = image;
 
             let decor = new Konva.Rect({
                 x: - 1,
@@ -44,6 +44,8 @@ export class GraphImage extends Graph{
 
         };
         imageObj.src = graphOption.src;
+        this.src = graphOption.src;
+        this._image = imageObj;
 
     }
 
@@ -84,7 +86,7 @@ export class GraphImage extends Graph{
     }
 
     onDrawingOver(){
-        this._bindEvent(this._image);
+        this._bindEvent(this._graphWrapper._image);
 
         this.genAbsolutePosition();
         super.onDrawingOver();
@@ -103,7 +105,6 @@ export class GraphImage extends Graph{
         this.realWidth = wrapper.width()*wrapper.scaleX();
         this.realHeight = wrapper.height()*wrapper.scaleY();
     }
-
 }
 
 export class GraphImageManager extends GraphManager{
