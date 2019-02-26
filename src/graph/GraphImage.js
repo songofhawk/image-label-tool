@@ -96,9 +96,12 @@ export class GraphImage extends Graph{
     }
 
     genAbsolutePosition(){
-        let pos = this._graphWrapper.getAbsolutePosition();
+        let wrapper = this._graphWrapper;
+        let pos = wrapper.getAbsolutePosition();
         this.x = pos.x;
         this.y = pos.y;
+        this.realWidth = wrapper.width()*wrapper*scaleX();
+        this.realHeight = wrapper.height()*wrapper.scaleY();
     }
 
 }

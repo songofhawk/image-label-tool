@@ -221,9 +221,12 @@ export class Graph3DImageText extends Graph{
     }
 
     genAbsolutePosition(){
-        let pos = this._graphWrapper.getAbsolutePosition();
+        let wrapper = this._graphWrapper;
+        let pos = wrapper.getAbsolutePosition();
         this.x = pos.x;
         this.y = pos.y;
+        this.realWidth = wrapper.width()*wrapper*scaleX();
+        this.realHeight = wrapper.height()*wrapper.scaleY();
     }
 
     setEditable(editable){
@@ -264,7 +267,6 @@ export class Graph3DImageText extends Graph{
             });
 
             rotate3dGroup.add(rotate3dArea);
-            this._rotate3dArea = rotate3dArea;
 
             let rotate3dHandler = new Konva.Rect({
                 x: 0,
@@ -281,7 +283,6 @@ export class Graph3DImageText extends Graph{
             rotate3dHandler.offsetY(-offsetY+5);
 
             rotate3dGroup.add(rotate3dHandler);
-            this._rotate3dHandler = rotate3dHandler;
 
             let self = this;
             rotate3dHandler.on('dragmove',()=>{
@@ -304,6 +305,7 @@ export class Graph3DImageTextManager extends GraphManager{
         let container = this._panel._container;
         container.style.transformStyle = 'preserve-3d';
         container.style.perspective = '600px';
+        container.style.perspectiveOrigin = '300px 300px';
 
         this._drawingHandler = new Graph3DImageTextDrawingHandler(this);
         //this.create();
