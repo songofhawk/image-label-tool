@@ -30,7 +30,7 @@ export class DataMapping{
 
     setData(data){
         this._data = JsonUtil.getNodeByPath(data, this.dataPath);
-        if (config.filter){
+        if (this.dataFilter){
             this._filtedData = this._data.filter(this.dataFilter);
         }else {
             delete this._filtedData;
