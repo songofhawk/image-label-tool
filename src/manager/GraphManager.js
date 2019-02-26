@@ -59,7 +59,7 @@ export class GraphManager {
 
     create(data){
         if (!data){
-            data = this._dataMapping.data;
+            data = this._dataMapping._data;
         }
 
         if (!data){
@@ -69,7 +69,11 @@ export class GraphManager {
         this._layer.draw();
     }
 
-
+    /**
+     * 按新数据加载新的图形
+     * @param data 新的数据
+     * @param keepDataMapping 是否保持原来的数据映射,缺省操作是先分离数据映射,清空图形以后,按新的数据重新加载数据映射
+     */
     reload(data, keepDataMapping){
         let oldDataMapping = this._dataMapping;
 
