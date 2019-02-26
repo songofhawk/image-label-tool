@@ -27,6 +27,7 @@ export class Graph3DImageText extends Graph{
             imageObj.style.marginLeft = - offsetX + 'px';
             imageObj.style.marginTop = - offsetY  + 'px';
 
+
             imageObj.show=function(){
                 this.style.display = '';
             };
@@ -51,18 +52,48 @@ export class Graph3DImageText extends Graph{
                 this.style.marginLeft = - width/2 + 'px';
                 this.style.marginTop = -height/2  + 'px';
             };
-            imageObj.rotateXTo=function(rotationDegree){
-                this.style.transform='rotateX('+rotationDegree+'deg)';
+            imageObj.rotateX=function(x){
+                imageObj._setTransformOne(x,'X');
+                imageObj._composeStyleTransform();
             };
-            imageObj.rotateYTo=function(rotationDegree){
-                this.style.transform='rotateY('+rotationDegree+'deg)';
+            imageObj.rotateY=function(y){
+                imageObj._setTransformOne(y,'Y');
+                imageObj._composeStyleTransform();
             };
-            imageObj.rotateZTo=function(rotationDegree){
-                this.style.transform='rotateZ('+rotationDegree+'deg)';
+            imageObj.rotateZ=function(z){
+                imageObj._setTransformOne(z,'Z');
+                imageObj._composeStyleTransform();
             };
             imageObj.rotateXY=function(x,y){
-                this.style.transform='rotateX('+x+'deg) rotateY('+y+'deg)';
+                imageObj._setTransformOne(x,'X');
+                imageObj._setTransformOne(y,'Y');
+                imageObj._composeStyleTransform();
             };
+            imageObj.rotateXYZ=function(x,y,z){
+                imageObj._setTransformOne(x,'X');
+                imageObj._setTransformOne(y,'Y');
+                imageObj._setTransformOne(z,'Z');
+                imageObj._composeStyleTransform();
+            };
+            imageObj._setTransformOne = function(value, name){
+                if (typeof(value) === "undefined" || value===null){
+                    return false;
+                }
+                if (!imageObj.transform){
+                    imageObj.transform={}
+                }
+                imageObj.transform['rotate'+name] = value;
+                return true;
+            };
+            imageObj._composeStyleTransform = function(){
+                let trans = imageObj.transform;
+                let x = typeof(trans.rotateX)==='undefined' ? '' : ('rotateX('+trans.rotateX+'deg) ');
+                let y = typeof(trans.rotateY)==='undefined' ? '' : ('rotateY('+trans.rotateY+'deg) ');
+                let z = typeof(trans.rotateZ)==='undefined' ? '' : ('rotateZ('+trans.rotateZ+'deg) ');
+                this.style.transform = x+y+z;
+            };
+
+
             imageObj.hide();
             let container = self._panel._container;
             container.appendChild(imageObj);
@@ -71,7 +102,6 @@ export class Graph3DImageText extends Graph{
             let rect = new Konva.Rect({
                 x: 0,
                 y: 0,
-                image: imageObj,
                 fillEnabled:true,
                 fill:Graph.DEFAULT_FILL_COLOR,
                 width: graphOption.realWidth,
@@ -176,12 +206,12 @@ export class Graph3DImageText extends Graph{
         this._graphWrapper.offsetY(this._graphWrapper.height()/2);
 
         this._image.moveTo(this.x, this.y);
-
         this._image.resize(this.realWidth, this.realHeight);
+
     }
 
     onRotate(rotationDegree){
-        this._image.rotateZTo(rotationDegree);
+        this._image.rotateZ(rotationDegree);
         super.onRotate();
     }
 
@@ -200,30 +230,32 @@ export class Graph3DImageText extends Graph{
         super.setEditable(editable);
 
         if (editable) {
-            let retate3dGroup = this._retate3dGroup;
-            if (retate3dGroup) {
-                retate3dGroup.setX(wrapper.x()+wrapper.width()*wrapper.scaleX()/2);
-                retate3dGroup.setY(wrapper.y()+wrapper.height()*wrapper.scaleY()+30);
-                retate3dGroup.show();
+            let rotate3dGroup = this._rotate3dGroup;
+            let wrapper = this._graphWrapper;
+            if (rotate3dGroup) {
+                // rotate3dGroup.x(wrapper.x());
+                // rotate3dGroup.y(wrapper.y()+wrapper.height()*wrapper.scaleY()+45);
+                rotate3dGroup.show();
                 return;
             }
 
-            let wrapper = this._graphWrapper;
-            retate3dGroup = new Konva.Group({
+            rotate3dGroup = new Konva.Group({
                 x: wrapper.x(),
-                y: wrapper.y()+wrapper.height()*wrapper.scaleY(),
+                y: wrapper.y()+wrapper.height()*wrapper.scaleY()+45,
                 width: 90,
                 height: 90
             });
-            this._layer.add(retate3dGroup);
-            let offsetX = retate3dGroup.width()/2, offsetY = retate3dGroup.height()/2;
-            retate3dGroup.offsetX(offsetX);
+            this._layer.add(rotate3dGroup);
+            let offsetX = rotate3dGroup.width()/2, offsetY = rotate3dGroup.height()/2;
+            rotate3dGroup.offsetX(offsetX);
+            rotate3dGroup.offsetY(offsetY);
+            this._rotate3dGroup  = rotate3dGroup;
 
             let rotate3dArea = new Konva.Rect({
                 x: 0,
                 y: 0,
-                width: retate3dGroup.width(),
-                height: retate3dGroup.height(),
+                width: rotate3dGroup.width(),
+                height: rotate3dGroup.height(),
                 fillEnabled: true,
                 fill: Graph.AREA_FILL_COLOR,
                 opacity: 0.1,
@@ -231,7 +263,7 @@ export class Graph3DImageText extends Graph{
                 strokeWidth: 1
             });
 
-            retate3dGroup.add(rotate3dArea);
+            rotate3dGroup.add(rotate3dArea);
             this._rotate3dArea = rotate3dArea;
 
             let rotate3dHandler = new Konva.Rect({
@@ -248,7 +280,7 @@ export class Graph3DImageText extends Graph{
             rotate3dHandler.offsetX(-offsetX+5);
             rotate3dHandler.offsetY(-offsetY+5);
 
-            retate3dGroup.add(rotate3dHandler);
+            rotate3dGroup.add(rotate3dHandler);
             this._rotate3dHandler = rotate3dHandler;
 
             let self = this;
@@ -258,9 +290,9 @@ export class Graph3DImageText extends Graph{
             })
 
         }else{
-            let rotate3dArea = this._rotate3dArea;
-            if (rotate3dArea) {
-                rotate3dArea.hide();
+            let rotate3dGroup = this._rotate3dGroup;
+            if (rotate3dGroup) {
+                rotate3dGroup.hide();
             }
         }
     }

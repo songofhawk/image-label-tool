@@ -20,8 +20,8 @@ export class Toolbar {
 
         StyleUtil.addNewStyle('\
                 .gpanel-toolbar-btn{\
-                    height:28px;\
-                    line-height: 28px;\
+                    height:20px;\
+                    line-height: 20px;\
                     width:40px;\
                     display: inline-block;\
                     background-repeat:no-repeat;\
@@ -83,7 +83,7 @@ export class Toolbar {
         let style = bar.style;
         style.display = 'block';
         style.left = pos.x - 20+'px';
-        style.top = pos.y - 60 - bar.offsetHeight + 'px';
+        style.top = pos.y - 30 - bar.offsetHeight + 'px';
     }
 
     hide(){
@@ -97,6 +97,6 @@ export class Toolbar {
         let bar = this._bar;
         let style = bar.style;
         style.left = x - 20+'px';
-        style.top = y - 60 - bar.offsetHeight + 'px';
+        style.top = y - 30 - bar.offsetHeight + 'px';
     }
 }
