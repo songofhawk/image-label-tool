@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import {Graph} from "./Graph";
-import {AbstractDrawingOperator, GraphManager} from "../manager/GraphManager";
+import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
 
 

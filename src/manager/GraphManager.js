@@ -70,9 +70,20 @@ export class GraphManager {
     }
 
 
-    reload(data){
+    reload(data, keepDataMapping){
+        let oldDataMapping = this._dataMapping;
+
+        if (!keepDataMapping){
+            this._dataMapping = null;
+        }
+
         this._container.removeAll();
-        this.create(data);
+
+        if (!keepDataMapping){
+            this._dataMapping = oldDataMapping;
+        }
+        oldDataMapping.setData(data);
+        this.create();
         this._layer.draw();
     }
 

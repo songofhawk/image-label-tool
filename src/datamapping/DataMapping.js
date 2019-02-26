@@ -23,9 +23,17 @@ export class DataMapping{
             dataKey:config.dataKey,
             mapping:this._parseMappingConfig(config.mapping)
         };
-        this._data = JsonUtil.getNodeByPath(config.data, config.for);
+        this.dataPath = config.for;
+        this.dataFilter = config.filter;
+        this.setData(config.data);
+    }
+
+    setData(data){
+        this._data = JsonUtil.getNodeByPath(data, this.dataPath);
         if (config.filter){
-            this._filtedData = this._data.filter(config.filter);
+            this._filtedData = this._data.filter(this.dataFilter);
+        }else {
+            delete this._filtedData;
         }
     }
 
