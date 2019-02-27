@@ -65,7 +65,11 @@ export class GraphManager {
         if (!data){
             throw 'GraphManager的create方法,必须传递data参数';
         }
-        data.forEach(this._createOne, this);
+        if (data instanceof Array) {
+            data.forEach(this._createOne, this);
+        }else{
+            this._createOne(data);
+        }
         this._layer.draw();
     }
 
@@ -132,6 +136,11 @@ class Container {
         this._graphMap[graph.code] = i;
         graph._index = i;
         graph.container = this;
+    }
+
+    replaceLast(graph){
+        this._graphList.pop();
+        this.add(graph);
     }
 
     /**

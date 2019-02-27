@@ -5,39 +5,29 @@ import {DrawingHandler} from "../manager/DrawingHandler";
 
 
 export class GraphAxis extends Graph{
-    constructor(manager) {
+    constructor(manager,graphOption) {
         super(manager);
 
         let layer = this._layer;
 
-        this._vLine = new Konva.Group({
-            x:0,
-            y:0
-        });
-        let vLine = new Konva.Line({
-            points: [0, 0, 0, layer.size().height],
+        let x = graphOption && graphOption.x ? graphOption.x :0;
+        let y = graphOption && graphOption.y ? graphOption.y :0;
+        this._vLine = new Konva.Line({
+            points: [x, 0, x, layer.size().height],
             stroke: Graph.DEFAULT_COLOR,
             strokeWidth: 2
         });
-        this._vLine.add(vLine);
-        this._vLine.line = vLine;
 
-        this._hLine = new Konva.Group({
-            x:0,
-            y:0
-        });
-        let hLine = new Konva.Line({
-            points: [0, 0, layer.size().width, 0],
+        this._hLine = new Konva.Line({
+            points: [0, y, layer.size().width, y],
             stroke: Graph.DEFAULT_COLOR,
             strokeWidth: 2
         });
-        this._hLine.add(hLine);
-        this._hLine.line = hLine;
 
         this._graphWrapper.add(this._vLine);
         this._graphWrapper.add(this._hLine);
-        layer.add(this._vLine);
-        layer.add(this._hLine);
+        // layer.add(this._vLine);
+        // layer.add(this._hLine);
 
     }
 
@@ -108,10 +98,9 @@ export class GraphAxisManager extends GraphManager{
         this._drawingHandler = new AxisDrawingHandler(this);
     }
 
-    create(description){
-        let graph = new GraphAxis();
-        graph.moveTo(description);
-        super.onCreate(graph);
+    _createGraphObjByDesc(desc){
+        this._currentGraph = new GraphAxis(this,desc);
+        return this._currentGraph ;
     }
 
 }
@@ -125,10 +114,12 @@ class AxisDrawingHandler extends DrawingHandler{
         let graph;
         if (this._graph){
             graph = this._graph;
+        }else if (this._manager._currentGraph) {
+            graph = this._manager._currentGraph;
         }else{
             graph = new GraphAxis(this._manager);
         }
-        super.stepStart(graph);
+        super.stepStart(graph,true);
     }
 
     stepMove(screenPoint, step){

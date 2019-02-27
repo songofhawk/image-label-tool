@@ -124,6 +124,7 @@ const axisManager = new GraphAxisManager(panel,{
         graph:'y'
     }]
 });
+axisManager.create();
 
 const imageTextManager = new GraphImageTextManager(panel,{
     data:data,

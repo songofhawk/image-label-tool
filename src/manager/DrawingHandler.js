@@ -8,9 +8,13 @@ export class DrawingHandler{
         this._step = 0;
     }
 
-    stepStart(graph){
+    stepStart(graph, isReplace){
         this._graph = graph;
-        this._container.add(graph);
+        if (isReplace){
+            this._container.replaceLast(graph);
+        }else{
+            this._container.add(graph);
+        }
         this._render();
         this._listenEvent(true);
     }
@@ -73,7 +77,7 @@ export class DrawingHandler{
                 self.mouseDown(pointer);
             });
 
-            stage.on('mousemove', function(e){
+            stage.on('mousemove', function(){
                 //console.log('mousemove on: ', e.target);
                 let pointer = stage.getPointerPosition();
                 self.mouseMove(pointer);
