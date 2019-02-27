@@ -15,13 +15,13 @@ export class GraphAxis extends Graph{
         this._vLine = new Konva.Line({
             points: [x, 0, x, layer.size().height],
             stroke: Graph.DEFAULT_COLOR,
-            strokeWidth: 2
+            strokeWidth: 2,
         });
 
         this._hLine = new Konva.Line({
             points: [0, y, layer.size().width, y],
             stroke: Graph.DEFAULT_COLOR,
-            strokeWidth: 2
+            strokeWidth: 2,
         });
 
         this._graphWrapper.add(this._vLine);
@@ -99,7 +99,8 @@ export class GraphAxisManager extends GraphManager{
     }
 
     _createGraphObjByDesc(desc){
-        this._currentGraph = new GraphAxis(this,desc);
+        this._currentGraph = new GraphAxis(this);
+        this._currentGraph.moveTo(desc);
         return this._currentGraph ;
     }
 
