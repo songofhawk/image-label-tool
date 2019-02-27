@@ -94,11 +94,17 @@ export class GraphAxis extends Graph{
         }
     }
 
+    onDrawingOver(){
+        this.x = this._vLine.x();
+        this.y = this._hLine.y();
+        super.onDrawingOver();
+    }
+
 }
 
 export class GraphAxisManager extends GraphManager{
-    constructor(panel){
-        super(panel);
+    constructor(panel,dataMappingConfig){
+        super(panel,dataMappingConfig);
         this._drawingHandler = new AxisDrawingHandler(this);
     }
 
@@ -116,7 +122,12 @@ class AxisDrawingHandler extends DrawingHandler{
     }
 
     stepStart(graphOption){
-        let graph = new GraphAxis(this._manager);
+        let graph;
+        if (this._graph){
+            graph = this._graph;
+        }else{
+            graph = new GraphAxis(this._manager);
+        }
         super.stepStart(graph);
     }
 
@@ -132,6 +143,7 @@ class AxisDrawingHandler extends DrawingHandler{
         super.stepUp(screenPoint, step);
     }
     stepOver(screenPoint, step){
+        this._graph.onDrawingOver();
         super.stepOver(screenPoint, step);
     }
 

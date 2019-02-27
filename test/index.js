@@ -113,7 +113,17 @@ const panel = new GraphPanel({
 /**
  *  初始化绘制工具
  */
-const axisManager = new GraphAxisManager(panel);
+const axisManager = new GraphAxisManager(panel,{
+    data:data,
+    for:'side',
+    mapping:[{
+        data:'originX',
+        graph:'x'
+    },{
+        data:'originY',
+        graph:'y'
+    }]
+});
 
 const imageTextManager = new GraphImageTextManager(panel,{
     data:data,

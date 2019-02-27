@@ -1,6 +1,6 @@
 export class LangUtil {
     static getClassName(obj) {
-        let name = obj.constructor.toString().match(/^function([^\(]+?)\(/);
+        let name = obj.constructor.toString().match(/^function([^(]+?)\(/);
 
         if (name && name[1]) {
             return name[1];
@@ -13,7 +13,7 @@ export class LangUtil {
         //return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         //这里只是临时使用,只要在一张图内不重复就可以啦,不需要标准的36位uuid
         return 'xxxx-xxxx-xxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
     }
@@ -30,6 +30,9 @@ export class LangUtil {
             let tType = mapping.target.type;
 
             let sValue = source[sKey];
+            if (typeof (sValue)==='undefined'){
+                return;
+            }
             let tValue;
 
             if (sType === PropertyType.Json) {
@@ -42,7 +45,7 @@ export class LangUtil {
                 tValue = [];
                 sValue.forEach((subSValue) => {
                     let subTValue = {};
-                    LangUtil.copyProperties(subSValue, subTValue, mapping.subMappings)
+                    LangUtil.copyProperties(subSValue, subTValue, mapping.subMappings);
                     tValue.push(subTValue);
                 })
             }
@@ -58,6 +61,9 @@ export class LangUtil {
     static copyAllProperties(source, target) {
         let keys = Object.keys(source);
         keys.forEach((key) => {
+            if (typeof (source[key])==='undefined'){
+                return;
+            }
             target[key] = source[key];
         })
     }
@@ -127,7 +133,6 @@ export let PropertyType = {
                 return this.Normal;
             case 'function':
                 return this.Function;
-                break;
             case 'json':
                 return this.Json;
             case 'array':
@@ -148,7 +153,7 @@ export let PropertyType = {
         }
         return this.Normal;
     }
-}
+};
 
 
 

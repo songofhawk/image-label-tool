@@ -97,7 +97,7 @@ export class DataMapping{
         if (this._data instanceof Array){
             this._data.push(data);
         }else{
-            this._data = data;
+            LangUtil.copyAllProperties(data, this._data);
         }
     }
 
