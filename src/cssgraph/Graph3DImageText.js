@@ -302,6 +302,7 @@ export class Graph3DImageText extends Graph{
 export class Graph3DImageTextManager extends GraphManager{
     constructor(panel,dataMappingConfig){
         super(panel,dataMappingConfig);
+        let self = this;
         let container = this._panel._container;
         container.style.transformStyle = 'preserve-3d';
 
@@ -310,15 +311,7 @@ export class Graph3DImageTextManager extends GraphManager{
         let centerY =container.clientHeight/2;
         container.style.perspectiveOrigin = centerX+'px'+' '+ centerY+'px';
 
-        let containerStyle = this._stage.container().style;
-
         let originHandler = this._createEyeIcon(centerX, centerY, 0.15, true, 'LightGray');
-        originHandler.on('mouseover',function () {
-            containerStyle.cursor = 'pointer';
-        });
-        originHandler.on('mouseout',function () {
-            containerStyle.cursor = 'default';
-        });
         originHandler.on('dragmove',function () {
             container.style.perspectiveOrigin = originHandler.x()+'px'+' '+ originHandler.y()+'px';
         });
@@ -334,6 +327,7 @@ export class Graph3DImageTextManager extends GraphManager{
             }else {
                 originHandler.hide();
             }
+            self._layer.draw();
         });
         this._layer.add(eyeSwitch);
 
@@ -344,7 +338,7 @@ export class Graph3DImageTextManager extends GraphManager{
     }
 
     _createEyeIcon(x,y,scale,draggable, color){
-        const baseWidth = 130*scale, baseHeight = 100*scale;
+        const baseWidth = 140*scale, baseHeight = 90*scale;
         let group = new Konva.Group({
             x: x,
             y: y,
@@ -367,10 +361,19 @@ export class Graph3DImageTextManager extends GraphManager{
             opacity:0.2
         });
         group.add(originBackground);
+        let containerStyle = this._stage.container().style;
+        group.on('mouseover',function () {
+            containerStyle.cursor = 'pointer';
+        });
+        group.on('mouseout',function () {
+            containerStyle.cursor = 'default';
+        });
 
+
+        //这两个图标不一样大, 所以开关切换(toggleSwitch)的时候, 还得调整位置和缩放
         const onPathData = 'M89.668,38.786c0-10.773-8.731-19.512-19.51-19.512S50.646,28.01,50.646,38.786c0,10.774,8.732,19.511,19.512,19.511   C80.934,58.297,89.668,49.561,89.668,38.786 M128.352,38.727c-13.315,17.599-34.426,28.972-58.193,28.972   c-23.77,0-44.879-11.373-58.194-28.972C25.279,21.129,46.389,9.756,70.158,9.756C93.927,9.756,115.036,21.129,128.352,38.727    M140.314,38.76C125.666,15.478,99.725,0,70.158,0S14.648,15.478,0,38.76c14.648,23.312,40.591,38.81,70.158,38.81   S125.666,62.072,140.314,38.76';
         const offPathData = 'M8.10869891,20.8913011 C4.61720816,18.8301147 3,16 3,16 C3,16 7,9 16,9 C17.3045107,9 18.5039752,9.14706466 19.6014388,9.39856122 L18.7519017,10.2480983 C17.8971484,10.0900546 16.9800929,10 16,10 C8,10 4.19995117,16 4.19995117,16 C4.19995117,16 5.71472808,18.3917225 8.84492713,20.1550729 L8.10869891,20.8913011 L8.10869891,20.8913011 L8.10869891,20.8913011 Z M12.398561,22.601439 C13.4960246,22.8529356 14.6954892,23.0000001 16,23 C25,22.999999 29,16 29,16 C29,16 27.3827918,13.1698856 23.8913008,11.1086992 L23.1550727,11.8449273 C26.2852719,13.6082776 27.8000488,16 27.8000488,16 C27.8000488,16 24,21.999999 16,22 C15.019907,22.0000001 14.1028515,21.9099455 13.2480981,21.7519019 L12.398561,22.601439 L12.398561,22.601439 L12.398561,22.601439 Z M19.8986531,15.1013469 C19.9649658,15.3902115 20,15.6910144 20,16 C20,18.2091391 18.2091391,20 16,20 C15.6910144,20 15.3902115,19.9649658 15.1013469,19.8986531 L16,19 C16.7677669,19.0000001 17.5355339,18.7071068 18.1213203,18.1213203 C18.7071068,17.5355339 19.0000001,16.7677669 19,16 L19.8986531,15.1013469 L19.8986531,15.1013469 L19.8986531,15.1013469 Z M16.8986531,12.1013469 C16.6097885,12.0350342 16.3089856,12 16,12 C13.7908609,12 12,13.7908609 12,16 C12,16.3089856 12.0350342,16.6097885 12.1013469,16.8986531 L13,16 C12.9999999,15.2322331 13.2928932,14.4644661 13.8786797,13.8786797 C14.4644661,13.2928932 15.2322331,12.9999999 16,13 L16.8986531,12.1013469 L16.8986531,12.1013469 L16.8986531,12.1013469 Z M24,7 L7,24 L8,25 L25,8 L24,7 L24,7 Z';
-        let originIcon = new Konva.Path({
+        let icon = new Konva.Path({
             x: 0,
             y: 0,
             data: onPathData,
@@ -380,14 +383,22 @@ export class Graph3DImageTextManager extends GraphManager{
                 y: scale
             }
         });
-        group.add(originIcon);
+        group.add(icon);
         let switchOn = true;
         group.toggleSwitch=function () {
             if (switchOn){
-                originIcon.data(offPathData);
+                icon.data(offPathData);
+                icon.scaleX(icon.scaleX()*5);
+                icon.scaleY(icon.scaleY()*5);
+                icon.offsetY(8);
+                icon.offsetX(1);
                 switchOn=false;
             }else {
-                originIcon.data(onPathData);
+                icon.data(onPathData);
+                icon.scaleX(icon.scaleX()/5);
+                icon.scaleY(icon.scaleY()/5);
+                icon.offsetY(-8);
+                icon.offsetX(-1);
                 switchOn=true;
             }
             return switchOn;
