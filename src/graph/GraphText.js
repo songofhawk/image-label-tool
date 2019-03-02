@@ -107,6 +107,11 @@ export class GraphText extends Graph{
         this._graphWrapper.text.fontSize(fontSize);
         this._layer.draw();
     }
+
+    setFontStyle(fontStyle){
+        this._graphWrapper.text.fontStyle(fontStyle);
+        this._layer.draw();
+    }
 }
 
 export class GraphTextManager extends GraphManager{

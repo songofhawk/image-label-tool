@@ -265,6 +265,21 @@ document.querySelector('#btn-set-font').addEventListener('click',function () {
         }
     }
 });
+document.querySelector('#btn-set-bold').addEventListener('click',function () {
+    if (currentTextGraph instanceof GraphText){
+        currentTextGraph.setFontStyle('bold');
+    }
+});
+document.querySelector('#btn-set-italic').addEventListener('click',function () {
+    if (currentTextGraph instanceof GraphText){
+        currentTextGraph.setFontStyle('italic');
+    }
+});
+document.querySelector('#btn-set-normal').addEventListener('click',function () {
+    if (currentTextGraph instanceof GraphText){
+        currentTextGraph.setFontStyle('normal');
+    }
+});
 
 /**
  * 显示调试数据
