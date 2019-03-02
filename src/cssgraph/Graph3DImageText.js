@@ -311,11 +311,11 @@ export class Graph3DImageTextManager extends GraphManager{
         let centerY =container.clientHeight/2;
         container.style.perspectiveOrigin = centerX+'px'+' '+ centerY+'px';
 
-        let originHandler = this._createEyeIcon(centerX, centerY, 0.15, true, 'LightGray');
-        originHandler.on('dragmove',function () {
-            container.style.perspectiveOrigin = originHandler.x()+'px'+' '+ originHandler.y()+'px';
+        let perspectiveHandler = this._createEyeIcon(centerX, centerY, 0.15, true, 'LightGray');
+        perspectiveHandler.on('dragmove',function () {
+            container.style.perspectiveOrigin = perspectiveHandler.x()+'px'+' '+ perspectiveHandler.y()+'px';
         });
-        this._layer.add(originHandler);
+        this._layer.add(perspectiveHandler);
 
         let eyeSwitch = this._createEyeIcon(container.clientWidth*0.9,
             container.clientWidth*0.1,
@@ -323,9 +323,9 @@ export class Graph3DImageTextManager extends GraphManager{
         eyeSwitch.on('click',function () {
             let switchOn = eyeSwitch.toggleSwitch();
             if (switchOn){
-                originHandler.show();
+                perspectiveHandler.show();
             }else {
-                originHandler.hide();
+                perspectiveHandler.hide();
             }
             self._layer.draw();
         });
@@ -407,6 +407,12 @@ export class Graph3DImageTextManager extends GraphManager{
     }
 
     _createGraphObjByDesc(desc){
+        // let textTypes = this.textTypes ? this.textTypes: ['TEXT'];
+        // if (textTypes.indexOf(desc.graphType)>=0){
+        //     return new Graph3DText(this, desc);
+        // }else{
+        //     return new Graph3DImage(this, desc);
+        // }
         return new Graph3DImageText(this,desc);
     }
 }

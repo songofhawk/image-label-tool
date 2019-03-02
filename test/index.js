@@ -89,6 +89,8 @@ let data = {
  * 正式开始初始化画板
  * -------------------------
  */
+let currentTextGraph = null;
+const currentTextEle = document.getElementById('current-text');
 const panel = new GraphPanel({
     containerId:'image-label-area',
     bkImgUrl:'./resource/image/jd.jpg',
@@ -106,7 +108,14 @@ const panel = new GraphPanel({
     onChange: (graph) =>{
         console.log('graph "' + graph.code + '" is updated.');
         showJsonData();
-    }
+    },
+    onDbClick: (graph) =>{
+        console.log('graph "' + graph.code + '" is double clicked.');
+        if (graph instanceof GraphText){
+            currentTextGraph = graph;
+            currentTextEle.innerText = graph.text;
+        }
+    },
 });
 
 
@@ -170,7 +179,33 @@ const pointAreaManager = new GraphPointAreaManager(panel,{
 });
 pointAreaManager.create();
 
-const threeDImageTextManager = new Graph3DImageTextManager(panel);
+const threeDImageTextManager = new Graph3DImageTextManager(panel,{
+    data:data,
+    for:'side.areas',
+    mapping:[{
+        data:'imageX',
+        graph:'x'
+    },{
+        data:'imageY',
+        graph:'y'
+    },{
+        data:'imageWidth',
+        graph:'realWidth'
+    },{
+        data:'imageHeight',
+        graph:'realHeight'
+    },{
+        data:'text',
+        graph:'text'
+    },{
+        data:'image',
+        graph:'src'
+    },{
+        data:'infoType',
+        graph:'graphType'
+    }],
+    dataKey: 'id'
+});
 
 
 /**
@@ -195,7 +230,7 @@ document.querySelector('#btn-draw-text').addEventListener('click',function () {
     imageTextManager.draw({
         x:10,
         y:10,
-        realWidth:80,
+        realWidth:160,
         realHeight:20,
         text:'买啥都有自家logo',
         graphType:'TEXT'
@@ -216,6 +251,19 @@ document.querySelector('#btn-draw-3d-image').addEventListener('click',function (
         src:'./resource/image/f.jpg',
         graphType:'LOGO'
     });
+});
+
+document.querySelector('#btn-set-font').addEventListener('click',function () {
+    if (currentTextGraph instanceof GraphText){
+        let fontFamily = document.getElementById('input-font-family').value;
+        if (fontFamily){
+            currentTextGraph.setFontFamily(fontFamily);
+        }
+        let fontSize = document.getElementById('input-font-size').value;
+        if (fontSize){
+            currentTextGraph.setFontSize(parseInt(fontSize));
+        }
+    }
 });
 
 /**

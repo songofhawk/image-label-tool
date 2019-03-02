@@ -43,6 +43,14 @@ export class Graph {
             self.onChange();
         });
 
+        wrapper.on('dblclick',function () {
+            let onDbClick = self._panel._onDbClick;
+            if (onDbClick){
+                onDbClick(self);
+            }
+        });
+
+
         if (graphOption.graphType){
             this.graphType = graphOption.graphType;
         }

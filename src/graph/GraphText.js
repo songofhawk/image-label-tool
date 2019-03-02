@@ -97,6 +97,16 @@ export class GraphText extends Graph{
     get text(){
         return this._text.text();
     }
+
+    setFontFamily(fontName){
+        this._graphWrapper.text.fontFamily(fontName);
+        this._layer.draw();
+    }
+
+    setFontSize(fontSize){
+        this._graphWrapper.text.fontSize(fontSize);
+        this._layer.draw();
+    }
 }
 
 export class GraphTextManager extends GraphManager{

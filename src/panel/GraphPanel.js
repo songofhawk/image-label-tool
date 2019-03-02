@@ -6,6 +6,7 @@ import {GraphImageTextManager} from "../graph/GraphImageText";
 import {GraphAxisManager} from "../graph/GraphAxis";
 import {GraphPointAreaManager} from "../graph/GraphPointArea";
 import {Graph3DImageTextManager} from "../cssgraph/Graph3DImageText";
+import {GraphText} from "../graph/GraphText";
 
 
 export class GraphPanel {
@@ -17,8 +18,9 @@ export class GraphPanel {
      * @param onSetProperty 点击图形设置属性以后的回调函数
      * @param onDelete 删除图形以后的回调函数
      * @param onChange 修改图形以后的回调函数
+     * @param onDbClick 双击图形以后的回调函数
      */
-    constructor({containerId, bkImgUrl, onDrawn, onSetProperty, onDelete, onChange}) {
+    constructor({containerId, bkImgUrl, onDrawn, onSetProperty, onDelete, onChange, onDbClick}) {
         if (!containerId) {
             throw 'containerId parameter is mandatory!';
         }
@@ -36,6 +38,7 @@ export class GraphPanel {
         this._toolbar = new Toolbar(containerId, onSetProperty, onDelete);
         this._onDrawn = onDrawn;
         this._onChange = onChange;
+        this._onDbClick = onDbClick;
 
         this._container = document.getElementById(containerId);
     }
@@ -151,5 +154,6 @@ if(window){
     window.GraphAxisManager = GraphAxisManager;
     window.GraphPointAreaManager = GraphPointAreaManager;
     window.Graph3DImageTextManager = Graph3DImageTextManager;
+    window.GraphText = GraphText;
 }
 
