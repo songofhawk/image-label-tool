@@ -39,8 +39,6 @@ let data = {
             "imageColor": "#000000",
             "shape": "SQUARE_DIAMOND",
             "image": "./resource/image/f.jpg",
-            "font": "宋体,b,i",
-            "text": "请输入",
             "areaForSpecs": [
                 {
                     "pgDesignAreaId": 191,
@@ -135,6 +133,22 @@ const axisManager = new GraphAxisManager(panel,{
 });
 axisManager.create();
 
+const areaText = data.side.areas[1];
+const fontArray = areaText.font.split(',');
+if (fontArray.length>0) {
+    areaText.fontFamily = fontArray[0];
+}
+if (fontArray.length>1) {
+    let style = fontArray[1];
+    if (style==='b'){
+        style='bold';
+    }
+    if (style==='i'){
+        style='italic';
+    }
+    areaText.fontStyle = style;
+}
+
 const imageTextManager = new GraphImageTextManager(panel,{
     data:data,
     for:'side.areas',
@@ -159,6 +173,12 @@ const imageTextManager = new GraphImageTextManager(panel,{
     },{
         data:'infoType',
         graph:'graphType'
+    },{
+        data:'fontFamily',
+        graph:'fontFamily'
+    },{
+        data:'fontStyle',
+        graph:'fontStyle'
     }],
     dataKey: 'id'
 });
