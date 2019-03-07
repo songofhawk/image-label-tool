@@ -179,6 +179,9 @@ const imageTextManager = new GraphImageTextManager(panel,{
     },{
         data:'fontStyle',
         graph:'fontStyle'
+    },{
+        data:'color',
+        graph:'color'
     }],
     dataKey: 'id'
 });
@@ -199,33 +202,34 @@ const pointAreaManager = new GraphPointAreaManager(panel,{
 });
 pointAreaManager.create();
 
-const threeDImageTextManager = new Graph3DImageTextManager(panel,{
-    data:data,
-    for:'side.areas',
-    mapping:[{
-        data:'imageX',
-        graph:'x'
-    },{
-        data:'imageY',
-        graph:'y'
-    },{
-        data:'imageWidth',
-        graph:'realWidth'
-    },{
-        data:'imageHeight',
-        graph:'realHeight'
-    },{
-        data:'text',
-        graph:'text'
-    },{
-        data:'image',
-        graph:'src'
-    },{
-        data:'infoType',
-        graph:'graphType'
-    }],
-    dataKey: 'id'
-});
+// //Graph3DImageTextManager被拆解了,需要重新引用
+// const threeDImageTextManager = new Graph3DImageTextManager(panel,{
+//     data:data,
+//     for:'side.areas',
+//     mapping:[{
+//         data:'imageX',
+//         graph:'x'
+//     },{
+//         data:'imageY',
+//         graph:'y'
+//     },{
+//         data:'imageWidth',
+//         graph:'realWidth'
+//     },{
+//         data:'imageHeight',
+//         graph:'realHeight'
+//     },{
+//         data:'text',
+//         graph:'text'
+//     },{
+//         data:'image',
+//         graph:'src'
+//     },{
+//         data:'infoType',
+//         graph:'graphType'
+//     }],
+//     dataKey: 'id'
+// });
 
 
 /**
@@ -261,17 +265,17 @@ document.querySelector('#btn-draw-point-area').addEventListener('click',function
     pointAreaManager.draw();
 });
 
-
-document.querySelector('#btn-draw-3d-image').addEventListener('click',function () {
-    threeDImageTextManager.draw({
-        x:10,
-        y:10,
-        realWidth:50,
-        realHeight:50,
-        src:'./resource/image/f.jpg',
-        graphType:'LOGO'
-    });
-});
+// //Graph3DImageTextManager被拆解了,需要重新引用
+// document.querySelector('#btn-draw-3d-image').addEventListener('click',function () {
+//     threeDImageTextManager.draw({
+//         x:10,
+//         y:10,
+//         realWidth:50,
+//         realHeight:50,
+//         src:'./resource/image/f.jpg',
+//         graphType:'LOGO'
+//     });
+// });
 
 document.querySelector('#btn-set-font').addEventListener('click',function () {
     if (currentTextGraph instanceof GraphText){
@@ -282,6 +286,10 @@ document.querySelector('#btn-set-font').addEventListener('click',function () {
         let fontSize = document.getElementById('input-font-size').value;
         if (fontSize){
             currentTextGraph.setFontSize(parseInt(fontSize));
+        }
+        let fontColor = document.getElementById('input-font-color').value;
+        if (fontColor){
+            currentTextGraph.setColor(fontColor);
         }
     }
 });

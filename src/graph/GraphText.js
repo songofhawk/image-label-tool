@@ -18,6 +18,7 @@ export class GraphText extends Graph{
             width: graphOption.realWidth,
             height: graphOption.realHeight,
             text: graphOption.text,
+            stroke:graphOption.color?graphOption.color:'black',
             fontSize:graphOption.realHeight?graphOption.realHeight - 2:12,
             fontFamily:graphOption.fontFamily?graphOption.fontFamily:'Calibri',
             fontStyle:graphOption.fontStyle?graphOption.fontStyle:'normal',
@@ -111,6 +112,11 @@ export class GraphText extends Graph{
 
     setFontStyle(fontStyle){
         this._graphWrapper.text.fontStyle(fontStyle);
+        this._layer.draw();
+    }
+
+    setColor(color){
+        this._graphWrapper.text.stroke(color);
         this._layer.draw();
     }
 }
