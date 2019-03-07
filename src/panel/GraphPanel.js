@@ -147,7 +147,7 @@ export class GraphPanel {
         this._loadBkImage(bkImgUrl);
     }
 
-    toDataUrl(){
+    toDataURL(){
         return this._stage.toDataURL();
     }
 }
