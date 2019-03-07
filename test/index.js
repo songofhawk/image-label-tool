@@ -309,6 +309,10 @@ document.querySelector('#btn-set-normal').addEventListener('click',function () {
     }
 });
 
+document.querySelector('#btn-to-data-url').addEventListener('click',function () {
+    console.log(panel.toDataUrl());
+});
+
 /**
  * 显示调试数据
  */

@@ -146,6 +146,10 @@ export class GraphPanel {
         this._unloadBkImage();
         this._loadBkImage(bkImgUrl);
     }
+
+    toDataUrl(){
+        return this._stage.toDataURL();
+    }
 }
 
 if(window){
