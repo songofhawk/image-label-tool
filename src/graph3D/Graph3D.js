@@ -2,10 +2,6 @@ import Konva from 'konva';
 import {Graph} from "../graph/Graph";
 import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
-import {GraphText} from "../graph/GraphText";
-import {GraphImage} from "../graph/GraphImage";
-import {Graph3DText} from "./Graph3DText";
-import {Graph3DImage} from "./Graph3DImage";
 
 
 export class Graph3D extends Graph{
