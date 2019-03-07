@@ -2,136 +2,143 @@ import Konva from 'konva';
 import {Graph} from "../graph/Graph";
 import {GraphManager} from "../manager/GraphManager";
 import {DrawingHandler} from "../manager/DrawingHandler";
+import {GraphText} from "../graph/GraphText";
+import {GraphImage} from "../graph/GraphImage";
+import {Graph3DText} from "./Graph3DText";
+import {Graph3DImage} from "./Graph3DImage";
 
 
-export class Graph3DImageText extends Graph{
+export class Graph3D extends Graph{
     constructor(manager,graphOption) {
         super(manager,graphOption);
+        this._graphOption = graphOption;
 
         let wrapper = this._graphWrapper;
-
         let offsetX = wrapper.width()/2, offsetY = wrapper.height()/2;
         wrapper.offsetX(offsetX);
         wrapper.offsetY(offsetY);
 
-        let imageObj = new Image();
         let self = this;
 
-        function initLocation(element) {
-            element.width = graphOption.realWidth;
-            element.height = graphOption.realHeight;
-            element.style.position = 'absolute';
-            element.style.left = graphOption.x + 'px';
-            element.style.top = graphOption.y + 'px';
-            element.style.marginLeft = -offsetX + 'px';
-            element.style.marginTop = -offsetY + 'px';
-        }
-
-        function attachMethods(element) {
-            element.show = function () {
-                this.style.display = '';
-            };
-            element.hide = function () {
-                this.style.display = 'none';
-            };
-            element.moveTo = function (x, y) {
-                let left = this.style.left;
-                let top = this.style.top;
-                this.style.left = x + 'px';
-                this.style.top = y + 'px';
-            };
-            element.moveLeftUp = function (distance) {
-                let left = this.style.left;
-                let top = this.style.top;
-                this.style.left = parseInt(left.substring(0, left.indexOf('px'))) - distance + 'px';
-                this.style.top = parseInt(top.substring(0, top.indexOf('px'))) - distance + 'px';
-            };
-            element.resize = function (width, height) {
-                this.width = width;
-                this.height = height;
-                this.style.marginLeft = -width / 2 + 'px';
-                this.style.marginTop = -height / 2 + 'px';
-            };
-            element.rotateX = function (x) {
-                imageObj._setTransformOne(x, 'X');
-                imageObj._composeStyleTransform();
-            };
-            element.rotateY = function (y) {
-                imageObj._setTransformOne(y, 'Y');
-                imageObj._composeStyleTransform();
-            };
-            element.rotateZ = function (z) {
-                imageObj._setTransformOne(z, 'Z');
-                imageObj._composeStyleTransform();
-            };
-            element.rotateXY = function (x, y) {
-                imageObj._setTransformOne(x, 'X');
-                imageObj._setTransformOne(y, 'Y');
-                imageObj._composeStyleTransform();
-            };
-            element.rotateXYZ = function (x, y, z) {
-                imageObj._setTransformOne(x, 'X');
-                imageObj._setTransformOne(y, 'Y');
-                imageObj._setTransformOne(z, 'Z');
-                imageObj._composeStyleTransform();
-            };
-            element._setTransformOne = function (value, name) {
-                if (typeof(value) === "undefined" || value === null) {
-                    return false;
-                }
-                if (!imageObj.transform) {
-                    imageObj.transform = {}
-                }
-                imageObj.transform['rotate' + name] = value;
-                return true;
-            };
-            element._composeStyleTransform = function () {
-                let trans = imageObj.transform;
-                let x = typeof(trans.rotateX) === 'undefined' ? '' : ('rotateX(' + trans.rotateX + 'deg) ');
-                let y = typeof(trans.rotateY) === 'undefined' ? '' : ('rotateY(' + trans.rotateY + 'deg) ');
-                let z = typeof(trans.rotateZ) === 'undefined' ? '' : ('rotateZ(' + trans.rotateZ + 'deg) ');
-                this.style.transform = x + y + z;
-            };
-
-        }
-
-        function addToContainer() {
-            imageObj.hide();
-            let container = self._panel._container;
-            container.appendChild(imageObj);
-            self._element = imageObj;
-        }
-
-        function createRect() {
-            let rect = new Konva.Rect({
-                x: 0,
-                y: 0,
-                fillEnabled: true,
-                fill: Graph.DEFAULT_FILL_COLOR,
-                width: graphOption.realWidth,
-                height: graphOption.realHeight,
-                listening: true
-            });
-            wrapper.add(rect);
-
-            if (graphOption.bindEvent) {
-                self._bindEvent(wrapper);
-            }
-        }
-
-        imageObj.onload = function() {
-            initLocation(imageObj);
-            attachMethods(imageObj);
-            addToContainer(imageObj);
+        let imageElement = new Image();
+        imageElement.onload = function() {
+            self._initLocation(imageElement);
+            self._attachMethodsToElement(imageElement);
+            self._addElementToContainer(imageElement);
             if (graphOption.bindEvent){
-                self._bindImageEvent(imageObj);
+                self._bindImageEvent(imageElement);
             }
-            createRect();
-            self._bindWrapperEvent(wrapper, self);
-
+            self._createRect();
+            if (graphOption.bindEvent){
+                self._bindWrapperEvent(wrapper, self);
+            }
         };
-        imageObj.src = graphOption.src;
+        imageElement.src = graphOption.src;
 
+    }
+
+    _initLocation(element) {
+        const  graphOption = this._graphOption;
+        element.width = graphOption.realWidth;
+        element.height = graphOption.realHeight;
+        element.style.position = 'absolute';
+        element.style.left = graphOption.x + 'px';
+        element.style.top = graphOption.y + 'px';
+        element.style.marginLeft = -offsetX + 'px';
+        element.style.marginTop = -offsetY + 'px';
+    }
+
+    _attachMethodsToElement(element) {
+        element.show = function () {
+            this.style.display = '';
+        };
+        element.hide = function () {
+            this.style.display = 'none';
+        };
+        element.moveTo = function (x, y) {
+            let left = this.style.left;
+            let top = this.style.top;
+            this.style.left = x + 'px';
+            this.style.top = y + 'px';
+        };
+        element.moveLeftUp = function (distance) {
+            let left = this.style.left;
+            let top = this.style.top;
+            this.style.left = parseInt(left.substring(0, left.indexOf('px'))) - distance + 'px';
+            this.style.top = parseInt(top.substring(0, top.indexOf('px'))) - distance + 'px';
+        };
+        element.resize = function (width, height) {
+            this.width = width;
+            this.height = height;
+            this.style.marginLeft = -width / 2 + 'px';
+            this.style.marginTop = -height / 2 + 'px';
+        };
+        element.rotateX = function (x) {
+            imageElement._setTransformOne(x, 'X');
+            imageElement._composeStyleTransform();
+        };
+        element.rotateY = function (y) {
+            imageElement._setTransformOne(y, 'Y');
+            imageElement._composeStyleTransform();
+        };
+        element.rotateZ = function (z) {
+            imageElement._setTransformOne(z, 'Z');
+            imageElement._composeStyleTransform();
+        };
+        element.rotateXY = function (x, y) {
+            imageElement._setTransformOne(x, 'X');
+            imageElement._setTransformOne(y, 'Y');
+            imageElement._composeStyleTransform();
+        };
+        element.rotateXYZ = function (x, y, z) {
+            imageElement._setTransformOne(x, 'X');
+            imageElement._setTransformOne(y, 'Y');
+            imageElement._setTransformOne(z, 'Z');
+            imageElement._composeStyleTransform();
+        };
+        element._setTransformOne = function (value, name) {
+            if (typeof(value) === "undefined" || value === null) {
+                return false;
+            }
+            if (!imageElement.transform) {
+                imageElement.transform = {}
+            }
+            imageElement.transform['rotate' + name] = value;
+            return true;
+        };
+        element._composeStyleTransform = function () {
+            let trans = imageElement.transform;
+            let x = typeof(trans.rotateX) === 'undefined' ? '' : ('rotateX(' + trans.rotateX + 'deg) ');
+            let y = typeof(trans.rotateY) === 'undefined' ? '' : ('rotateY(' + trans.rotateY + 'deg) ');
+            let z = typeof(trans.rotateZ) === 'undefined' ? '' : ('rotateZ(' + trans.rotateZ + 'deg) ');
+            this.style.transform = x + y + z;
+        };
+
+    }
+
+     _addElementToContainer(element) {
+        element.hide();
+        let container = self._panel._container;
+        container.appendChild(element);
+        self._element = element;
+    }
+
+
+    _createRect() {
+        let rect = new Konva.Rect({
+            x: 0,
+            y: 0,
+            fillEnabled: true,
+            fill: Graph.DEFAULT_FILL_COLOR,
+            width: graphOption.realWidth,
+            height: graphOption.realHeight,
+            listening: true
+        });
+        wrapper.add(rect);
+
+        if (graphOption.bindEvent) {
+            self._bindEvent(wrapper);
+        }
     }
 
     _bindWrapperEvent(wrapper, self) {
@@ -350,7 +357,7 @@ export class Graph3DImageTextManager extends GraphManager{
 
 
 
-        this._drawingHandler = new Graph3DImageTextDrawingHandler(this);
+        this._drawingHandler = new Graph3DHandler(this);
         //this.create();
     }
 
@@ -424,23 +431,23 @@ export class Graph3DImageTextManager extends GraphManager{
     }
 
     _createGraphObjByDesc(desc){
-        // let textTypes = this.textTypes ? this.textTypes: ['TEXT'];
-        // if (textTypes.indexOf(desc.graphType)>=0){
-        //     return new Graph3DText(this, desc);
-        // }else{
-        //     return new Graph3DImage(this, desc);
-        // }
-        return new Graph3DImageText(this,desc);
+        let textTypes = this.textTypes ? this.textTypes: ['TEXT'];
+        if (textTypes.indexOf(desc.graphType)>=0){
+            return new Graph3DText(this, desc);
+        }else{
+            return new Graph3DImage(this, desc);
+        }
     }
 }
 
-class Graph3DImageTextDrawingHandler extends DrawingHandler{
+class Graph3DHandler extends DrawingHandler{
     constructor(manager){
         super(manager);
     }
 
     stepStart(graphOption){
-        let graph = new Graph3DImageText(this._manager, graphOption);
+        if (graphOption.graphType.is);
+        let graph = this._manager._createGraphObjByDesc(graphOption);
         this._stage.container().style.cursor = 'crosshair';
         super.stepStart(graph);
     }

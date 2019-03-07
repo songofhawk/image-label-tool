@@ -5,7 +5,7 @@ import {Toolbar} from "../toolbar/Toolbar";
 import {GraphImageTextManager} from "../graph/GraphImageText";
 import {GraphAxisManager} from "../graph/GraphAxis";
 import {GraphPointAreaManager} from "../graph/GraphPointArea";
-import {Graph3DImageTextManager} from "../cssgraph/Graph3DImageText";
+import {Graph3DImageTextManager} from "../graph3D/Graph3D";
 import {GraphText} from "../graph/GraphText";
 
 
