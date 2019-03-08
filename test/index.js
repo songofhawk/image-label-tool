@@ -92,8 +92,8 @@ const currentTextEle = document.getElementById('current-text');
 const panel = new GraphPanel({
     containerId:'image-label-area',
     bkImgUrl:'./resource/image/jd.jpg',
-    width:800,
-    height:800,
+    // width:600,
+    // height:600,
     onDrawn: (graph) => {
         console.log('graph "' + graph.code + '" is drawn.');
         showJsonData();
@@ -116,6 +116,11 @@ const panel = new GraphPanel({
             currentTextEle.innerText = graph.text;
         }
     },
+    onCreate:()=>{
+        axisManager.create();
+        pointAreaManager.create();
+        imageTextManager.create();
+    }
 });
 
 
@@ -133,7 +138,7 @@ const axisManager = new GraphAxisManager(panel,{
         graph:'y'
     }]
 });
-axisManager.create();
+
 
 const areaText = data.side.areas[1];
 const fontArray = areaText.font.split(',');
@@ -187,7 +192,7 @@ const imageTextManager = new GraphImageTextManager(panel,{
     }],
     dataKey: 'id'
 });
-imageTextManager.create();
+
 
 const pointAreaManager = new GraphPointAreaManager(panel,{
     data:data,
@@ -205,7 +210,7 @@ const pointAreaManager = new GraphPointAreaManager(panel,{
     }],
     dataKey: 'id'
 });
-pointAreaManager.create();
+
 
 // //Graph3DImageTextManager被拆解了,需要重新引用
 // const threeDImageTextManager = new Graph3DImageTextManager(panel,{

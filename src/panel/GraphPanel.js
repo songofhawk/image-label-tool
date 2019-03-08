@@ -21,59 +21,65 @@ export class GraphPanel {
      * @param onDelete 删除图形以后的回调函数
      * @param onChange 修改图形以后的回调函数
      * @param onDbClick 双击图形以后的回调函数
+     * @param onCreate panel创建成功以后的回调函数
      */
-    constructor({containerId, width, height, bkImgUrl, onDrawn, onSetProperty, onDelete, onChange, onDbClick}) {
+    constructor({containerId, width, height, bkImgUrl, onDrawn, onSetProperty, onDelete, onChange, onDbClick, onCreate}) {
         if (!containerId) {
             throw 'containerId parameter is mandatory!';
         }
-        width = width?width:800;
-        height = height?height:800;
         this._stage= new Konva.Stage({
             container: containerId,
-            width: width,
-            height: height,
+            width: width?width:200,
+            height: height?height:200,
             listening:true
         });
 
-        this._loadBkImage(bkImgUrl,width,height);
-        this._currentManager = null;
+        let self = this;
+        this._loadBkImage(bkImgUrl,width,height,function(width, height, bkLayer) {
+            // add the layer to the stage
+            self._stage.width(width);
+            self._stage.height(height);
+            self._stage.add(bkLayer);
+            self._bkLayer = bkLayer;
+            if (self._onCreate){
+                self._onCreate();
+            }
+            bkLayer.moveToBottom();
+            self.render();
+        });
 
+        this._currentManager = null;
         this._toolbar = new Toolbar(containerId, onSetProperty, onDelete);
         this._onDrawn = onDrawn;
         this._onChange = onChange;
         this._onDbClick = onDbClick;
-
         this._container = document.getElementById(containerId);
+        this._onCreate = onCreate;
     }
 
     _unloadBkImage(){
         this._bkLayer.destroy();
     }
 
-    _loadBkImage(bkImgUrl,width,height) {
+    _loadBkImage(bkImgUrl,width,height, callBack) {
         let bkLayer = new Konva.Layer();
-        let jsImage = new Image();
-        let self = this;
-        jsImage.onload = function () {
-
+        let imageElement = new Image();
+        imageElement.onload = function () {
+            console.log(imageElement.width, imageElement.height);
+            width = width?width:imageElement.width;
+            height = height?height:imageElement.height;
             let bkImage = new Konva.Image({
                 x: 0,
                 y: 0,
-                image: jsImage,
+                image: imageElement,
                 width: width,
                 height: height,
                 listening: false
             });
-            // add the shape to the layer
             bkLayer.add(bkImage);
-
-            // add the layer to the stage
-            self._stage.add(bkLayer);
-            bkLayer.moveToBottom();
-            self._bkLayer = bkLayer;
-            self.render();
+            callBack(width,height,bkLayer);
         };
-        jsImage.src = bkImgUrl;
+        imageElement.src = bkImgUrl;
     }
 
     get graphManager(){

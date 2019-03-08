@@ -41,6 +41,7 @@ export class GraphImage extends Graph{
             if (graphOption.bindEvent){
                 self._bindEvent(image);
             }
+            self._layer.draw();
 
         };
         imageObj.src = graphOption.src;
