@@ -13,6 +13,8 @@ export class GraphPanel {
     /**
      * 画板初始化
      * @param containerId 画板容器元素的id
+     * @param width 画布宽度,缺省值800
+     * @param height 画布高度,缺省值800
      * @param bkImgUrl 背景图url
      * @param onDrawn 绘制完成图形以后的回调函数
      * @param onSetProperty 点击图形设置属性以后的回调函数
@@ -20,15 +22,15 @@ export class GraphPanel {
      * @param onChange 修改图形以后的回调函数
      * @param onDbClick 双击图形以后的回调函数
      */
-    constructor({containerId, bkImgUrl, onDrawn, onSetProperty, onDelete, onChange, onDbClick}) {
+    constructor({containerId, width, height, bkImgUrl, onDrawn, onSetProperty, onDelete, onChange, onDbClick}) {
         if (!containerId) {
             throw 'containerId parameter is mandatory!';
         }
 
         this._stage= new Konva.Stage({
             container: containerId,
-            width: 600,
-            height: 600,
+            width: width?width:800,
+            height: height?height:800,
             listening:true
         });
 

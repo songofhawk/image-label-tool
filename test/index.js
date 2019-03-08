@@ -92,6 +92,8 @@ const currentTextEle = document.getElementById('current-text');
 const panel = new GraphPanel({
     containerId:'image-label-area',
     bkImgUrl:'./resource/image/jd.jpg',
+    width:800,
+    height:800,
     onDrawn: (graph) => {
         console.log('graph "' + graph.code + '" is drawn.');
         showJsonData();
