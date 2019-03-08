@@ -12,7 +12,7 @@ export class GraphPointArea extends Graph {
         this._points = [];
         this._lines = [];
 
-        if (graphOption && graphOption.points){
+        if (graphOption && graphOption.absolutePoints){
             this.create(graphOption);
         }
     }
