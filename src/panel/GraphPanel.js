@@ -26,15 +26,16 @@ export class GraphPanel {
         if (!containerId) {
             throw 'containerId parameter is mandatory!';
         }
-
+        width = width?width:800;
+        height = height?height:800;
         this._stage= new Konva.Stage({
             container: containerId,
-            width: width?width:800,
-            height: height?height:800,
+            width: width,
+            height: height,
             listening:true
         });
 
-        this._loadBkImage(bkImgUrl);
+        this._loadBkImage(bkImgUrl,width,height);
         this._currentManager = null;
 
         this._toolbar = new Toolbar(containerId, onSetProperty, onDelete);
@@ -49,7 +50,7 @@ export class GraphPanel {
         this._bkLayer.destroy();
     }
 
-    _loadBkImage(bkImgUrl) {
+    _loadBkImage(bkImgUrl,width,height) {
         let bkLayer = new Konva.Layer();
         let jsImage = new Image();
         let self = this;
@@ -59,8 +60,8 @@ export class GraphPanel {
                 x: 0,
                 y: 0,
                 image: jsImage,
-                width: 600,
-                height: 600,
+                width: width,
+                height: height,
                 listening: false
             });
             // add the shape to the layer
