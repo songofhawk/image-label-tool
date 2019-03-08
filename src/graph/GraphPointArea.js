@@ -30,6 +30,29 @@ export class GraphPointArea extends Graph {
         this._closeArea();
     }
 
+    clone(offset){
+        let manager = this._manager;
+
+        let newAbPoints = GraphPointArea._copyPoints(this.absolutePoints, offset);
+        let newPointArea = new GraphPointArea(manager, {graphType:this.graphType, absolutePoints:newAbPoints});
+        manager._container.add(newPointArea);
+        manager.onDrawingOver(newPointArea);
+        return newPointArea;
+    }
+
+    static _copyPoints(points, offset){
+        let newPoints = [];
+        for (let i=0;i<points.length;i++){
+            let point = points[i];
+
+            newPoints.push({
+                x: offset? (point.x + offset.x) : point.x,
+                y: offset? (point.y + offset.y) : point.y
+            });
+        }
+        return newPoints;
+    }
+
     get points(){
         return this._points;
     }

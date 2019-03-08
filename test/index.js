@@ -100,6 +100,9 @@ const panel = new GraphPanel({
     },
     onSetProperty: (graph) => {
         console.log('graph "' + graph.code + '" will be set properties.');
+        if (graph.clone){
+            graph.clone({x:20,y:10});
+        }
     },
     onDelete: (graph) => {
         console.log('graph "' + graph.code + '" is deleted.');
