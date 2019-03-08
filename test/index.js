@@ -199,6 +199,9 @@ const pointAreaManager = new GraphPointAreaManager(panel,{
     },{
         data:'id',
         graph:'code'
+    },{
+        data:'infoType',
+        graph:'graphType'
     }],
     dataKey: 'id'
 });
@@ -264,7 +267,9 @@ document.querySelector('#btn-draw-text').addEventListener('click',function () {
 });
 
 document.querySelector('#btn-draw-point-area').addEventListener('click',function () {
-    pointAreaManager.draw();
+    pointAreaManager.draw({
+        graphType:'TEXT'
+    });
 });
 
 // //Graph3DImageTextManager被拆解了,需要重新引用

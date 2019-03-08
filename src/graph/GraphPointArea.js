@@ -12,7 +12,7 @@ export class GraphPointArea extends Graph {
         this._points = [];
         this._lines = [];
 
-        if (graphOption){
+        if (graphOption && graphOption.points){
             this.create(graphOption);
         }
     }
@@ -347,7 +347,7 @@ class PointAreaDrawingHandler extends DrawingHandler {
     }
 
     stepStart(graphOption) {
-        let graph = new GraphPointArea(this._manager);
+        let graph = new GraphPointArea(this._manager, graphOption);
         graph.createPoint();
         super.stepStart(graph);
     }
