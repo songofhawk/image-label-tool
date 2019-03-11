@@ -77,7 +77,9 @@ export class GraphPanel {
                 listening: false
             });
             bkLayer.add(bkImage);
-            callBack(width,height,bkLayer);
+            if (callBack){
+                callBack(width,height,bkLayer);
+            }
         };
         imageElement.src = bkImgUrl;
     }
@@ -151,9 +153,9 @@ export class GraphPanel {
         this._managers.push(manager);
     }
 
-    reloadBackground(bkImgUrl){
+    reloadBackground(bkImgUrl,callBack){
         this._unloadBkImage();
-        this._loadBkImage(bkImgUrl);
+        this._loadBkImage(bkImgUrl,callBack);
     }
 
     toDataURL(){
