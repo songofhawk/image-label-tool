@@ -35,17 +35,10 @@ export class GraphPanel {
         });
 
         let self = this;
-        this._loadBkImage(bkImgUrl,width,height,function(width, height, bkLayer) {
-            // add the layer to the stage
-            self._stage.width(width);
-            self._stage.height(height);
-            self._stage.add(bkLayer);
-            self._bkLayer = bkLayer;
+        this._loadBkImage(bkImgUrl,width,height,function() {
             if (self._onCreate){
                 self._onCreate();
             }
-            bkLayer.moveToBottom();
-            self.render();
         });
 
         this._currentManager = null;
@@ -64,6 +57,7 @@ export class GraphPanel {
     _loadBkImage(bkImgUrl,width,height, callBack) {
         let bkLayer = new Konva.Layer();
         let imageElement = new Image();
+        let self = this;
         imageElement.onload = function () {
             console.log(imageElement.width, imageElement.height);
             width = width?width:imageElement.width;
@@ -77,6 +71,14 @@ export class GraphPanel {
                 listening: false
             });
             bkLayer.add(bkImage);
+
+            // add the layer to the stage
+            self._stage.width(width);
+            self._stage.height(height);
+            self._stage.add(bkLayer);
+            self._bkLayer = bkLayer;
+            bkLayer.moveToBottom();
+
             if (callBack){
                 callBack(width,height,bkLayer);
             }
